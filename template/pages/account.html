@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | APEX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand">APEX <span>ATHLETE</span></div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="account.html" class="nav-item active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="account-orders.html" class="nav-item">
+                <i class="fas fa-box"></i>
+                <span>Order History</span>
+            </a>
+            <a href="account-addresses.html" class="nav-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Addresses</span>
+            </a>
+            <a href="account-payment.html" class="nav-item">
+                <i class="fas fa-credit-card"></i>
+                <span>Payment Methods</span>
+            </a>
+            <a href="account-wishlist.html" class="nav-item">
+                <i class="fas fa-heart"></i>
+                <span>Wishlist</span>
+            </a>
+            <a href="account-profile.html" class="nav-item">
+                <i class="fas fa-user-cog"></i>
+                <span>Profile Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 0.9rem; color: white;">Jonathan Doe</div>
+                    <div style="font-size: 0.8rem;">Member since 2024</div>
+                </div>
+                <a href="../index.html" style="color: #9ca3af;"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h1 class="page-title">Locker Room</h1>
+            <a href="../index.html" class="action-btn">
+                <i class="fas fa-shopping-bag"></i> Shop Now
+            </a>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Total Orders</span>
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-value">12</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Points Earned</span>
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-value" style="color: var(--accent);">2,450</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Wishlist Items</span>
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="stat-value">5</div>
+            </div>
+        </div>
+
+        <div class="data-card">
+            <div class="card-header">
+                <h3 class="card-title">Recent Orders</h3>
+                <a href="account-orders.html" style="color: var(--primary); font-weight: 600; font-size: 0.9rem;">View All</a>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight: 600;">#APX-1024</td>
+                        <td>Oct 24, 2025</td>
+                        <td><span class="status-badge status-processing">Processing</span></td>
+                        <td style="font-weight: 600;">$300.24</td>
+                        <td><a href="account-order-view.html" style="text-decoration: underline; font-weight: 600;">Track</a></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">#APX-1009</td>
+                        <td>Sep 12, 2025</td>
+                        <td><span class="status-badge status-delivered">Delivered</span></td>
+                        <td style="font-weight: 600;">$149.00</td>
+                        <td><a href="account-order-view.html" style="text-decoration: underline; font-weight: 600;">View</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="data-card">
+            <div class="card-header">
+                <h3 class="card-title">Account Details</h3>
+                <a href="account-profile.html" style="color: var(--primary); font-weight: 600; font-size: 0.9rem;">Edit Profile</a>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 20px;">
+                <div>
+                    <h5 style="color: var(--text-muted); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; font-size: 0.85rem;">Contact Info</h5>
+                    <p style="font-weight: 600; font-size: 1.1rem; margin-bottom: 5px;">Jonathan Doe</p>
+                    <p style="color: var(--text-muted);">john.doe@example.com</p>
+                </div>
+                <div>
+                    <h5 style="color: var(--text-muted); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; font-size: 0.85rem;">Default Shipping</h5>
+                    <p style="color: var(--text-muted); line-height: 1.6;">
+                        123 Athlete Way<br>Sport City, NY 10012<br>United States
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

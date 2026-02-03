@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Book | APEX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="../index.html" class="brand">APEX <span>ATHLETE</span></a>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="account.html" class="nav-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="account-orders.html" class="nav-item">
+                <i class="fas fa-box"></i>
+                <span>Order History</span>
+            </a>
+            <a href="account-addresses.html" class="nav-item active">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Addresses</span>
+            </a>
+            <a href="account-payment.html" class="nav-item">
+                <i class="fas fa-credit-card"></i>
+                <span>Payment Methods</span>
+            </a>
+            <a href="account-wishlist.html" class="nav-item">
+                <i class="fas fa-heart"></i>
+                <span>Wishlist</span>
+            </a>
+            <a href="account-profile.html" class="nav-item">
+                <i class="fas fa-user-cog"></i>
+                <span>Profile Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 0.9rem; color: white;">Jonathan Doe</div>
+                    <div style="font-size: 0.8rem;">Member since 2024</div>
+                </div>
+                <a href="../index.html" style="color: #9ca3af;"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h1 class="page-title">Address Book</h1>
+            <button class="action-btn">
+                <i class="fas fa-plus"></i> Add New Address
+            </button>
+        </div>
+
+        <div class="address-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+            <!-- Default Address -->
+            <div class="data-card" style="position: relative; border: 2px solid var(--primary); padding: 25px;">
+                <span style="position: absolute; top: -12px; right: 20px; background: var(--primary); color: var(--accent); padding: 4px 10px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Default</span>
+                <h4 style="margin-bottom: 15px; font-weight: 600; text-transform: uppercase;">Jonathan Doe</h4>
+                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
+                    123 Athlete Way<br>
+                    Sport City, NY 10012<br>
+                    United States<br>
+                    +1 (555) 123-4567
+                </p>
+                <div style="display: flex; gap: 15px;">
+                    <a href="#" style="font-weight: 600; font-size: 0.9rem; text-decoration: underline; color: var(--primary);">Edit</a>
+                    <a href="#" style="font-weight: 600; font-size: 0.9rem; color: var(--danger);">Remove</a>
+                </div>
+            </div>
+
+            <!-- Secondary Address -->
+            <div class="data-card" style="padding: 25px;">
+                <h4 style="margin-bottom: 15px; font-weight: 600; text-transform: uppercase;">Jonathan Doe (Office)</h4>
+                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
+                    500 Corporate Blvd, Suite 200<br>
+                    Metropolis, CA 90210<br>
+                    United States<br>
+                    +1 (555) 987-6543
+                </p>
+                <div style="display: flex; gap: 15px;">
+                    <a href="#" style="font-weight: 600; font-size: 0.9rem; text-decoration: underline; color: var(--primary);">Edit</a>
+                    <a href="#" style="font-weight: 600; font-size: 0.9rem; color: var(--danger);">Remove</a>
+                    <a href="#" style="font-weight: 600; font-size: 0.9rem; color: var(--text-muted); margin-left: auto;">Set as Default</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

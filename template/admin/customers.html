@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers | APEX Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand">APEX <span>ADMIN</span></div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="products.html" class="nav-item">
+                <i class="fas fa-box"></i>
+                <span>Products</span>
+            </a>
+            <a href="orders.html" class="nav-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Orders</span>
+            </a>
+            <a href="customers.html" class="nav-item active">
+                <i class="fas fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="analytics.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 0.9rem; color: white;">John Doe</div>
+                    <div style="font-size: 0.8rem;">Store Owner</div>
+                </div>
+                <i class="fas fa-sign-out-alt" style="cursor: pointer;"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h1 class="page-title">Customers</h1>
+            <a href="customers-form.html" class="action-btn">
+                <i class="fas fa-user-plus"></i> Add Customer
+            </a>
+        </div>
+
+        <!-- Filters -->
+        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+            <input type="text" class="form-input" placeholder="Search customers..." style="max-width: 300px;">
+            <select class="form-select" style="max-width: 150px;">
+                <option>Sort by: Newest</option>
+                <option>Total Spent</option>
+                <option>Orders Count</option>
+            </select>
+        </div>
+
+        <!-- Customers Table -->
+        <div class="data-card">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;"><input type="checkbox"></th>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Orders</th>
+                        <th>Total Spent</th>
+                        <th>Last Order</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>
+                            <div style="font-weight: 600;">Sarah Jenkins</div>
+                            <div style="font-size: 0.8rem; color: #666;">sarah@example.com</div>
+                        </td>
+                        <td>New York, USA</td>
+                        <td>5</td>
+                        <td>$850.00</td>
+                        <td>Oct 24, 2025</td>
+                        <td><a href="customers-form.html" style="color: #666;"><i class="fas fa-edit"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>
+                            <div style="font-weight: 600;">Michael Chen</div>
+                            <div style="font-size: 0.8rem; color: #666;">michael@example.com</div>
+                        </td>
+                        <td>Toronto, Canada</td>
+                        <td>3</td>
+                        <td>$420.00</td>
+                        <td>Oct 24, 2025</td>
+                        <td><a href="customers-form.html" style="color: #666;"><i class="fas fa-edit"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>
+                            <div style="font-weight: 600;">David Ross</div>
+                            <div style="font-size: 0.8rem; color: #666;">david@example.com</div>
+                        </td>
+                        <td>London, UK</td>
+                        <td>12</td>
+                        <td>$1,250.00</td>
+                        <td>Oct 23, 2025</td>
+                        <td><a href="customers-form.html" style="color: #666;"><i class="fas fa-edit"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

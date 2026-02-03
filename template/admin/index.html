@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | APEX Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand">APEX <span>ADMIN</span></div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="products.html" class="nav-item">
+                <i class="fas fa-box"></i>
+                <span>Products</span>
+            </a>
+            <a href="orders.html" class="nav-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Orders</span>
+            </a>
+            <a href="customers.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="analytics.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 0.9rem; color: white;">John Doe</div>
+                    <div style="font-size: 0.8rem;">Store Owner</div>
+                </div>
+                <i class="fas fa-sign-out-alt" style="cursor: pointer;"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h1 class="page-title">Dashboard</h1>
+            <div style="display: flex; gap: 15px;">
+                <button class="action-btn" style="background: white; color: #333; border: 1px solid #ddd;">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <a href="../index.html" target="_blank" class="action-btn">
+                    <i class="fas fa-external-link-alt"></i> View Store
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Total Sales</span>
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-value">$24,500</div>
+                <div class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> 12% from last month
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Total Orders</span>
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <div class="stat-value">345</div>
+                <div class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> 8% from last month
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Avg. Order Value</span>
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div class="stat-value">$71.00</div>
+                <div class="stat-trend trend-down">
+                    <i class="fas fa-arrow-down"></i> 2% from last month
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Conversion Rate</span>
+                    <i class="fas fa-percentage"></i>
+                </div>
+                <div class="stat-value">3.2%</div>
+                <div class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> 0.5% from last month
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="data-card">
+            <div class="card-header">
+                <h3 class="card-title">Recent Orders</h3>
+                <a href="orders.html" style="color: var(--primary); font-size: 0.9rem; font-weight: 600;">View All</a>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#APX-1024</td>
+                        <td>Sarah Jenkins</td>
+                        <td>Oct 24, 2025</td>
+                        <td><span class="status-badge status-paid">Paid</span></td>
+                        <td>$149.00</td>
+                        <td><a href="orders-view.html" style="color: #666;"><i class="fas fa-ellipsis-h"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td>#APX-1023</td>
+                        <td>Michael Chen</td>
+                        <td>Oct 24, 2025</td>
+                        <td><span class="status-badge status-pending">Processing</span></td>
+                        <td>$210.00</td>
+                        <td><a href="orders-view.html" style="color: #666;"><i class="fas fa-ellipsis-h"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td>#APX-1022</td>
+                        <td>Emma Wilson</td>
+                        <td>Oct 23, 2025</td>
+                        <td><span class="status-badge status-failed">Failed</span></td>
+                        <td>$89.00</td>
+                        <td><a href="orders-view.html" style="color: #666;"><i class="fas fa-ellipsis-h"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td>#APX-1021</td>
+                        <td>David Ross</td>
+                        <td>Oct 23, 2025</td>
+                        <td><span class="status-badge status-paid">Paid</span></td>
+                        <td>$300.24</td>
+                        <td><a href="orders-view.html" style="color: #666;"><i class="fas fa-ellipsis-h"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

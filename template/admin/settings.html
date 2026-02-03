@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | APEX Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .settings-nav {
+            display: flex;
+            gap: 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .tab-link {
+            padding-bottom: 15px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-link.active {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand">APEX <span>ADMIN</span></div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="products.html" class="nav-item">
+                <i class="fas fa-box"></i>
+                <span>Products</span>
+            </a>
+            <a href="orders.html" class="nav-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Orders</span>
+            </a>
+            <a href="customers.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="analytics.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="settings.html" class="nav-item active">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 0.9rem; color: white;">John Doe</div>
+                    <div style="font-size: 0.8rem;">Store Owner</div>
+                </div>
+                <i class="fas fa-sign-out-alt" style="cursor: pointer;"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h1 class="page-title">Settings</h1>
+            <button class="action-btn">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+
+        <div class="settings-nav">
+            <div class="tab-link active" data-target="general">General</div>
+            <div class="tab-link" data-target="payments">Payments</div>
+            <div class="tab-link" data-target="shipping">Shipping</div>
+            <div class="tab-link" data-target="team">Team</div>
+        </div>
+
+        <!-- General Settings -->
+        <div id="general" class="tab-content" style="display: block;">
+            <div class="data-card" style="padding: 30px;">
+                <h3 style="margin-bottom: 20px;">Store Details</h3>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label">Store Name</label>
+                            <input type="text" class="form-input" value="APEX Performance">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Store Contact Email</label>
+                            <input type="email" class="form-input" value="support@apex.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Currency</label>
+                            <select class="form-select">
+                                <option>USD ($)</option>
+                                <option>EUR (€)</option>
+                                <option>GBP (£)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label">Store Logo</label>
+                        <div class="image-upload">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #ccc; margin-bottom: 10px;"></i>
+                            <p style="font-size: 0.9rem; color: #666;">Click to upload or drag and drop</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payments Settings -->
+        <div id="payments" class="tab-content">
+            <div class="data-card" style="padding: 30px;">
+                <h3 style="margin-bottom: 20px;">Payment Providers</h3>
+                <div style="border: 1px solid var(--border); padding: 20px; border-radius: 6px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i class="fab fa-stripe" style="font-size: 2.5rem; color: #6772e5;"></i>
+                        <div>
+                            <div style="font-weight: 600;">Stripe</div>
+                            <div style="font-size: 0.85rem; color: #666;">Credit card payments</div>
+                        </div>
+                    </div>
+                    <button class="action-btn" style="background: white; color: #333; border: 1px solid #ddd;">Manage</button>
+                </div>
+                <div style="border: 1px solid var(--border); padding: 20px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i class="fab fa-paypal" style="font-size: 2rem; color: #003087;"></i>
+                        <div>
+                            <div style="font-weight: 600;">PayPal</div>
+                            <div style="font-size: 0.85rem; color: #666;">Express checkout</div>
+                        </div>
+                    </div>
+                    <button class="action-btn" style="background: var(--primary);">Activate</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

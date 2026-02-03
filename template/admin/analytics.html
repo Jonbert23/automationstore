@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics | APEX Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .chart-placeholder {
+            width: 100%;
+            height: 300px;
+            background: #f9fafb;
+            border: 1px dashed #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 1.2rem;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand">APEX <span>ADMIN</span></div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="products.html" class="nav-item">
+                <i class="fas fa-box"></i>
+                <span>Products</span>
+            </a>
+            <a href="orders.html" class="nav-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Orders</span>
+            </a>
+            <a href="customers.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="analytics.html" class="nav-item active">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 0.9rem; color: white;">John Doe</div>
+                    <div style="font-size: 0.8rem;">Store Owner</div>
+                </div>
+                <i class="fas fa-sign-out-alt" style="cursor: pointer;"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h1 class="page-title">Analytics</h1>
+            <select class="form-select" style="max-width: 150px;">
+                <option>Last 30 Days</option>
+                <option>Last 7 Days</option>
+                <option>This Year</option>
+            </select>
+        </div>
+
+        <!-- Sales Chart -->
+        <div class="data-card">
+            <div class="card-header">
+                <h3 class="card-title">Total Sales</h3>
+            </div>
+            <div style="padding: 20px;">
+                <div class="chart-placeholder">
+                    <i class="fas fa-chart-area" style="margin-right: 10px;"></i> Sales Graph Placeholder
+                </div>
+            </div>
+        </div>
+
+        <div class="form-grid">
+            <!-- Traffic Sources -->
+            <div class="data-card">
+                <div class="card-header">
+                    <h3 class="card-title">Traffic Sources</h3>
+                </div>
+                <div style="padding: 20px;">
+                    <div class="chart-placeholder" style="height: 200px;">
+                        <i class="fas fa-chart-pie" style="margin-right: 10px;"></i> Pie Chart Placeholder
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Direct</span>
+                            <span style="font-weight: 600;">45%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Social Media</span>
+                            <span style="font-weight: 600;">30%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Organic Search</span>
+                            <span style="font-weight: 600;">25%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Products -->
+            <div class="data-card">
+                <div class="card-header">
+                    <h3 class="card-title">Top Selling Products</h3>
+                </div>
+                <table class="data-table">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Zoom Velocity 5</div>
+                            </td>
+                            <td style="text-align: right;">120 sold</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Apex High-Top</div>
+                            </td>
+                            <td style="text-align: right;">85 sold</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Cloud Strider</div>
+                            </td>
+                            <td style="text-align: right;">64 sold</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Nitro Boost Red</div>
+                            </td>
+                            <td style="text-align: right;">42 sold</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

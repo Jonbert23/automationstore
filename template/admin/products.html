@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | APEX Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand">APEX <span>ADMIN</span></div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="products.html" class="nav-item active">
+                <i class="fas fa-box"></i>
+                <span>Products</span>
+            </a>
+            <a href="orders.html" class="nav-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Orders</span>
+            </a>
+            <a href="customers.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="analytics.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 0.9rem; color: white;">John Doe</div>
+                    <div style="font-size: 0.8rem;">Store Owner</div>
+                </div>
+                <i class="fas fa-sign-out-alt" style="cursor: pointer;"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h1 class="page-title">Products</h1>
+            <a href="products-form.html" class="action-btn">
+                <i class="fas fa-plus"></i> Add Product
+            </a>
+        </div>
+
+        <!-- Filters -->
+        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+            <input type="text" class="form-input" placeholder="Search products..." style="max-width: 300px;">
+            <select class="form-select" style="max-width: 150px;">
+                <option>All Categories</option>
+                <option>Running</option>
+                <option>Basketball</option>
+                <option>Training</option>
+            </select>
+            <select class="form-select" style="max-width: 150px;">
+                <option>Status: All</option>
+                <option>Active</option>
+                <option>Draft</option>
+                <option>Out of Stock</option>
+            </select>
+        </div>
+
+        <!-- Products Table -->
+        <div class="data-card">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;"><input type="checkbox"></th>
+                        <th style="width: 80px;">Image</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><div style="width: 50px; height: 50px; background: #eee; border-radius: 4px;"></div></td>
+                        <td>
+                            <div style="font-weight: 600;">Zoom Velocity 5</div>
+                            <div style="font-size: 0.8rem; color: #666;">SKU: APX-ZV5-001</div>
+                        </td>
+                        <td>Running</td>
+                        <td>124</td>
+                        <td>$149.00</td>
+                        <td><span class="status-badge status-paid">Active</span></td>
+                        <td>
+                            <div style="display: flex; gap: 10px;">
+                                <a href="products-form.html" style="color: #666;"><i class="fas fa-edit"></i></a>
+                                <i class="fas fa-trash" style="cursor: pointer; color: var(--danger);"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><div style="width: 50px; height: 50px; background: #eee; border-radius: 4px;"></div></td>
+                        <td>
+                            <div style="font-weight: 600;">Apex High-Top</div>
+                            <div style="font-size: 0.8rem; color: #666;">SKU: APX-HT-002</div>
+                        </td>
+                        <td>Lifestyle</td>
+                        <td>45</td>
+                        <td>$189.00</td>
+                        <td><span class="status-badge status-paid">Active</span></td>
+                        <td>
+                            <div style="display: flex; gap: 10px;">
+                                <a href="products-form.html" style="color: #666;"><i class="fas fa-edit"></i></a>
+                                <i class="fas fa-trash" style="cursor: pointer; color: var(--danger);"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><div style="width: 50px; height: 50px; background: #eee; border-radius: 4px;"></div></td>
+                        <td>
+                            <div style="font-weight: 600;">Nitro Boost Red</div>
+                            <div style="font-size: 0.8rem; color: #666;">SKU: APX-NBR-003</div>
+                        </td>
+                        <td>Training</td>
+                        <td>0</td>
+                        <td>$129.00</td>
+                        <td><span class="status-badge status-failed">Out of Stock</span></td>
+                        <td>
+                            <div style="display: flex; gap: 10px;">
+                                <a href="products-form.html" style="color: #666;"><i class="fas fa-edit"></i></a>
+                                <i class="fas fa-trash" style="cursor: pointer; color: var(--danger);"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div style="display: flex; justify-content: space-between; align-items: center; color: #666; font-size: 0.9rem;">
+            <span>Showing 1-10 of 45 products</span>
+            <div style="display: flex; gap: 5px;">
+                <button style="padding: 5px 10px; border: 1px solid #ddd; background: white; border-radius: 4px;">Previous</button>
+                <button style="padding: 5px 10px; border: 1px solid #ddd; background: white; border-radius: 4px;">Next</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

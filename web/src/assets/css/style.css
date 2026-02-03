@@ -1,0 +1,527 @@
+/* Modern Sport Ecommerce Design System - APEX */
+:root {
+    --primary: #000000;
+    --secondary: #444444;
+    --accent: #D9FF00; /* Neon Lime */
+    --accent-hover: #B8D900;
+    --light: #F4F4F4;
+    --white: #FFFFFF;
+    --border: #E0E0E0;
+    --success: #00C853;
+    --danger: #FF1744;
+    --font-main: 'Roboto', sans-serif;
+    --font-heading: 'Oswald', sans-serif; /* Strong, condensed heading */
+    --transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Snappier transition */
+    --shadow: 0 10px 30px rgba(0,0,0,0.08);
+    --shadow-hover: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    color: var(--primary);
+    background-color: var(--white);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; transition: var(--transition); }
+ul { list-style: none; }
+img { max-width: 100%; display: block; }
+button, input, select { font-family: inherit; }
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+    font-style: italic; /* Sporty feel */
+}
+
+.container {
+    max-width: 1300px; /* Wider container for impact */
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 14px 35px;
+    background: var(--primary);
+    color: var(--white);
+    border: 2px solid var(--primary);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    transform: skew(-10deg); /* Skewed buttons for speed */
+}
+
+.btn span {
+    display: inline-block;
+    transform: skew(10deg); /* Unskew text */
+}
+
+.btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--primary);
+    transform: skew(-10deg) translateY(-3px);
+    box-shadow: 0 10px 20px rgba(217, 255, 0, 0.4);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.btn-outline:hover {
+    background: var(--primary);
+    color: var(--white);
+    transform: skew(-10deg) translateY(-3px);
+}
+
+/* Header */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255,255,255,0.98);
+    z-index: 1000;
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+    transition: var(--transition);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.logo {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    font-style: italic;
+    color: var(--primary);
+    text-transform: uppercase;
+}
+
+.logo span {
+    color: var(--accent-hover); /* Darker lime for text visibility */
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+}
+
+.nav-links a {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    position: relative;
+    letter-spacing: 0.5px;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: var(--accent);
+    transition: var(--transition);
+    transform: skew(-20deg);
+}
+
+.nav-links a:hover::after, .nav-links a.active::after {
+    width: 100%;
+}
+
+.nav-icons {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.icon-btn {
+    position: relative;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.icon-btn:hover {
+    color: var(--accent-hover);
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--accent);
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 800;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile Menu */
+.hamburger {
+    display: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+/* Hero Section */
+.hero {
+    height: 85vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Left align for sport dynamic */
+    position: relative;
+    margin-top: 95px; /* Header + Top bar */
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    color: var(--white);
+    max-width: 700px;
+    padding: 0 20px;
+    margin-left: 5%;
+    opacity: 0;
+    transform: translateX(-30px);
+    animation: slideRight 0.8s forwards 0.3s;
+}
+
+.hero h1 {
+    font-size: 5rem;
+    margin-bottom: 10px;
+    line-height: 0.9;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+}
+
+.hero p {
+    font-size: 1.4rem;
+    margin-bottom: 40px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Product Grid */
+.section-title {
+    text-align: center;
+    margin: 100px 0 50px;
+    position: relative;
+}
+
+.section-title h2 {
+    font-size: 3rem;
+    display: inline-block;
+}
+
+.section-title h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--accent);
+    margin: 10px auto 0;
+    transform: skew(-20deg);
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 40px;
+    margin-bottom: 80px;
+}
+
+.product-card {
+    group: relative;
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--border);
+    box-shadow: var(--shadow);
+}
+
+.product-image {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1; /* Square for shoes */
+    background: #f8f8f8;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image img {
+    width: 90%;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.1) rotate(-5deg);
+}
+
+.product-actions {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: var(--transition);
+}
+
+.product-card:hover .product-actions {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.product-info {
+    padding: 0 15px 20px;
+}
+
+.product-info h3 {
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+    font-style: normal;
+}
+
+.product-category {
+    font-size: 0.8rem;
+    color: var(--secondary);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.product-price {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.2rem;
+    font-family: var(--font-heading);
+}
+
+/* Footer */
+footer {
+    background: #000;
+    color: var(--white);
+    padding: 100px 0 40px;
+    clip-path: polygon(0 50px, 100% 0, 100% 100%, 0 100%); /* Angled top */
+    margin-top: -50px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 50px;
+    margin-bottom: 60px;
+}
+
+.footer-col h4 {
+    color: var(--white);
+    margin-bottom: 25px;
+    font-size: 1.4rem;
+    color: var(--accent);
+}
+
+.footer-col ul li {
+    margin-bottom: 12px;
+}
+
+.footer-col ul li a {
+    color: #888;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.footer-col ul li a:hover {
+    color: var(--white);
+    padding-left: 5px;
+}
+
+.newsletter input {
+    width: 100%;
+    padding: 15px;
+    background: #222;
+    border: 1px solid #333;
+    color: var(--white);
+    margin-bottom: 10px;
+    font-family: var(--font-heading);
+    letter-spacing: 1px;
+}
+
+.newsletter input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* Animations */
+@keyframes slideRight {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Page Specifics */
+.page-header {
+    padding: 150px 0 80px;
+    text-align: center;
+    background: var(--light);
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    margin-bottom: 60px;
+}
+
+.page-header h1 {
+    font-size: 4rem;
+    margin-bottom: 10px;
+}
+
+/* Cart Page */
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+}
+
+.cart-table th {
+    text-align: left;
+    padding: 15px;
+    border-bottom: 2px solid var(--primary);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+}
+
+.cart-table td {
+    padding: 25px 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.cart-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    background: #f4f4f4;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-family: var(--font-heading);
+}
+
+.form-control {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ddd;
+    transition: var(--transition);
+    background: #f9f9f9;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    header { top: 50px; } /* Adjust for top bar wrapping */
+    
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        width: 85%;
+        background: var(--primary);
+        flex-direction: column;
+        padding: 100px 40px;
+        transition: var(--transition);
+        z-index: 1001;
+    }
+
+    .nav-links a {
+        color: var(--white);
+        font-size: 1.5rem;
+    }
+
+    .nav-links.active {
+        right: 0;
+    }
+
+    .hamburger {
+        display: block;
+        z-index: 1002;
+    }
+    
+    .hero h1 { font-size: 3rem; }
+    
+    .hero-content { margin-left: 0; text-align: center; }
+    
+    .hero { justify-content: center; }
+}

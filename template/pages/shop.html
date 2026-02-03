@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop All | APEX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <!-- Top Announcement Bar -->
+        <div style="background: #111; color: var(--accent); text-align: center; padding: 8px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+            <i class="fas fa-bolt" style="margin-right: 5px;"></i> Free Express Shipping on Orders Over $150
+        </div>
+        
+        <div class="container nav-container">
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <a href="../index.html" class="logo">APEX<span>.</span></a>
+
+            <nav class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="shop.html" class="active">Men</a>
+                <a href="shop.html">Women</a>
+                <a href="shop.html">New Drops</a>
+                <a href="contact.html">Support</a>
+            </nav>
+
+            <div class="nav-icons">
+                <div class="icon-btn"><i class="fas fa-search"></i></div>
+                <a href="cart.html" class="icon-btn">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <a href="account.html" class="icon-btn"><i class="far fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>Performance Footwear</h1>
+            <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto; color: #666;">Engineered for every athlete. Find your perfect fit for running, training, and lifestyle.</p>
+        </div>
+    </div>
+
+    <!-- Shop Layout -->
+    <section class="container" style="padding: 0 20px 80px;">
+        <div style="display: flex; gap: 50px; flex-wrap: wrap;">
+            
+            <!-- Sidebar Filters -->
+            <aside style="flex: 1; min-width: 250px;">
+                <div style="margin-bottom: 40px;">
+                    <h4>Sport</h4>
+                    <ul style="margin-top: 20px;">
+                        <li style="margin-bottom: 12px;"><a href="#" style="color: var(--primary); font-weight: 700;">All Sports</a></li>
+                        <li style="margin-bottom: 12px;"><a href="#" style="color: var(--secondary);">Running</a></li>
+                        <li style="margin-bottom: 12px;"><a href="#" style="color: var(--secondary);">Basketball</a></li>
+                        <li style="margin-bottom: 12px;"><a href="#" style="color: var(--secondary);">Training & Gym</a></li>
+                        <li style="margin-bottom: 12px;"><a href="#" style="color: var(--secondary);">Trail</a></li>
+                        <li style="margin-bottom: 12px;"><a href="#" style="color: var(--secondary);">Lifestyle</a></li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 40px;">
+                    <h4>Price Range</h4>
+                    <div style="margin-top: 20px; display: flex; gap: 10px; align-items: center;">
+                        <input type="number" placeholder="Min" class="form-control" style="padding: 10px;">
+                        <span>-</span>
+                        <input type="number" placeholder="Max" class="form-control" style="padding: 10px;">
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Color</h4>
+                    <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+                        <span style="width: 30px; height: 30px; background: black; border-radius: 50%; cursor: pointer; border: 2px solid #ddd;"></span>
+                        <span style="width: 30px; height: 30px; background: white; border-radius: 50%; cursor: pointer; border: 2px solid #ddd;"></span>
+                        <span style="width: 30px; height: 30px; background: #FF1744; border-radius: 50%; cursor: pointer; border: 2px solid #ddd;"></span>
+                        <span style="width: 30px; height: 30px; background: #2979FF; border-radius: 50%; cursor: pointer; border: 2px solid #ddd;"></span>
+                        <span style="width: 30px; height: 30px; background: #D9FF00; border-radius: 50%; cursor: pointer; border: 2px solid #ddd;"></span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Product Grid -->
+            <div style="flex: 3;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 20px;">
+                    <span style="font-weight: 700; color: #666;">Showing 9 results</span>
+                    <select class="form-control" style="width: auto; padding: 10px 30px 10px 10px;">
+                        <option>Sort by: Featured</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                        <option>Newest Drops</option>
+                    </select>
+                </div>
+
+                <div class="product-grid">
+                    <!-- Product 1 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <a href="product.html">
+                                <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=600&q=80" alt="Running Green">
+                            </a>
+                            <div class="product-actions">
+                                <button class="btn add-to-cart"><span>Add to Cart</span></button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Running</span>
+                            <h3><a href="product.html">Zoom Velocity 5</a></h3>
+                            <div class="product-price">$149.00</div>
+                        </div>
+                    </div>
+        
+                    <!-- Product 2 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <a href="product.html">
+                                <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=600&q=80" alt="High Top">
+                            </a>
+                            <div class="product-actions">
+                                <button class="btn add-to-cart"><span>Add to Cart</span></button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Lifestyle</span>
+                            <h3><a href="product.html">Apex High-Top</a></h3>
+                            <div class="product-price">$189.00</div>
+                        </div>
+                    </div>
+        
+                    <!-- Product 3 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <a href="product.html">
+                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" alt="Red Shoe">
+                            </a>
+                            <div class="product-actions">
+                                <button class="btn add-to-cart"><span>Add to Cart</span></button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Training</span>
+                            <h3><a href="product.html">Nitro Boost Red</a></h3>
+                            <div class="product-price">$129.00</div>
+                        </div>
+                    </div>
+        
+                    <!-- Product 4 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <a href="product.html">
+                                <img src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?auto=format&fit=crop&w=600&q=80" alt="Blue Shoe">
+                            </a>
+                            <div class="product-actions">
+                                <button class="btn add-to-cart"><span>Add to Cart</span></button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Running</span>
+                            <h3><a href="product.html">Cloud Strider</a></h3>
+                            <div class="product-price">$159.00</div>
+                        </div>
+                    </div>
+
+                    <!-- Product 5 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <a href="product.html">
+                                <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=600&q=80" alt="Blue Runner">
+                            </a>
+                            <div class="product-actions">
+                                <button class="btn add-to-cart"><span>Add to Cart</span></button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Running</span>
+                            <h3><a href="product.html">Marathon Elite</a></h3>
+                            <div class="product-price">$210.00</div>
+                        </div>
+                    </div>
+
+                    <!-- Product 6 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <a href="product.html">
+                                <img src="https://images.unsplash.com/photo-1584735175315-9d5df23860e6?auto=format&fit=crop&w=600&q=80" alt="White Red">
+                            </a>
+                            <div class="product-actions">
+                                <button class="btn add-to-cart"><span>Add to Cart</span></button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Basketball</span>
+                            <h3><a href="product.html">Court King 2</a></h3>
+                            <div class="product-price">$130.00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 60px;">
+                    <a href="#" class="btn btn-outline" style="padding: 10px 20px;">1</a>
+                    <a href="#" class="btn" style="padding: 10px 20px; background: var(--primary); color: white; border-color: var(--primary);">2</a>
+                    <a href="#" class="btn btn-outline" style="padding: 10px 20px;">3</a>
+                    <a href="#" class="btn btn-outline" style="padding: 10px 20px;">Next &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4 class="logo" style="font-size: 1.8rem; margin-bottom: 20px; color: white;">APEX<span>.</span></h4>
+                    <p style="color: #888; font-size: 0.9rem;">Pushing the boundaries of athletic performance since 2026. We build gear for those who refuse to settle.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="shop.html">Men's Running</a></li>
+                        <li><a href="shop.html">Women's Training</a></li>
+                        <li><a href="shop.html">Basketball</a></li>
+                        <li><a href="shop.html">New Arrivals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Order Status</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Size Charts</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Join The Club</h4>
+                    <p style="color: #888; font-size: 0.85rem; margin-bottom: 15px;">Get exclusive access to new drops and sales.</p>
+                    <form class="newsletter">
+                        <input type="email" placeholder="ENTER YOUR EMAIL">
+                        <button type="submit" class="btn" style="width: 100%; padding: 12px;"><span>SUBSCRIBE</span></button>
+                    </form>
+                </div>
+            </div>
+            <div style="border-top: 1px solid #222; padding-top: 30px; text-align: center; color: #555; font-size: 0.8rem; display: flex; justify-content: space-between;">
+                <span>&copy; 2026 APEX Performance. All rights reserved.</span>
+                <div style="display: flex; gap: 15px;">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

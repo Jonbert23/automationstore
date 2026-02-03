@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order #APX-1024 | APEX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="../index.html" class="brand">APEX <span>ATHLETE</span></a>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="account.html" class="nav-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="account-orders.html" class="nav-item active">
+                <i class="fas fa-box"></i>
+                <span>Order History</span>
+            </a>
+            <a href="account-addresses.html" class="nav-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Addresses</span>
+            </a>
+            <a href="account-payment.html" class="nav-item">
+                <i class="fas fa-credit-card"></i>
+                <span>Payment Methods</span>
+            </a>
+            <a href="account-wishlist.html" class="nav-item">
+                <i class="fas fa-heart"></i>
+                <span>Wishlist</span>
+            </a>
+            <a href="account-profile.html" class="nav-item">
+                <i class="fas fa-user-cog"></i>
+                <span>Profile Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 0.9rem; color: white;">Jonathan Doe</div>
+                    <div style="font-size: 0.8rem;">Member since 2024</div>
+                </div>
+                <a href="../index.html" style="color: #9ca3af;"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <a href="account-orders.html" style="color: var(--text-muted); font-size: 1.2rem;"><i class="fas fa-arrow-left"></i></a>
+                <h1 class="page-title">Order #APX-1024</h1>
+            </div>
+            <button class="action-btn">
+                <i class="fas fa-file-invoice"></i> Invoice
+            </button>
+        </div>
+
+        <div class="data-card">
+            <div class="card-header">
+                <h3 class="card-title">Order Details</h3>
+                <span class="status-badge status-processing">Processing</span>
+            </div>
+
+            <!-- Tracker -->
+            <div style="display: flex; justify-content: space-between; margin: 40px 0; position: relative;">
+                <div style="position: absolute; top: 50%; left: 0; width: 100%; height: 4px; background: #e5e7eb; z-index: 0; transform: translateY(-50%);"></div>
+                
+                <div style="position: relative; z-index: 1; text-align: center; background: white; padding: 0 10px;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: var(--accent); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 1.1rem;"><i class="fas fa-check"></i></div>
+                    <div style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: var(--primary);">Confirmed</div>
+                </div>
+                <div style="position: relative; z-index: 1; text-align: center; background: white; padding: 0 10px;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: var(--accent); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 1.1rem;"><i class="fas fa-box"></i></div>
+                    <div style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: var(--primary);">Processing</div>
+                </div>
+                <div style="position: relative; z-index: 1; text-align: center; background: white; padding: 0 10px;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: #e5e7eb; color: #9ca3af; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 1.1rem;"><i class="fas fa-shipping-fast"></i></div>
+                    <div style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: #9ca3af;">Shipped</div>
+                </div>
+                <div style="position: relative; z-index: 1; text-align: center; background: white; padding: 0 10px;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: #e5e7eb; color: #9ca3af; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 1.1rem;"><i class="fas fa-home"></i></div>
+                    <div style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: #9ca3af;">Delivered</div>
+                </div>
+            </div>
+
+            <!-- Items -->
+            <div style="margin-bottom: 30px;">
+                <div style="display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--border);">
+                    <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=200&q=80" alt="Product" style="width: 80px; height: 80px; object-fit: contain; background: #f4f4f4;">
+                    <div style="flex: 1;">
+                        <h4 style="margin-bottom: 5px; font-weight: 600;">Zoom Velocity 5</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Neon Lime / US 9</p>
+                        <div style="margin-top: 10px; font-weight: 700;">$149.00 <span style="font-weight: 400; color: var(--text-muted);">x 1</span></div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--border);">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=200&q=80" alt="Product" style="width: 80px; height: 80px; object-fit: contain; background: #f4f4f4;">
+                    <div style="flex: 1;">
+                        <h4 style="margin-bottom: 5px; font-weight: 600;">Nitro Boost Red</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Red / US 10</p>
+                        <div style="margin-top: 10px; font-weight: 700;">$129.00 <span style="font-weight: 400; color: var(--text-muted);">x 1</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; border-top: 1px solid var(--border); padding-top: 30px;">
+                <div>
+                    <h4 style="margin-bottom: 15px; font-weight: 600;">Shipping Address</h4>
+                    <p style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">
+                        Jonathan Doe<br>
+                        123 Athlete Way<br>
+                        Sport City, NY 10012<br>
+                        United States
+                    </p>
+                </div>
+                <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Subtotal</span>
+                        <span>$278.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Shipping</span>
+                        <span>$0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Tax</span>
+                        <span>$22.24</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.2rem; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border);">
+                        <span>Total</span>
+                        <span>$300.24</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

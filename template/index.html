@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APEX | Performance Footwear</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <!-- Top Announcement Bar -->
+        <div style="background: #111; color: var(--accent); text-align: center; padding: 8px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+            <i class="fas fa-bolt" style="margin-right: 5px;"></i> Free Express Shipping on Orders Over $150
+        </div>
+
+        <div class="container nav-container">
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <a href="index.html" class="logo">APEX<span>.</span></a>
+
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="pages/shop.html">Men</a>
+                <a href="pages/shop.html">Women</a>
+                <a href="pages/shop.html">New Drops</a>
+                <a href="pages/contact.html">Support</a>
+            </nav>
+
+            <div class="nav-icons">
+                <div class="icon-btn"><i class="fas fa-search"></i></div>
+                <a href="pages/cart.html" class="icon-btn">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <a href="pages/account.html" class="icon-btn"><i class="far fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" style="background-image: url('https://images.unsplash.com/photo-1556906781-9a412961c28c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+        <div class="hero-content">
+            <h1>Unleash Your<br><span style="color: var(--accent);">Potential</span></h1>
+            <p>Engineered for speed. Designed for the streets.</p>
+            <a href="pages/shop.html" class="btn"><span>Shop Latest</span></a>
+        </div>
+    </section>
+
+    <!-- As Seen In -->
+    <section style="padding: 40px 0; background: #fff; border-bottom: 1px solid var(--border);">
+        <div class="container" style="text-align: center;">
+            <p style="color: #999; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; font-weight: 700;">Trusted By Pros</p>
+            <div style="display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; opacity: 0.4; filter: grayscale(100%);">
+                <i class="fab fa-nike" style="font-size: 2.5rem;"></i>
+                <i class="fab fa-adidas" style="font-size: 2.5rem;"></i>
+                <i class="fab fa-puma" style="font-size: 2.5rem;"></i>
+                <i class="fab fa-under-armour" style="font-size: 2.5rem;"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="container" style="margin-top: 100px;">
+        <div class="section-title">
+            <h2>Shop by Sport</h2>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            <div style="position: relative; height: 400px; overflow: hidden; background: #000;">
+                <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=800&q=80" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.5s;" onmouseover="this.style.opacity='1'; this.style.transform='scale(1.1)'" onmouseout="this.style.opacity='0.7'; this.style.transform='scale(1)'">
+                <div style="position: absolute; bottom: 30px; left: 30px; color: white; z-index: 2;">
+                    <h3 style="font-size: 2.5rem; margin-bottom: 5px; color: var(--accent);">Running</h3>
+                    <a href="pages/shop.html" class="btn btn-outline" style="border-color: white; color: white; padding: 10px 25px;">View Gear</a>
+                </div>
+            </div>
+            <div style="position: relative; height: 400px; overflow: hidden; background: #000;">
+                <img src="https://images.unsplash.com/photo-1519861531473-920026393112?auto=format&fit=crop&w=800&q=80" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.5s;" onmouseover="this.style.opacity='1'; this.style.transform='scale(1.1)'" onmouseout="this.style.opacity='0.7'; this.style.transform='scale(1)'">
+                <div style="position: absolute; bottom: 30px; left: 30px; color: white; z-index: 2;">
+                    <h3 style="font-size: 2.5rem; margin-bottom: 5px; color: var(--accent);">Basketball</h3>
+                    <a href="pages/shop.html" class="btn btn-outline" style="border-color: white; color: white; padding: 10px 25px;">View Gear</a>
+                </div>
+            </div>
+            <div style="position: relative; height: 400px; overflow: hidden; background: #000;">
+                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.5s;" onmouseover="this.style.opacity='1'; this.style.transform='scale(1.1)'" onmouseout="this.style.opacity='0.7'; this.style.transform='scale(1)'">
+                <div style="position: absolute; bottom: 30px; left: 30px; color: white; z-index: 2;">
+                    <h3 style="font-size: 2.5rem; margin-bottom: 5px; color: var(--accent);">Training</h3>
+                    <a href="pages/shop.html" class="btn btn-outline" style="border-color: white; color: white; padding: 10px 25px;">View Gear</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Sellers -->
+    <section class="container">
+        <div class="section-title">
+            <h2>Trending Now</h2>
+            <p>Top rated performance gear chosen by athletes.</p>
+        </div>
+
+        <div class="product-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <a href="pages/product.html">
+                        <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=600&q=80" alt="Nike Green">
+                    </a>
+                    <div class="product-actions">
+                        <button class="btn add-to-cart"><span>Add to Cart</span></button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Running</span>
+                    <h3><a href="pages/product.html">Zoom Velocity 5</a></h3>
+                    <div class="product-price">$149.00</div>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <a href="pages/product.html">
+                        <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=600&q=80" alt="Jordan High">
+                    </a>
+                    <div class="product-actions">
+                        <button class="btn add-to-cart"><span>Add to Cart</span></button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Lifestyle</span>
+                    <h3><a href="pages/product.html">Apex High-Top</a></h3>
+                    <div class="product-price">$189.00</div>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <a href="pages/product.html">
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" alt="Red Shoe">
+                    </a>
+                    <div class="product-actions">
+                        <button class="btn add-to-cart"><span>Add to Cart</span></button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Training</span>
+                    <h3><a href="pages/product.html">Nitro Boost Red</a></h3>
+                    <div class="product-price">$129.00</div>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <a href="pages/product.html">
+                        <img src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?auto=format&fit=crop&w=600&q=80" alt="Blue Shoe">
+                    </a>
+                    <div class="product-actions">
+                        <button class="btn add-to-cart"><span>Add to Cart</span></button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Running</span>
+                    <h3><a href="pages/product.html">Cloud Strider</a></h3>
+                    <div class="product-price">$159.00</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 80px;">
+            <a href="pages/shop.html" class="btn btn-outline"><span>View All Products</span></a>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section style="background-color: #111; color: white; padding: 100px 0; clip-path: polygon(0 0, 100% 10%, 100% 100%, 0 90%);">
+        <div class="container">
+            <div class="section-title" style="margin-top: 0;">
+                <h2 style="color: white;">Engineered for Performance</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; text-align: center;">
+                <div>
+                    <i class="fas fa-wind" style="font-size: 3rem; color: var(--accent); margin-bottom: 25px;"></i>
+                    <h4 style="color: white; font-size: 1.5rem;">Aerodynamic Design</h4>
+                    <p style="color: #999;">Reduced drag for maximum speed efficiency.</p>
+                </div>
+                <div>
+                    <i class="fas fa-feather-alt" style="font-size: 3rem; color: var(--accent); margin-bottom: 25px;"></i>
+                    <h4 style="color: white; font-size: 1.5rem;">Ultra Lightweight</h4>
+                    <p style="color: #999;">Feather-light materials that won't weigh you down.</p>
+                </div>
+                <div>
+                    <i class="fas fa-shoe-prints" style="font-size: 3rem; color: var(--accent); margin-bottom: 25px;"></i>
+                    <h4 style="color: white; font-size: 1.5rem;">Superior Grip</h4>
+                    <p style="color: #999;">Advanced traction patterns for any terrain.</p>
+                </div>
+                <div>
+                    <i class="fas fa-recycle" style="font-size: 3rem; color: var(--accent); margin-bottom: 25px;"></i>
+                    <h4 style="color: white; font-size: 1.5rem;">Eco-Conscious</h4>
+                    <p style="color: #999;">Made with 50% recycled ocean plastics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="container" style="padding: 100px 0;">
+        <div class="section-title">
+            <h2>Athlete Reviews</h2>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            <div style="padding: 40px; background: #f8f8f8; border-left: 5px solid var(--accent);">
+                <div style="color: var(--accent); margin-bottom: 15px;">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p style="font-style: italic; margin-bottom: 20px; font-size: 1.1rem; font-weight: 500;">"The energy return on the Zoom Velocity is insane. Shaved 30 seconds off my 5K time."</p>
+                <h5 style="margin-bottom: 0;">Marcus J.</h5>
+                <span style="font-size: 0.8rem; color: #666; text-transform: uppercase; font-weight: 700;">Marathon Runner</span>
+            </div>
+            <div style="padding: 40px; background: #f8f8f8; border-left: 5px solid var(--accent);">
+                <div style="color: var(--accent); margin-bottom: 15px;">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p style="font-style: italic; margin-bottom: 20px; font-size: 1.1rem; font-weight: 500;">"Best basketball shoes I've owned. The ankle support is top-notch without sacrificing mobility."</p>
+                <h5 style="margin-bottom: 0;">David R.</h5>
+                <span style="font-size: 0.8rem; color: #666; text-transform: uppercase; font-weight: 700;">Shooting Guard</span>
+            </div>
+            <div style="padding: 40px; background: #f8f8f8; border-left: 5px solid var(--accent);">
+                <div style="color: var(--accent); margin-bottom: 15px;">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+                <p style="font-style: italic; margin-bottom: 20px; font-size: 1.1rem; font-weight: 500;">"Stylish enough for the gym and the street. The Nitro Boost fits like a glove."</p>
+                <h5 style="margin-bottom: 0;">Sarah K.</h5>
+                <span style="font-size: 0.8rem; color: #666; text-transform: uppercase; font-weight: 700;">Crossfit Athlete</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Limited Time Offer Banner -->
+    <section style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1517466787929-bc90951d64b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; padding: 120px 0; text-align: center; color: white; background-attachment: fixed;">
+        <div class="container">
+            <h2 style="font-size: 4rem; margin-bottom: 10px; color: var(--accent);">Flash Sale</h2>
+            <p style="font-size: 1.5rem; margin-bottom: 40px; font-weight: 300;">24 Hours Only. 50% Off Select Styles.</p>
+            
+            <div id="countdown" style="display: flex; justify-content: center; gap: 30px; margin-bottom: 50px;">
+                <div><span id="days" style="font-size: 3rem; font-weight: 700; font-family: 'Oswald';">00</span><div style="font-size: 0.9rem; color: #ccc;">DAYS</div></div>
+                <div><span id="hours" style="font-size: 3rem; font-weight: 700; font-family: 'Oswald';">00</span><div style="font-size: 0.9rem; color: #ccc;">HOURS</div></div>
+                <div><span id="minutes" style="font-size: 3rem; font-weight: 700; font-family: 'Oswald';">00</span><div style="font-size: 0.9rem; color: #ccc;">MINS</div></div>
+                <div><span id="seconds" style="font-size: 3rem; font-weight: 700; font-family: 'Oswald'; color: var(--accent);">00</span><div style="font-size: 0.9rem; color: #ccc;">SECS</div></div>
+            </div>
+            
+            <a href="pages/shop.html" class="btn" style="background: var(--accent); color: black; border-color: var(--accent);"><span>Shop The Sale</span></a>
+        </div>
+    </section>
+
+    <!-- Instagram / Shop the Look -->
+    <section class="container" style="padding: 80px 0;">
+        <div class="section-title">
+            <h2>#TeamAPEX</h2>
+            <p>Join the movement. Tag us to be featured.</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+            <div style="aspect-ratio: 1; overflow: hidden; position: relative;">
+                <img src="https://images.unsplash.com/photo-1483721310020-03333e577078?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+            <div style="aspect-ratio: 1; overflow: hidden; position: relative;">
+                <img src="https://images.unsplash.com/photo-1518002171953-a080ee32bede?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+            <div style="aspect-ratio: 1; overflow: hidden; position: relative;">
+                <img src="https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+            <div style="aspect-ratio: 1; overflow: hidden; position: relative;">
+                <img src="https://images.unsplash.com/photo-1539185441755-769473a23570?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="#" class="btn btn-outline"><span><i class="fab fa-instagram" style="margin-right: 8px;"></i> Follow @APEX_Official</span></a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4 class="logo" style="font-size: 1.8rem; margin-bottom: 20px; color: white;">APEX<span>.</span></h4>
+                    <p style="color: #888; font-size: 0.9rem;">Pushing the boundaries of athletic performance since 2026. We build gear for those who refuse to settle.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="pages/shop.html">Men's Running</a></li>
+                        <li><a href="pages/shop.html">Women's Training</a></li>
+                        <li><a href="pages/shop.html">Basketball</a></li>
+                        <li><a href="pages/shop.html">New Arrivals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="pages/contact.html">Order Status</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Size Charts</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Join The Club</h4>
+                    <p style="color: #888; font-size: 0.85rem; margin-bottom: 15px;">Get exclusive access to new drops and sales.</p>
+                    <form class="newsletter">
+                        <input type="email" placeholder="ENTER YOUR EMAIL">
+                        <button type="submit" class="btn" style="width: 100%; padding: 12px;"><span>SUBSCRIBE</span></button>
+                    </form>
+                </div>
+            </div>
+            <div style="border-top: 1px solid #222; padding-top: 30px; text-align: center; color: #555; font-size: 0.8rem; display: flex; justify-content: space-between;">
+                <span>&copy; 2026 APEX Performance. All rights reserved.</span>
+                <div style="display: flex; gap: 15px;">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
