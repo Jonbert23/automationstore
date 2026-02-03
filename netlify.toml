@@ -1,0 +1,27 @@
+# Netlify configuration for SHUZEE Digital Store
+
+[build]
+  # Base directory (where package.json is located)
+  base = "web"
+  
+  # Build command
+  command = "npm install && npm run build"
+  
+  # Output directory (relative to base)
+  publish = "dist"
+
+# Environment variables (set these in Netlify dashboard)
+[build.environment]
+  NODE_VERSION = "18"
+
+# SPA redirect - all routes go to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Cache static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
