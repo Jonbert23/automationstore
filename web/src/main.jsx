@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './assets/css/style.css'
 import App from './App.jsx'
 
-console.log('APEX App Starting...');
+console.log('SHUZEE App Starting...');
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

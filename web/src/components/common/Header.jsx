@@ -35,7 +35,7 @@ const Header = () => {
           <i className="fas fa-bars"></i>
         </div>
         
-        <Link to="/" className="logo">APEX<span>.</span></Link>
+        <Link to="/" className="logo">SHUZEE<span>.</span></Link>
 
         <nav className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
           <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>

@@ -167,7 +167,7 @@ const Home = () => {
       {/* Instagram / Shop the Look */}
       <section className="container" style={{ padding: '80px 0' }}>
         <div className="section-title">
-          <h2>#TeamAPEX</h2>
+          <h2>#TeamSHUZEE</h2>
           <p>Join the movement. Tag us to be featured.</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px' }}>
@@ -189,7 +189,7 @@ const Home = () => {
           ))}
         </div>
         <div style={{ textAlign: 'center', marginTop: '40px' }}>
-          <a href="#" className="btn btn-outline"><span><i className="fab fa-instagram" style={{ marginRight: '8px' }}></i> Follow @APEX_Official</span></a>
+          <a href="#" className="btn btn-outline"><span><i className="fab fa-instagram" style={{ marginRight: '8px' }}></i> Follow @SHUZEE_Official</span></a>
         </div>
       </section>
     </>

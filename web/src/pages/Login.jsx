@@ -138,7 +138,7 @@ const Login = () => {
     <section style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 20px' }}>
       <div style={{ maxWidth: '450px', width: '100%', textAlign: 'center' }}>
         {/* Logo */}
-        <h1 className="logo" style={{ fontSize: '3rem', marginBottom: '10px' }}>APEX<span>.</span></h1>
+        <h1 className="logo" style={{ fontSize: '3rem', marginBottom: '10px' }}>SHUZEE<span>.</span></h1>
         <p style={{ color: '#666', marginBottom: '40px' }}>Performance Footwear</p>
 
         {/* Auth Card */}

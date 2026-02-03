@@ -49,7 +49,7 @@ const AccountLayout = () => {
       {/* Sidebar */}
       <aside className="account-sidebar">
         <div className="sidebar-header">
-          <Link to="/" className="sidebar-brand">APEX <span>ATHLETE</span></Link>
+          <Link to="/" className="sidebar-brand">SHUZEE</Link>
         </div>
         
         <nav className="sidebar-nav">

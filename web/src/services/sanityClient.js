@@ -10,7 +10,7 @@ const token = import.meta.env.VITE_SANITY_TOKEN;
 const isSanityConfigured = Boolean(projectId && dataset);
 
 // Store customization
-export const storeName = import.meta.env.VITE_STORE_NAME || 'APEX';
+export const storeName = import.meta.env.VITE_STORE_NAME || 'SHUZEE';
 
 console.log('Sanity Client initialized with projectId:', projectId);
 

@@ -84,7 +84,7 @@ const AdminLayout = () => {
       <aside className="admin-sidebar">
         <div className="admin-sidebar-header">
           <NavLink to="/admin" className="admin-brand">
-            APEX <span>ADMIN</span>
+            SHUZEE <span>ADMIN</span>
           </NavLink>
         </div>
 

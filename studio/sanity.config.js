@@ -4,7 +4,7 @@ import { schemaTypes } from './schemas';
 
 export default defineConfig({
   name: 'apex-ecommerce',
-  title: 'APEX E-Commerce',
+  title: 'SHUZEE E-Commerce',
 
   projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'your-project-id',
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',

@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container">
         <div className="footer-grid">
           <div className="footer-col">
-            <h4 className="logo" style={{ fontSize: '1.8rem', marginBottom: '20px', color: 'white' }}>APEX<span>.</span></h4>
+            <h4 className="logo" style={{ fontSize: '1.8rem', marginBottom: '20px', color: 'white' }}>SHUZEE<span>.</span></h4>
             <p style={{ color: '#888', fontSize: '0.9rem' }}>Pushing the boundaries of athletic performance since 2026. We build gear for those who refuse to settle.</p>
           </div>
           <div className="footer-col">
@@ -37,7 +37,7 @@ const Footer = () => {
           </div>
         </div>
         <div style={{ borderTop: '1px solid #222', paddingTop: '30px', textAlign: 'center', color: '#555', fontSize: '0.8rem', display: 'flex', justifyContent: 'space-between' }}>
-          <span>&copy; 2026 APEX Performance. All rights reserved.</span>
+          <span>&copy; 2026 SHUZEE Performance. All rights reserved.</span>
           <div style={{ display: 'flex', gap: '15px' }}>
             <Link to="#">Privacy Policy</Link>
             <Link to="#">Terms of Use</Link>

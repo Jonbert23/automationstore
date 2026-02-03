@@ -119,7 +119,7 @@ const Contact = () => {
         <div className="contact-info-box">
           <div className="info-item">
             <h4>HQ Location</h4>
-            <p>APEX Performance Labs<br />500 Sprint Blvd, Suite 100<br />Portland, OR 97205</p>
+            <p>SHUZEE Performance Labs<br />500 Sprint Blvd, Suite 100<br />Portland, OR 97205</p>
           </div>
           <div className="info-item">
             <h4>Customer Support</h4>
