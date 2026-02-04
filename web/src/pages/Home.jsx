@@ -2,122 +2,291 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/common/Hero';
 import ProductCard from '../components/common/ProductCard';
+import { getFeaturedProducts, getCategories } from '../services/sanityClient';
 
 const Home = () => {
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const endDate = new Date();
-    endDate.setDate(endDate.getDate() + 3);
-
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = endDate - now;
-
-      if (distance < 0) {
-        clearInterval(timer);
-        return;
+    const fetchData = async () => {
+      try {
+        const [products, cats] = await Promise.all([
+          getFeaturedProducts(),
+          getCategories()
+        ]);
+        setFeaturedProducts(products || []);
+        setCategories(cats || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
-
-      setTimeLeft({
-        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((distance % (1000 * 60)) / 1000),
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
+    };
+    fetchData();
   }, []);
-
-  // Mock data for now, will be replaced by Sanity data later
-  const products = [
-    { _id: '1', title: 'Zoom Velocity 5', category: 'Running', price: 149.00, slug: { current: 'zoom-velocity-5' }, image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=600&q=80' },
-    { _id: '2', title: 'Apex High-Top', category: 'Lifestyle', price: 189.00, slug: { current: 'apex-high-top' }, image: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=600&q=80' },
-    { _id: '3', title: 'Nitro Boost Red', category: 'Training', price: 129.00, slug: { current: 'nitro-boost-red' }, image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80' },
-    { _id: '4', title: 'Cloud Strider', category: 'Running', price: 159.00, slug: { current: 'cloud-strider' }, image: 'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?auto=format&fit=crop&w=600&q=80' },
-  ];
 
   return (
     <>
       <Hero />
       
-      {/* As Seen In */}
-      <section style={{ padding: '40px 0', background: '#fff', borderBottom: '1px solid var(--border)' }}>
-        <div className="container" style={{ textAlign: 'center' }}>
-          <p style={{ color: '#999', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '20px', fontWeight: 700 }}>Trusted By Pros</p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '60px', flexWrap: 'wrap', opacity: 0.4, filter: 'grayscale(100%)' }}>
-            <i className="fab fa-nike" style={{ fontSize: '2.5rem' }}></i>
-            <i className="fab fa-adidas" style={{ fontSize: '2.5rem' }}></i>
-            <i className="fab fa-puma" style={{ fontSize: '2.5rem' }}></i>
-            <i className="fab fa-under-armour" style={{ fontSize: '2.5rem' }}></i>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Categories */}
-      <section className="container" style={{ marginTop: '100px' }}>
-        <div className="section-title">
-          <h2>Shop by Sport</h2>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
-          {['Running', 'Basketball', 'Training'].map((sport, index) => (
-             <div key={index} style={{ position: 'relative', height: '400px', overflow: 'hidden', background: '#000' }}>
-               <img 
-                 src={[
-                   "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=800&q=80",
-                   "https://images.unsplash.com/photo-1519861531473-920026393112?auto=format&fit=crop&w=800&q=80",
-                   "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80"
-                 ][index]} 
-                 style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7, transition: '0.5s' }} 
-                 onMouseOver={(e) => { e.currentTarget.style.opacity='1'; e.currentTarget.style.transform='scale(1.1)'; }} 
-                 onMouseOut={(e) => { e.currentTarget.style.opacity='0.7'; e.currentTarget.style.transform='scale(1)'; }}
-                 alt={sport}
-               />
-               <div style={{ position: 'absolute', bottom: '30px', left: '30px', color: 'white', zIndex: 2 }}>
-                 <h3 style={{ fontSize: '2.5rem', marginBottom: '5px', color: 'var(--accent)' }}>{sport}</h3>
-                 <Link to="/shop" className="btn btn-outline" style={{ borderColor: 'white', color: 'white', padding: '10px 25px' }}>View Gear</Link>
-               </div>
-             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Best Sellers */}
-      <section className="container">
-        <div className="section-title">
-          <h2>Trending Now</h2>
-          <p>Top rated performance gear chosen by athletes.</p>
-        </div>
-
-        <div className="product-grid">
-          {products.map(product => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-        </div>
-        
-        <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-          <Link to="/shop" className="btn btn-outline"><span>View All Products</span></Link>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section style={{ backgroundColor: '#111', color: 'white', padding: '100px 0', clipPath: 'polygon(0 0, 100% 10%, 100% 100%, 0 90%)' }}>
+      {/* How It Works */}
+      <section style={{ padding: '80px 0', background: '#fafafa' }}>
         <div className="container">
-          <div className="section-title" style={{ marginTop: 0 }}>
-            <h2 style={{ color: 'white' }}>Engineered for Performance</h2>
+          <div className="section-title">
+            <h2>How It Works</h2>
+            <p>Get started in 3 simple steps</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '40px', textAlign: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px' }}>
             {[
-              { icon: 'fa-wind', title: 'Aerodynamic Design', desc: 'Reduced drag for maximum speed efficiency.' },
-              { icon: 'fa-feather-alt', title: 'Ultra Lightweight', desc: "Feather-light materials that won't weigh you down." },
-              { icon: 'fa-shoe-prints', title: 'Superior Grip', desc: 'Advanced traction patterns for any terrain.' },
-              { icon: 'fa-recycle', title: 'Eco-Conscious', desc: 'Made with 50% recycled ocean plastics.' }
+              { 
+                step: '01', 
+                icon: 'fa-shopping-cart', 
+                title: 'Choose Your Script', 
+                desc: 'Browse our collection of Photoshop automation scripts for jerseys, patterns, and more.',
+                color: '#3b82f6'
+              },
+              { 
+                step: '02', 
+                icon: 'fa-credit-card', 
+                title: 'Easy Payment', 
+                desc: 'Pay securely via GCash, Maya, or GoTyme. We verify payments within minutes.',
+                color: '#22c55e'
+              },
+              { 
+                step: '03', 
+                icon: 'fa-download', 
+                title: 'Instant Access', 
+                desc: 'Get immediate access to your files via Google Drive. Download and start automating!',
+                color: '#7c3aed'
+              },
+            ].map((item, index) => (
+              <div key={index} style={{ 
+                background: 'white', 
+                padding: '40px 30px', 
+                borderRadius: '16px',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+                position: 'relative',
+                transition: 'transform 0.3s, box-shadow 0.3s'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-5px)';
+                e.currentTarget.style.boxShadow = '0 10px 40px rgba(0,0,0,0.1)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.05)';
+              }}>
+                <div style={{ 
+                  position: 'absolute', 
+                  top: '-15px', 
+                  left: '30px',
+                  background: item.color,
+                  color: 'white',
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.3rem'
+                }}>
+                  <i className={`fas ${item.icon}`}></i>
+                </div>
+                <div style={{ 
+                  position: 'absolute', 
+                  top: '20px', 
+                  right: '20px',
+                  fontSize: '3rem',
+                  fontWeight: 700,
+                  color: '#f3f4f6'
+                }}>
+                  {item.step}
+                </div>
+                <h4 style={{ marginTop: '30px', marginBottom: '15px', fontSize: '1.3rem' }}>{item.title}</h4>
+                <p style={{ color: '#6b7280', lineHeight: 1.7 }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="container" style={{ padding: '80px 0' }}>
+        <div className="section-title">
+          <h2>Browse by Category</h2>
+          <p>Find the perfect automation tool for your workflow</p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
+          {[
+            { 
+              title: 'Jersey Mockups', 
+              desc: 'Automate basketball, football & sports jersey designs',
+              icon: 'fa-tshirt',
+              color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              slug: 'jersey-mockups'
+            },
+            { 
+              title: 'Sewing Patterns', 
+              desc: 'Generate pattern pieces with seam allowances',
+              icon: 'fa-cut',
+              color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              slug: 'sewing-patterns'
+            },
+            { 
+              title: 'Bulk Actions', 
+              desc: 'Resize, watermark, export multiple files at once',
+              icon: 'fa-layer-group',
+              color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+              slug: 'bulk-actions'
+            },
+            { 
+              title: 'Print Ready', 
+              desc: 'Prepare files for DTF, sublimation & screen print',
+              icon: 'fa-print',
+              color: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+              slug: 'print-ready'
+            },
+          ].map((cat, index) => (
+            <Link 
+              to={`/shop?category=${cat.slug}`} 
+              key={index}
+              style={{ 
+                background: cat.color,
+                padding: '35px 25px',
+                borderRadius: '16px',
+                color: 'white',
+                textDecoration: 'none',
+                display: 'block',
+                transition: 'transform 0.3s, box-shadow 0.3s'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-5px)';
+                e.currentTarget.style.boxShadow = '0 15px 30px rgba(0,0,0,0.2)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              <i className={`fas ${cat.icon}`} style={{ fontSize: '2.5rem', marginBottom: '20px', display: 'block' }}></i>
+              <h4 style={{ color: 'white', marginBottom: '8px', fontSize: '1.2rem' }}>{cat.title}</h4>
+              <p style={{ opacity: 0.9, fontSize: '0.9rem', margin: 0 }}>{cat.desc}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Featured Products */}
+      <section style={{ background: '#111', padding: '80px 0' }}>
+        <div className="container">
+          <div className="section-title">
+            <h2 style={{ color: 'white' }}>Featured Scripts</h2>
+            <p style={{ color: '#9ca3af' }}>Our most popular automation tools</p>
+          </div>
+
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '60px', color: '#9ca3af' }}>
+              <i className="fas fa-spinner fa-spin" style={{ fontSize: '2rem' }}></i>
+              <p style={{ marginTop: '15px' }}>Loading products...</p>
+            </div>
+          ) : featuredProducts.length > 0 ? (
+            <div className="product-grid">
+              {featuredProducts.slice(0, 4).map(product => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '60px', color: '#9ca3af' }}>
+              <i className="fas fa-box-open" style={{ fontSize: '3rem', marginBottom: '15px' }}></i>
+              <p>Products coming soon!</p>
+            </div>
+          )}
+          
+          <div style={{ textAlign: 'center', marginTop: '40px' }}>
+            <Link to="/shop" className="btn" style={{ 
+              background: 'linear-gradient(90deg, #00d4ff, #7c3aed)',
+              border: 'none'
+            }}>
+              <span>View All Products</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Features / Why Choose Us */}
+      <section style={{ padding: '80px 0' }}>
+        <div className="container">
+          <div className="section-title">
+            <h2>Why Choose SHUZEE Scripts?</h2>
+            <p>Built by designers, for designers</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '30px' }}>
+            {[
+              { 
+                icon: 'fa-bolt', 
+                title: 'Lightning Fast', 
+                desc: 'Process hundreds of designs in minutes instead of hours.',
+                color: '#f59e0b'
+              },
+              { 
+                icon: 'fa-check-double', 
+                title: 'Consistent Quality', 
+                desc: 'Every output maintains professional quality standards.',
+                color: '#22c55e'
+              },
+              { 
+                icon: 'fa-headset', 
+                title: 'Local Support', 
+                desc: 'Filipino-owned with responsive customer support.',
+                color: '#3b82f6'
+              },
+              { 
+                icon: 'fa-sync-alt', 
+                title: 'Free Updates', 
+                desc: 'Get lifetime updates and improvements at no extra cost.',
+                color: '#7c3aed'
+              },
+              { 
+                icon: 'fa-video', 
+                title: 'Video Tutorials', 
+                desc: 'Step-by-step guides to help you get started quickly.',
+                color: '#ef4444'
+              },
+              { 
+                icon: 'fa-shield-alt', 
+                title: 'Secure Payment', 
+                desc: 'Pay safely via GCash, Maya, or GoTyme.',
+                color: '#06b6d4'
+              },
             ].map((feature, index) => (
-              <div key={index}>
-                <i className={`fas ${feature.icon}`} style={{ fontSize: '3rem', color: 'var(--accent)', marginBottom: '25px' }}></i>
-                <h4 style={{ color: 'white', fontSize: '1.5rem' }}>{feature.title}</h4>
-                <p style={{ color: '#999' }}>{feature.desc}</p>
+              <div key={index} style={{ 
+                display: 'flex', 
+                gap: '20px',
+                padding: '25px',
+                borderRadius: '12px',
+                background: '#fafafa',
+                transition: 'background 0.3s'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'}
+              onMouseOut={(e) => e.currentTarget.style.background = '#fafafa'}>
+                <div style={{ 
+                  width: '50px', 
+                  height: '50px', 
+                  background: `${feature.color}15`,
+                  borderRadius: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}>
+                  <i className={`fas ${feature.icon}`} style={{ color: feature.color, fontSize: '1.3rem' }}></i>
+                </div>
+                <div>
+                  <h4 style={{ marginBottom: '8px', fontSize: '1.1rem' }}>{feature.title}</h4>
+                  <p style={{ color: '#6b7280', fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>{feature.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -125,71 +294,124 @@ const Home = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="container" style={{ padding: '100px 0' }}>
-        <div className="section-title">
-          <h2>Athlete Reviews</h2>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
-          {[
-            { text: "The energy return on the Zoom Velocity is insane. Shaved 30 seconds off my 5K time.", name: "Marcus J.", role: "Marathon Runner" },
-            { text: "Best basketball shoes I've owned. The ankle support is top-notch without sacrificing mobility.", name: "David R.", role: "Shooting Guard" },
-            { text: "Stylish enough for the gym and the street. The Nitro Boost fits like a glove.", name: "Sarah K.", role: "Crossfit Athlete" }
-          ].map((review, index) => (
-            <div key={index} style={{ padding: '40px', background: '#f8f8f8', borderLeft: '5px solid var(--accent)' }}>
-              <div style={{ color: 'var(--accent)', marginBottom: '15px' }}>
-                <i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i>
-              </div>
-              <p style={{ fontStyle: 'italic', marginBottom: '20px', fontSize: '1.1rem', fontWeight: 500 }}>"{review.text}"</p>
-              <h5 style={{ marginBottom: 0 }}>{review.name}</h5>
-              <span style={{ fontSize: '0.8rem', color: '#666', textTransform: 'uppercase', fontWeight: 700 }}>{review.role}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Limited Time Offer Banner */}
-      <section style={{ backgroundImage: "linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1517466787929-bc90951d64b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')", backgroundSize: 'cover', backgroundPosition: 'center', padding: '120px 0', textAlign: 'center', color: 'white', backgroundAttachment: 'fixed' }}>
+      <section style={{ background: '#fafafa', padding: '80px 0' }}>
         <div className="container">
-          <h2 style={{ fontSize: '4rem', marginBottom: '10px', color: 'var(--accent)' }}>Flash Sale</h2>
-          <p style={{ fontSize: '1.5rem', marginBottom: '40px', fontWeight: 300 }}>24 Hours Only. 50% Off Select Styles.</p>
-          
-          <div id="countdown" style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginBottom: '50px' }}>
-            <div><span style={{ fontSize: '3rem', fontWeight: 700, fontFamily: 'Oswald' }}>{String(timeLeft.days).padStart(2, '0')}</span><div style={{ fontSize: '0.9rem', color: '#ccc' }}>DAYS</div></div>
-            <div><span style={{ fontSize: '3rem', fontWeight: 700, fontFamily: 'Oswald' }}>{String(timeLeft.hours).padStart(2, '0')}</span><div style={{ fontSize: '0.9rem', color: '#ccc' }}>HOURS</div></div>
-            <div><span style={{ fontSize: '3rem', fontWeight: 700, fontFamily: 'Oswald' }}>{String(timeLeft.minutes).padStart(2, '0')}</span><div style={{ fontSize: '0.9rem', color: '#ccc' }}>MINS</div></div>
-            <div><span style={{ fontSize: '3rem', fontWeight: 700, fontFamily: 'Oswald', color: 'var(--accent)' }}>{String(timeLeft.seconds).padStart(2, '0')}</span><div style={{ fontSize: '0.9rem', color: '#ccc' }}>SECS</div></div>
+          <div className="section-title">
+            <h2>What Our Customers Say</h2>
+            <p>Trusted by graphic designers and print shops across the Philippines</p>
           </div>
-          
-          <Link to="/shop" className="btn" style={{ background: 'var(--accent)', color: 'black', borderColor: 'var(--accent)' }}><span>Shop The Sale</span></Link>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '25px' }}>
+            {[
+              { 
+                text: "This jersey automation script saved me 5 hours a day! I can now take on more orders without hiring additional staff.", 
+                name: "Mark Santos", 
+                role: "Jersey Print Shop Owner, Cebu",
+                avatar: "M"
+              },
+              { 
+                text: "The sewing pattern script is a game-changer. What used to take me 30 minutes per pattern now takes 30 seconds.", 
+                name: "Ana Reyes", 
+                role: "Fashion Designer, Manila",
+                avatar: "A"
+              },
+              { 
+                text: "Super responsive yung support! Na-resolve agad yung concern ko. Will definitely buy more scripts from SHUZEE.", 
+                name: "Rico Dela Cruz", 
+                role: "Freelance Designer, Davao",
+                avatar: "R"
+              }
+            ].map((review, index) => (
+              <div key={index} style={{ 
+                padding: '35px', 
+                background: 'white', 
+                borderRadius: '16px',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.05)'
+              }}>
+                <div style={{ color: '#f59e0b', marginBottom: '20px' }}>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                </div>
+                <p style={{ fontSize: '1.05rem', lineHeight: 1.7, marginBottom: '25px', color: '#374151' }}>"{review.text}"</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <div style={{ 
+                    width: '50px', 
+                    height: '50px', 
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontWeight: 700,
+                    fontSize: '1.2rem'
+                  }}>
+                    {review.avatar}
+                  </div>
+                  <div>
+                    <h5 style={{ marginBottom: '3px', fontWeight: 600 }}>{review.name}</h5>
+                    <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>{review.role}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Instagram / Shop the Look */}
-      <section className="container" style={{ padding: '80px 0' }}>
-        <div className="section-title">
-          <h2>#TeamSHUZEE</h2>
-          <p>Join the movement. Tag us to be featured.</p>
+      {/* CTA Banner */}
+      <section style={{ 
+        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+        padding: '100px 0',
+        textAlign: 'center',
+        color: 'white'
+      }}>
+        <div className="container">
+          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', marginBottom: '15px', color: 'white' }}>
+            Ready to Automate Your Workflow?
+          </h2>
+          <p style={{ fontSize: '1.2rem', opacity: 0.8, marginBottom: '35px', maxWidth: '600px', margin: '0 auto 35px' }}>
+            Join hundreds of Filipino designers who are saving time and earning more with our Photoshop scripts.
+          </p>
+          <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link to="/shop" className="btn" style={{ 
+              background: 'linear-gradient(90deg, #00d4ff, #7c3aed)',
+              border: 'none',
+              padding: '18px 40px',
+              fontSize: '1.1rem'
+            }}>
+              <span><i className="fas fa-shopping-bag" style={{ marginRight: '10px' }}></i>Shop Now</span>
+            </Link>
+            <a href="https://m.me/shuzee" target="_blank" rel="noopener noreferrer" className="btn btn-outline" style={{ 
+              borderColor: 'rgba(255,255,255,0.3)',
+              color: 'white',
+              padding: '18px 40px'
+            }}>
+              <span><i className="fab fa-facebook-messenger" style={{ marginRight: '10px' }}></i>Message Us</span>
+            </a>
+          </div>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px' }}>
-          {[
-            "https://images.unsplash.com/photo-1483721310020-03333e577078?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-            "https://images.unsplash.com/photo-1518002171953-a080ee32bede?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-            "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-            "https://images.unsplash.com/photo-1539185441755-769473a23570?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-          ].map((img, index) => (
-            <div key={index} style={{ aspectRatio: '1', overflow: 'hidden', position: 'relative' }}>
-              <img 
-                src={img} 
-                style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} 
-                onMouseOver={(e) => e.currentTarget.style.transform='scale(1.1)'} 
-                onMouseOut={(e) => e.currentTarget.style.transform='scale(1)'}
-                alt="Instagram post"
-              />
+      </section>
+
+      {/* Payment Methods */}
+      <section style={{ padding: '50px 0', borderTop: '1px solid #e5e7eb' }}>
+        <div className="container" style={{ textAlign: 'center' }}>
+          <p style={{ color: '#9ca3af', fontSize: '0.85rem', marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '2px' }}>
+            Accepted Payment Methods
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', flexWrap: 'wrap', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#374151' }}>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/GCash_logo.svg/2560px-GCash_logo.svg.png" alt="GCash" style={{ height: '30px', objectFit: 'contain' }} />
             </div>
-          ))}
-        </div>
-        <div style={{ textAlign: 'center', marginTop: '40px' }}>
-          <a href="#" className="btn btn-outline"><span><i className="fab fa-instagram" style={{ marginRight: '8px' }}></i> Follow @SHUZEE_Official</span></a>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#374151' }}>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Maya_logo.svg/2560px-Maya_logo.svg.png" alt="Maya" style={{ height: '30px', objectFit: 'contain' }} />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#374151' }}>
+              <span style={{ fontWeight: 700, fontSize: '1.2rem' }}>GoTyme</span>
+            </div>
+          </div>
         </div>
       </section>
     </>
