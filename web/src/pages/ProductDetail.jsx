@@ -453,9 +453,9 @@ const ProductDetail = () => {
                             <i className="fas fa-check" style={{ fontSize: '0.8rem' }}></i>
                           </div>
                           <div>
-                            <h4 style={{ fontWeight: 600, marginBottom: '5px' }}>{feature.title}</h4>
+                            <h4 style={{ fontWeight: 600, marginBottom: '5px', color: 'white' }}>{feature.title}</h4>
                             {feature.description && (
-                              <p style={{ color: '#6b7280', fontSize: '0.9rem', margin: 0 }}>{feature.description}</p>
+                              <p style={{ color: '#9ca3af', fontSize: '0.9rem', margin: 0 }}>{feature.description}</p>
                             )}
                           </div>
                         </div>
@@ -482,11 +482,11 @@ const ProductDetail = () => {
                 <div>
                   {/* Review Summary */}
                   {reviews.length > 0 && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '25px', paddingBottom: '20px', borderBottom: '1px solid var(--border)' }}>
-                      <div style={{ fontSize: '2.5rem', fontWeight: 700 }}>{averageRating}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '25px', paddingBottom: '20px', borderBottom: '1px solid #333' }}>
+                      <div style={{ fontSize: '2.5rem', fontWeight: 700, color: 'white' }}>{averageRating}</div>
                       <div>
                         {renderStars(Math.round(averageRating))}
-                        <p style={{ margin: '5px 0 0', color: '#666', fontSize: '0.9rem' }}>Based on {reviews.length} review{reviews.length !== 1 ? 's' : ''}</p>
+                        <p style={{ margin: '5px 0 0', color: '#9ca3af', fontSize: '0.9rem' }}>Based on {reviews.length} review{reviews.length !== 1 ? 's' : ''}</p>
                       </div>
                     </div>
                   )}
@@ -551,23 +551,23 @@ const ProductDetail = () => {
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
                             <div>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '5px' }}>
-                                <strong>{review.userName || 'Anonymous'}</strong>
+                                <strong style={{ color: 'white' }}>{review.userName || 'Anonymous'}</strong>
                                 {review.isVerifiedPurchase && (
-                                  <span style={{ fontSize: '0.75rem', background: '#dcfce7', color: '#166534', padding: '2px 8px', borderRadius: '10px' }}>
+                                  <span style={{ fontSize: '0.75rem', background: 'rgba(217, 255, 0, 0.1)', color: '#D9FF00', padding: '2px 8px', borderRadius: '10px', border: '1px solid #D9FF00' }}>
                                     Verified Purchase
                                   </span>
                                 )}
                               </div>
                               {renderStars(review.rating)}
                             </div>
-                            <span style={{ color: '#888', fontSize: '0.85rem' }}>{formatReviewDate(review._createdAt)}</span>
+                            <span style={{ color: '#666', fontSize: '0.85rem' }}>{formatReviewDate(review._createdAt)}</span>
                           </div>
-                          <p style={{ color: '#555', lineHeight: 1.6 }}>{review.comment}</p>
+                          <p style={{ color: '#9ca3af', lineHeight: 1.6 }}>{review.comment}</p>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <p style={{ color: '#888', fontStyle: 'italic', textAlign: 'center', padding: '30px' }}>
+                    <p style={{ color: '#9ca3af', fontStyle: 'italic', textAlign: 'center', padding: '30px' }}>
                       No reviews yet. Be the first to review this product!
                     </p>
                   )}
