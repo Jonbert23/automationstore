@@ -109,7 +109,7 @@ const AdminAnalytics = () => {
         .slice(0, 10)
         .map(order => ({
           type: 'order',
-          message: `New order #${order._id.slice(-6).toUpperCase()} - $${order.total?.toFixed(2)}`,
+          message: `New order #${order._id.slice(-6).toUpperCase()} - ₱${order.total?.toLocaleString()}`,
           time: order._createdAt,
           status: order.status
         }));
@@ -171,7 +171,7 @@ const AdminAnalytics = () => {
                 borderRadius: '4px 4px 0 0',
                 transition: 'height 0.3s ease'
               }}
-              title={`$${item.revenue.toFixed(2)}`}
+              title={`₱${item.revenue.toLocaleString()}`}
             />
             <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: '5px', transform: 'rotate(-45deg)', whiteSpace: 'nowrap' }}>
               {item.date}
@@ -213,11 +213,11 @@ const AdminAnalytics = () => {
         <div className="admin-stat-card">
           <div className="admin-stat-header">
             <span>Revenue ({dateRange}d)</span>
-            <i className="fas fa-dollar-sign"></i>
+            <i className="fas fa-peso-sign"></i>
           </div>
-          <div className="admin-stat-value">${analytics.totalRevenue.toFixed(2)}</div>
+          <div className="admin-stat-value">₱{analytics.totalRevenue.toLocaleString()}</div>
           <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            All time: ${analytics.allTimeRevenue?.toFixed(2)}
+            All time: ₱{analytics.allTimeRevenue?.toLocaleString()}
           </div>
         </div>
         <div className="admin-stat-card">
@@ -242,7 +242,7 @@ const AdminAnalytics = () => {
             <span>Avg. Order Value</span>
             <i className="fas fa-chart-line"></i>
           </div>
-          <div className="admin-stat-value">${analytics.avgOrderValue.toFixed(2)}</div>
+          <div className="admin-stat-value">₱{analytics.avgOrderValue.toLocaleString()}</div>
         </div>
       </div>
 
@@ -318,7 +318,7 @@ const AdminAnalytics = () => {
                     </div>
                   </div>
                   <div style={{ fontWeight: 700, color: 'var(--primary)' }}>
-                    ${product.revenue.toFixed(2)}
+                    ₱{product.revenue.toLocaleString()}
                   </div>
                 </div>
               ))}
