@@ -156,9 +156,9 @@ const AdminDashboard = () => {
         <div className="admin-stat-card">
           <div className="admin-stat-header">
             <span>Total Revenue</span>
-            <i className="fas fa-dollar-sign"></i>
+            <i className="fas fa-peso-sign"></i>
           </div>
-          <div className="admin-stat-value">${stats.totalRevenue.toFixed(2)}</div>
+          <div className="admin-stat-value">₱{stats.totalRevenue.toLocaleString()}</div>
           <Link to="/admin/analytics" style={{ color: 'var(--primary)', fontSize: '0.85rem' }}>
             View analytics →
           </Link>
@@ -230,14 +230,14 @@ const AdminDashboard = () => {
             {/* Bar Chart */}
             <div style={{ position: 'relative' }}>
               {/* Y-axis labels */}
-              <div style={{ position: 'absolute', left: 0, top: 0, bottom: 30, width: '60px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                <span>${Math.max(...chartData.map(d => d.revenue), 100).toFixed(0)}</span>
-                <span>${(Math.max(...chartData.map(d => d.revenue), 100) / 2).toFixed(0)}</span>
-                <span>$0</span>
+              <div style={{ position: 'absolute', left: 0, top: 0, bottom: 30, width: '70px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                <span>₱{Math.max(...chartData.map(d => d.revenue), 100).toLocaleString()}</span>
+                <span>₱{(Math.max(...chartData.map(d => d.revenue), 100) / 2).toLocaleString()}</span>
+                <span>₱0</span>
               </div>
               
               {/* Chart area */}
-              <div style={{ marginLeft: '70px' }}>
+              <div style={{ marginLeft: '80px' }}>
                 <div style={{ 
                   display: 'flex', 
                   alignItems: 'flex-end', 
@@ -261,7 +261,7 @@ const AdminDashboard = () => {
                           position: 'relative',
                           cursor: 'pointer'
                         }}
-                        title={`${day.date}: $${day.revenue.toFixed(2)} (${day.orders} orders)`}
+                        title={`${day.date}: ₱${day.revenue.toLocaleString()} (${day.orders} orders)`}
                       >
                         {/* Revenue bar */}
                         <div
@@ -293,7 +293,7 @@ const AdminDashboard = () => {
                               opacity: 0,
                               transition: 'opacity 0.2s'
                             }} className="chart-tooltip">
-                              ${day.revenue.toFixed(0)}
+                              ₱{day.revenue.toLocaleString()}
                             </div>
                           )}
                         </div>
@@ -395,7 +395,7 @@ const AdminDashboard = () => {
                       {order.status || 'Pending'}
                     </span>
                   </td>
-                  <td>${(order.total || 0).toFixed(2)}</td>
+                  <td>₱{(order.total || 0).toLocaleString()}</td>
                 </tr>
               ))}
             </tbody>
