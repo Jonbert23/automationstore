@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { client, writeClient, verifyPayment, rejectPayment } from '../../services/sanityClient';
+import { sendCustomerPaymentVerified, sendCustomerPaymentRejected } from '../../services/emailService';
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -91,6 +92,9 @@ const AdminOrders = () => {
   };
 
   const updateOrderStatus = async (orderId, newStatus) => {
+    const currentOrder = orders.find(o => o._id === orderId);
+    const previousStatus = currentOrder?.status;
+    
     setUpdatingStatus(orderId);
     try {
       // If changing to verified, also set accessGranted
@@ -107,6 +111,38 @@ const AdminOrders = () => {
             order._id === orderId ? { ...order, status: newStatus, accessGranted: true, paymentVerified: true } : order
           )
         );
+        
+        // Send verified email to customer
+        if (previousStatus !== 'verified' && previousStatus !== 'completed' && currentOrder) {
+          sendCustomerPaymentVerified({
+            orderId: orderId,
+            customerName: currentOrder.userName || 'Customer',
+            customerEmail: currentOrder.user,
+            totalAmount: currentOrder.total,
+            items: currentOrder.items?.map(item => ({
+              title: item.product?.title || 'Product',
+              price: item.price
+            })) || []
+          });
+        }
+      } else if (newStatus === 'cancelled') {
+        await writeClient.patch(orderId).set({ status: newStatus }).commit();
+        setOrders(
+          orders.map((order) =>
+            order._id === orderId ? { ...order, status: newStatus } : order
+          )
+        );
+        
+        // Send rejected email to customer
+        if (previousStatus !== 'cancelled' && currentOrder) {
+          sendCustomerPaymentRejected({
+            orderId: orderId,
+            customerName: currentOrder.userName || 'Customer',
+            customerEmail: currentOrder.user,
+            totalAmount: currentOrder.total,
+            rejectionReason: 'Your order has been cancelled.'
+          });
+        }
       } else {
         await writeClient.patch(orderId).set({ status: newStatus }).commit();
         setOrders(

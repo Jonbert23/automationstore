@@ -31,6 +31,7 @@ const AdminOrderView = () => {
   };
 
   const updateOrderStatus = async (newStatus) => {
+    const previousStatus = order.status;
     setUpdatingStatus(true);
     try {
       // If changing to verified, also set accessGranted
@@ -48,6 +49,34 @@ const AdminOrderView = () => {
           accessGranted: true,
           paymentVerified: true 
         });
+        
+        // Send verified email to customer (only if status changed from non-verified)
+        if (previousStatus !== 'verified' && previousStatus !== 'completed') {
+          sendCustomerPaymentVerified({
+            orderId: orderId,
+            customerName: order.userName || 'Customer',
+            customerEmail: order.user,
+            totalAmount: order.total,
+            items: order.items?.map(item => ({
+              title: item.product?.title || 'Product',
+              price: item.price
+            })) || []
+          });
+        }
+      } else if (newStatus === 'cancelled') {
+        await writeClient.patch(orderId).set({ status: newStatus }).commit();
+        setOrder({ ...order, status: newStatus });
+        
+        // Send rejected email to customer (only if status changed from non-cancelled)
+        if (previousStatus !== 'cancelled') {
+          sendCustomerPaymentRejected({
+            orderId: orderId,
+            customerName: order.userName || 'Customer',
+            customerEmail: order.user,
+            totalAmount: order.total,
+            rejectionReason: 'Your order has been cancelled.'
+          });
+        }
       } else {
         await writeClient.patch(orderId).set({ status: newStatus }).commit();
         setOrder({ ...order, status: newStatus });
