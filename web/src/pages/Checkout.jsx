@@ -346,11 +346,24 @@ const Checkout = () => {
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: '0.9rem', color: '#9ca3af' }}>
                   Upload Payment Receipt *
                 </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setPaymentProofFile(e.target.files[0])}
-                  style={{
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type="file"
+                    id="payment-proof"
+                    accept="image/*"
+                    onChange={(e) => setPaymentProofFile(e.target.files[0])}
+                    style={{
+                      opacity: 0,
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      cursor: 'pointer',
+                      zIndex: 2
+                    }}
+                  />
+                  <div style={{
                     width: '100%',
                     padding: '14px',
                     border: '1px solid #333',
@@ -358,9 +371,25 @@ const Checkout = () => {
                     fontSize: '1rem',
                     background: '#222',
                     color: 'white',
-                    outline: 'none'
-                  }}
-                />
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px'
+                  }}>
+                    <span style={{
+                      background: '#D9FF00',
+                      color: '#111',
+                      padding: '5px 10px',
+                      borderRadius: '4px',
+                      fontSize: '0.8rem',
+                      fontWeight: 700
+                    }}>
+                      Choose File
+                    </span>
+                    <span style={{ color: paymentProofFile ? 'white' : '#666', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {paymentProofFile ? paymentProofFile.name : 'No file chosen'}
+                    </span>
+                  </div>
+                </div>
                 <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '8px' }}>
                   Please upload a screenshot of your payment transaction
                 </p>
