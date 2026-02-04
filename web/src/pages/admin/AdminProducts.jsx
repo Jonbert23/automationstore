@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getProducts, getCategories, urlFor, writeClient, client } from '../../services/sanityClient';
+import { getProducts, getCategories, urlFor, deleteProduct, client } from '../../services/sanityClient';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -48,11 +48,15 @@ const AdminProducts = () => {
 
     setDeleting(productId);
     try {
-      await writeClient.delete(productId);
-      setProducts(products.filter((p) => p._id !== productId));
+      const result = await deleteProduct(productId);
+      if (result.success) {
+        setProducts(products.filter((p) => p._id !== productId));
+      } else {
+        alert(`Failed to delete: ${result.error}`);
+      }
     } catch (error) {
       console.error('Error deleting product:', error);
-      alert('Failed to delete product');
+      alert('Failed to delete product: ' + error.message);
     } finally {
       setDeleting(null);
     }
