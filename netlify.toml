@@ -12,8 +12,7 @@
 
 # Netlify Functions configuration
 [functions]
-  # Functions are in the root netlify/functions folder
-  directory = "../netlify/functions"
+  directory = "netlify/functions"
 
 # Environment variables (set these in Netlify dashboard)
 [build.environment]
