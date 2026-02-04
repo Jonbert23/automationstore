@@ -502,9 +502,16 @@ export const createOrder = async (orderData) => {
     return { _id: 'demo-order-' + Date.now() };
   }
   try {
+    // Ensure items have _key
+    const itemsWithKeys = orderData.items.map(item => ({
+      ...item,
+      _key: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+    }));
+
     return await writeClient.create({
       _type: 'order',
       ...orderData,
+      items: itemsWithKeys,
       status: 'pending',
       paymentVerified: false,
       accessGranted: false,
