@@ -117,7 +117,7 @@ const Checkout = () => {
       {/* Simple Header for Checkout */}
       <header style={{ position: 'static', padding: '25px 0', borderBottom: '1px solid #333', background: '#1a1a1a' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <Link to="/" className="logo" style={{ color: 'white' }}>{storeName}<span style={{ color: '#D9FF00' }}>.</span></Link>
+          <Link to="/" className="logo" style={{ color: 'white' }}>SHUZEE<span style={{ color: '#D9FF00' }}>.</span></Link>
         </div>
       </header>
 
