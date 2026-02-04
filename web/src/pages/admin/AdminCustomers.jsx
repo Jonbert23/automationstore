@@ -7,6 +7,7 @@ const AdminCustomers = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('newest');
+  const [imageErrors, setImageErrors] = useState({});
 
   useEffect(() => {
     fetchCustomers();
@@ -112,7 +113,7 @@ const AdminCustomers = () => {
       c.email,
       c.location,
       c.ordersCount,
-      `$${c.totalSpent.toFixed(2)}`,
+      `₱${c.totalSpent.toLocaleString()}`,
       formatDate(c.lastOrder),
       formatDate(c._createdAt)
     ]);
@@ -165,10 +166,10 @@ const AdminCustomers = () => {
         <div className="admin-stat-card">
           <div className="admin-stat-header">
             <span>Total Revenue</span>
-            <i className="fas fa-dollar-sign"></i>
+            <i className="fas fa-peso-sign"></i>
           </div>
           <div className="admin-stat-value">
-            ${customers.reduce((sum, c) => sum + c.totalSpent, 0).toFixed(2)}
+            ₱{customers.reduce((sum, c) => sum + c.totalSpent, 0).toLocaleString()}
           </div>
         </div>
         <div className="admin-stat-card">
@@ -177,9 +178,9 @@ const AdminCustomers = () => {
             <i className="fas fa-chart-line"></i>
           </div>
           <div className="admin-stat-value">
-            ${customers.length > 0 
-              ? (customers.reduce((sum, c) => sum + c.totalSpent, 0) / customers.length).toFixed(2)
-              : '0.00'}
+            ₱{customers.length > 0 
+              ? (customers.reduce((sum, c) => sum + c.totalSpent, 0) / customers.length).toLocaleString()
+              : '0'}
           </div>
         </div>
       </div>
@@ -233,18 +234,20 @@ const AdminCustomers = () => {
                 <tr key={customer._id}>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      {customer.picture ? (
+                      {customer.picture && !imageErrors[customer._id] ? (
                         <img 
                           src={customer.picture} 
                           alt={customer.name}
                           style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
+                          onError={() => setImageErrors(prev => ({ ...prev, [customer._id]: true }))}
+                          referrerPolicy="no-referrer"
                         />
                       ) : (
                         <div style={{
                           width: '40px',
                           height: '40px',
                           borderRadius: '50%',
-                          background: 'var(--primary)',
+                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                           color: 'white',
                           display: 'flex',
                           alignItems: 'center',
@@ -272,7 +275,7 @@ const AdminCustomers = () => {
                       {customer.ordersCount}
                     </span>
                   </td>
-                  <td style={{ fontWeight: 600 }}>${customer.totalSpent.toFixed(2)}</td>
+                  <td style={{ fontWeight: 600 }}>₱{customer.totalSpent.toLocaleString()}</td>
                   <td>{formatDate(customer.lastOrder)}</td>
                   <td>{formatDate(customer._createdAt)}</td>
                   <td>
