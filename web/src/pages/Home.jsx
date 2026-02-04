@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/common/Hero';
 import ProductCard from '../components/common/ProductCard';
-import { GCashIcon, MayaIcon } from '../components/common/PaymentIcons';
+import { GCashIcon, MayaIcon, GoTymeIcon } from '../components/common/PaymentIcons';
 import { getFeaturedProducts, getCategories } from '../services/sanityClient';
 
 const Home = () => {
@@ -407,7 +407,7 @@ const Home = () => {
               <MayaIcon height={30} />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'white' }}>
-              <span style={{ fontWeight: 700, fontSize: '1.2rem' }}>GoTyme</span>
+              <GoTymeIcon height={30} />
             </div>
           </div>
         </div>
