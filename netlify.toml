@@ -10,11 +10,22 @@
   # Output directory (relative to base)
   publish = "dist"
 
+# Netlify Functions configuration
+[functions]
+  # Functions are in the root netlify/functions folder
+  directory = "../netlify/functions"
+
 # Environment variables (set these in Netlify dashboard)
 [build.environment]
   NODE_VERSION = "18"
 
-# SPA redirect - all routes go to index.html
+# API routes for serverless functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# SPA redirect - all routes go to index.html (must be after API routes)
 [[redirects]]
   from = "/*"
   to = "/index.html"

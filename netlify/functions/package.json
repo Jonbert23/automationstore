@@ -1,0 +1,8 @@
+{
+  "name": "shuzee-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for SHUZEE Digital Store",
+  "dependencies": {
+    "@sanity/client": "^6.15.0"
+  }
+}
