@@ -10,6 +10,7 @@ const AdminProducts = () => {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [showArchived, setShowArchived] = useState(false);
   const [deleting, setDeleting] = useState(null);
+  const [duplicating, setDuplicating] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -103,6 +104,83 @@ const AdminProducts = () => {
       alert('Cannot permanently delete. This product is referenced in orders. It will remain archived.');
     } finally {
       setDeleting(null);
+    }
+  };
+
+  const handleDuplicate = async (productId) => {
+    setDuplicating(productId);
+    try {
+      // Fetch the full product data
+      const product = await client.fetch(
+        `*[_type == "product" && _id == $productId][0]{
+          title,
+          price,
+          comparePrice,
+          description,
+          images,
+          category,
+          featured,
+          driveLink,
+          fileType,
+          fileSize,
+          compatibility,
+          accessInstructions,
+          features,
+          demoVideo
+        }`,
+        { productId }
+      );
+
+      if (!product) {
+        alert('Product not found');
+        return;
+      }
+
+      // Generate unique slug
+      const timestamp = Date.now();
+      const newTitle = `${product.title} (Copy)`;
+      const newSlug = `${product.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-copy-${timestamp}`;
+
+      // Create the duplicate product
+      const newProduct = {
+        _type: 'product',
+        title: newTitle,
+        slug: { _type: 'slug', current: newSlug },
+        price: product.price,
+        comparePrice: product.comparePrice,
+        description: product.description,
+        images: product.images,
+        category: product.category,
+        featured: false, // Don't duplicate featured status
+        isArchived: false,
+        driveLink: product.driveLink,
+        fileType: product.fileType,
+        fileSize: product.fileSize,
+        compatibility: product.compatibility,
+        accessInstructions: product.accessInstructions,
+        features: product.features,
+        demoVideo: product.demoVideo,
+      };
+
+      const created = await writeClient.create(newProduct);
+      
+      // Add to products list
+      setProducts([
+        {
+          ...newProduct,
+          _id: created._id,
+          category: products.find(p => p._id === productId)?.category,
+          categorySlug: products.find(p => p._id === productId)?.categorySlug,
+        },
+        ...products,
+      ]);
+      
+      alert(`Product duplicated! New product: "${newTitle}"`);
+    } catch (error) {
+      console.error('Error duplicating product:', error);
+      alert('Failed to duplicate product: ' + (error.message || 'Unknown error'));
+    } finally {
+      setDuplicating(null);
     }
   };
 
@@ -257,6 +335,23 @@ const AdminProducts = () => {
                         >
                           <i className="fas fa-edit"></i>
                         </Link>
+                        <button
+                          onClick={() => handleDuplicate(product._id)}
+                          disabled={duplicating === product._id}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            color: '#3b82f6',
+                          }}
+                          title="Duplicate"
+                        >
+                          {duplicating === product._id ? (
+                            <i className="fas fa-spinner fa-spin"></i>
+                          ) : (
+                            <i className="fas fa-copy"></i>
+                          )}
+                        </button>
                         {product.isArchived ? (
                           <>
                             <button
