@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getOrderById, urlFor, writeClient, verifyPayment, rejectPayment } from '../../services/sanityClient';
+import { sendCustomerPaymentVerified, sendCustomerPaymentRejected } from '../../services/emailService';
 
 const AdminOrderView = () => {
   const { orderId } = useParams();
@@ -73,6 +74,18 @@ const AdminOrderView = () => {
         paymentVerifiedAt: new Date().toISOString(),
         accessGrantedAt: new Date().toISOString()
       });
+      
+      // Send email notification to customer
+      sendCustomerPaymentVerified({
+        orderId: orderId,
+        customerName: order.userName || 'Customer',
+        customerEmail: order.user,
+        totalAmount: order.total,
+        items: order.items?.map(item => ({
+          title: item.product?.title || 'Product',
+          price: item.price
+        })) || []
+      });
     } catch (error) {
       console.error('Error verifying payment:', error);
       alert('Failed to verify payment');
@@ -87,9 +100,19 @@ const AdminOrderView = () => {
     
     setVerifying(true);
     try {
-      await rejectPayment(orderId, reason || 'Payment could not be verified');
+      const rejectionReason = reason || 'Payment could not be verified';
+      await rejectPayment(orderId, rejectionReason);
       setOrder({ ...order, status: 'cancelled', notes: reason });
       setAdminNotes(reason);
+      
+      // Send email notification to customer
+      sendCustomerPaymentRejected({
+        orderId: orderId,
+        customerName: order.userName || 'Customer',
+        customerEmail: order.user,
+        totalAmount: order.total,
+        rejectionReason: rejectionReason
+      });
     } catch (error) {
       console.error('Error rejecting payment:', error);
       alert('Failed to reject payment');

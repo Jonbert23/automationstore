@@ -91,9 +91,9 @@ const Checkout = () => {
         status: 'payment_submitted',
       });
 
-      // Send email notification to admin with payment proof URL
-      import('../services/emailService').then(({ sendOrderNotification }) => {
-        sendOrderNotification({
+      // Send email notifications
+      import('../services/emailService').then(({ sendAdminOrderNotification, sendCustomerOrderConfirmation }) => {
+        const orderEmailData = {
           orderId: order._id,
           customerName: user.name,
           customerEmail: user.email,
@@ -101,7 +101,13 @@ const Checkout = () => {
           items: cart,
           paymentMethod: selectedPayment?.name || 'Unknown',
           paymentProofUrl: imageAsset?.url || ''
-        });
+        };
+        
+        // Send to admin
+        sendAdminOrderNotification(orderEmailData);
+        
+        // Send confirmation to customer
+        sendCustomerOrderConfirmation(orderEmailData);
       });
 
       setOrderId(order._id);
