@@ -7,7 +7,7 @@ const PUBLIC_KEY = 'bN1Y9i0WnPAEibqWd';
 // Template IDs - Only 2 templates needed
 const TEMPLATES = {
   ADMIN_NEW_ORDER: 'template_3ygdrmg',    // Admin notification for new orders
-  CUSTOMER_EMAIL: 'template_customer',     // Single dynamic template for all customer emails
+  CUSTOMER_EMAIL: 'template_2cmlyus',     // Single dynamic template for all customer emails
 };
 
 // Your site URL
