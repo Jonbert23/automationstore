@@ -14,6 +14,7 @@ const Checkout = () => {
   const [step, setStep] = useState(1); // 1: Review, 2: Payment, 3: Confirm
   const [paymentProofFile, setPaymentProofFile] = useState(null);
   const [orderId, setOrderId] = useState(null);
+  const [isZoomed, setIsZoomed] = useState(false);
 
   // Fetch payment methods
   useEffect(() => {
@@ -279,147 +280,173 @@ const Checkout = () => {
               ))}
             </div>
 
-            {/* QR Code Display */}
-            {selectedPayment && (
-              <div style={{ background: '#1a1a1a', border: '1px solid #333', borderRadius: '12px', padding: '30px', textAlign: 'center', marginBottom: '25px' }}>
-                <h3 style={{ marginBottom: '20px', color: 'white' }}>Scan QR Code to Pay</h3>
-                
-                {getQRCodeUrl(selectedPayment.qrCode) ? (
-                  <img 
-                    src={getQRCodeUrl(selectedPayment.qrCode)} 
-                    alt={`${selectedPayment.name} QR Code`}
-                    style={{ maxWidth: '250px', margin: '0 auto 20px', display: 'block', borderRadius: '8px' }}
-                  />
-                ) : (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px' }}>
+              {/* QR Code Section - Left Side on Desktop */}
+              <div style={{ flex: '1 1 350px' }}>
+                {selectedPayment && (
                   <div style={{ 
-                    width: '250px', 
-                    height: '250px', 
-                    background: '#222', 
-                    margin: '0 auto 20px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: '8px',
-                    color: '#666'
+                    background: '#1a1a1a', 
+                    border: '1px solid #333', 
+                    borderRadius: '12px', 
+                    padding: '30px', 
+                    textAlign: 'center', 
+                    height: '100%',
+                    position: 'sticky',
+                    top: '20px'
                   }}>
-                    <div>
-                      <i className="fas fa-qrcode" style={{ fontSize: '3rem', marginBottom: '10px', display: 'block' }}></i>
-                      <p style={{ fontSize: '0.85rem' }}>QR Code not available</p>
+                    <h3 style={{ marginBottom: '20px', color: 'white' }}>Scan to Pay</h3>
+                    
+                    {getQRCodeUrl(selectedPayment.qrCode) ? (
+                      <img 
+                        src={getQRCodeUrl(selectedPayment.qrCode)} 
+                        alt={`${selectedPayment.name} QR Code`}
+                        style={{ width: '100%', borderRadius: '12px', border: '2px solid #333', marginBottom: '20px' }}
+                      />
+                    ) : (
+                      <div style={{ 
+                        width: '100%', 
+                        aspectRatio: '1/1',
+                        background: '#222', 
+                        marginBottom: '20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: '12px',
+                        color: '#666'
+                      }}>
+                        <div>
+                          <i className="fas fa-qrcode" style={{ fontSize: '3rem', marginBottom: '10px', display: 'block' }}></i>
+                          <p style={{ fontSize: '0.85rem' }}>QR Code not available</p>
+                        </div>
+                      </div>
+                    )}
+
+                    <div style={{ background: 'rgba(217, 255, 0, 0.1)', borderRadius: '8px', padding: '15px', border: '1px solid #D9FF00' }}>
+                      <p style={{ fontWeight: 700, color: '#D9FF00', fontSize: '1.2rem' }}>
+                        <i className="fas fa-coins" style={{ marginRight: '8px' }}></i>
+                        ₱{total.toLocaleString()}
+                      </p>
                     </div>
                   </div>
                 )}
+              </div>
 
-                {selectedPayment.accountName && (
-                  <p style={{ marginBottom: '5px', color: 'white' }}>
-                    <strong>Account Name:</strong> {selectedPayment.accountName}
-                  </p>
-                )}
-                {selectedPayment.accountNumber && (
-                  <p style={{ marginBottom: '15px', color: '#9ca3af' }}>
-                    <strong>Number:</strong> {selectedPayment.accountNumber}
-                  </p>
-                )}
+              {/* Payment Details & Upload - Right Side on Desktop */}
+              <div style={{ flex: '1 1 350px' }}>
+                {selectedPayment && (
+                  <div style={{ background: '#1a1a1a', border: '1px solid #333', borderRadius: '12px', padding: '25px', marginBottom: '20px' }}>
+                    <h3 style={{ marginBottom: '20px', fontSize: '1.1rem', color: 'white' }}>Payment Details</h3>
+                    
+                    {selectedPayment.accountName && (
+                      <div style={{ marginBottom: '15px' }}>
+                        <p style={{ fontSize: '0.9rem', color: '#9ca3af', marginBottom: '5px' }}>Account Name</p>
+                        <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white' }}>{selectedPayment.accountName}</p>
+                      </div>
+                    )}
+                    
+                    {selectedPayment.accountNumber && (
+                      <div style={{ marginBottom: '15px' }}>
+                        <p style={{ fontSize: '0.9rem', color: '#9ca3af', marginBottom: '5px' }}>Account Number</p>
+                        <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white', fontFamily: 'monospace' }}>{selectedPayment.accountNumber}</p>
+                      </div>
+                    )}
 
-                <div style={{ background: 'rgba(217, 255, 0, 0.1)', borderRadius: '8px', padding: '15px', marginTop: '20px', border: '1px solid #D9FF00' }}>
-                  <p style={{ fontWeight: 700, color: '#D9FF00', marginBottom: '5px' }}>
-                    <i className="fas fa-coins" style={{ marginRight: '8px' }}></i>
-                    Amount to Pay: ₱{total.toLocaleString()}
-                  </p>
-                </div>
-
-                {selectedPayment.instructions && (
-                  <div style={{ marginTop: '20px', textAlign: 'left', background: '#222', padding: '15px', borderRadius: '8px', border: '1px solid #333' }}>
-                    <h4 style={{ fontSize: '0.9rem', marginBottom: '10px', fontWeight: 600, color: '#D9FF00' }}>Payment Instructions:</h4>
-                    <p style={{ fontSize: '0.85rem', color: '#9ca3af', whiteSpace: 'pre-line' }}>{selectedPayment.instructions}</p>
+                    {selectedPayment.instructions && (
+                      <div style={{ marginTop: '20px', background: '#222', padding: '15px', borderRadius: '8px', border: '1px solid #333' }}>
+                        <h4 style={{ fontSize: '0.9rem', marginBottom: '10px', fontWeight: 600, color: '#D9FF00' }}>Instructions:</h4>
+                        <p style={{ fontSize: '0.85rem', color: '#9ca3af', whiteSpace: 'pre-line' }}>{selectedPayment.instructions}</p>
+                      </div>
+                    )}
                   </div>
                 )}
-              </div>
-            )}
 
-            {/* Payment Proof Upload */}
-            <div style={{ background: '#1a1a1a', border: '1px solid #333', borderRadius: '12px', padding: '25px', marginBottom: '30px' }}>
-              <h3 style={{ marginBottom: '15px', fontSize: '1rem', color: 'white' }}>
-                <i className="fas fa-receipt" style={{ marginRight: '10px', color: '#D9FF00' }}></i>
-                Payment Confirmation
-              </h3>
-              <div style={{ marginBottom: '15px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: '0.9rem', color: '#9ca3af' }}>
-                  Upload Payment Receipt *
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type="file"
-                    id="payment-proof"
-                    accept="image/*"
-                    onChange={(e) => setPaymentProofFile(e.target.files[0])}
-                    style={{
-                      opacity: 0,
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
+                {/* Payment Proof Upload */}
+                <div style={{ background: '#1a1a1a', border: '1px solid #333', borderRadius: '12px', padding: '25px', marginBottom: '30px' }}>
+                  <h3 style={{ marginBottom: '15px', fontSize: '1rem', color: 'white' }}>
+                    <i className="fas fa-receipt" style={{ marginRight: '10px', color: '#D9FF00' }}></i>
+                    Payment Confirmation
+                  </h3>
+                  <div style={{ marginBottom: '15px' }}>
+                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: '0.9rem', color: '#9ca3af' }}>
+                      Upload Payment Receipt *
+                    </label>
+                    <div style={{ position: 'relative' }}>
+                      <input
+                        type="file"
+                        id="payment-proof"
+                        accept="image/*"
+                        onChange={(e) => setPaymentProofFile(e.target.files[0])}
+                        style={{
+                          opacity: 0,
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          cursor: 'pointer',
+                          zIndex: 2
+                        }}
+                      />
+                      <div style={{
+                        width: '100%',
+                        padding: '14px',
+                        border: '1px solid #333',
+                        borderRadius: '8px',
+                        fontSize: '1rem',
+                        background: '#222',
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px'
+                      }}
+                    >
+                        <span style={{
+                          background: '#D9FF00',
+                          color: '#111',
+                          padding: '5px 10px',
+                          borderRadius: '4px',
+                          fontSize: '0.8rem',
+                          fontWeight: 700
+                        }}>
+                          Choose File
+                        </span>
+                        <span style={{ color: paymentProofFile ? 'white' : '#666', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {paymentProofFile ? paymentProofFile.name : 'No file chosen'}
+                        </span>
+                      </div>
+                    </div>
+                    <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '8px' }}>
+                      Please upload a screenshot of your payment transaction
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '15px' }}>
+                  <button 
+                    onClick={() => setStep(1)}
+                    style={{ 
+                      flex: '0 0 auto',
+                      padding: '18px 30px', 
+                      background: '#333',
+                      border: 'none',
+                      borderRadius: '8px',
+                      fontWeight: 600,
                       cursor: 'pointer',
-                      zIndex: 2
+                      color: 'white'
                     }}
-                  />
-                  <div style={{
-                    width: '100%',
-                    padding: '14px',
-                    border: '1px solid #333',
-                    borderRadius: '8px',
-                    fontSize: '1rem',
-                    background: '#222',
-                    color: 'white',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px'
-                  }}>
-                    <span style={{
-                      background: '#D9FF00',
-                      color: '#111',
-                      padding: '5px 10px',
-                      borderRadius: '4px',
-                      fontSize: '0.8rem',
-                      fontWeight: 700
-                    }}>
-                      Choose File
-                    </span>
-                    <span style={{ color: paymentProofFile ? 'white' : '#666', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {paymentProofFile ? paymentProofFile.name : 'No file chosen'}
-                    </span>
-                  </div>
+                  >
+                    ← Back
+                  </button>
+                  <button 
+                    onClick={handlePlaceOrder}
+                    className="btn" 
+                    style={{ flex: 1, padding: '18px', fontSize: '1.1rem', background: '#D9FF00', color: '#111', border: 'none' }}
+                    disabled={loading || !paymentProofFile}
+                  >
+                    <span>{loading ? 'Processing...' : 'Submit Order'}</span>
+                  </button>
                 </div>
-                <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '8px' }}>
-                  Please upload a screenshot of your payment transaction
-                </p>
               </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: '15px' }}>
-              <button 
-                onClick={() => setStep(1)}
-                style={{ 
-                  flex: '0 0 auto',
-                  padding: '18px 30px', 
-                  background: '#333',
-                  border: 'none',
-                  borderRadius: '8px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  color: 'white'
-                }}
-              >
-                ← Back
-              </button>
-              <button 
-                onClick={handlePlaceOrder}
-                className="btn" 
-                style={{ flex: 1, padding: '18px', fontSize: '1.1rem', background: '#D9FF00', color: '#111', border: 'none' }}
-                disabled={loading || !paymentProofFile}
-              >
-                <span>{loading ? 'Processing...' : 'Submit Order'}</span>
-              </button>
             </div>
           </div>
         )}
