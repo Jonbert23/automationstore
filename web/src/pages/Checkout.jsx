@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useStore from '../hooks/useStore';
+import { createOrder, getPaymentMethods, urlFor, storeName } from '../services/sanityClient';
 import { GCashIcon, MayaIcon, GoTymeIcon } from '../components/common/PaymentIcons';
+import '../assets/css/checkout.css';
 
 const Checkout = () => {
   const navigate = useNavigate();
