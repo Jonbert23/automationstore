@@ -28,15 +28,15 @@ const Home = () => {
   }, []);
 
   return (
-    <>
+    <div className="dark-mode" style={{ backgroundColor: '#111', color: '#fff' }}>
       <Hero />
       
       {/* How It Works */}
-      <section style={{ padding: '80px 0', background: '#fafafa' }}>
+      <section style={{ padding: '80px 0', background: '#1a1a1a' }}>
         <div className="container">
           <div className="section-title">
-            <h2>How It Works</h2>
-            <p>Get started in 3 simple steps</p>
+            <h2 style={{ color: 'white' }}>How It Works</h2>
+            <p style={{ color: '#9ca3af' }}>Get started in 3 simple steps</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px' }}>
             {[
@@ -45,45 +45,42 @@ const Home = () => {
                 icon: 'fa-shopping-cart', 
                 title: 'Choose Your Script', 
                 desc: 'Browse our collection of Photoshop automation scripts for jerseys, patterns, and more.',
-                color: '#3b82f6'
               },
               { 
                 step: '02', 
                 icon: 'fa-credit-card', 
                 title: 'Easy Payment', 
                 desc: 'Pay securely via GCash, Maya, or GoTyme. We verify payments within minutes.',
-                color: '#22c55e'
               },
               { 
                 step: '03', 
                 icon: 'fa-download', 
                 title: 'Instant Access', 
                 desc: 'Get immediate access to your files via Google Drive. Download and start automating!',
-                color: '#7c3aed'
               },
             ].map((item, index) => (
               <div key={index} style={{ 
-                background: 'white', 
+                background: '#222', 
                 padding: '40px 30px', 
                 borderRadius: '16px',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+                border: '1px solid #333',
                 position: 'relative',
-                transition: 'transform 0.3s, box-shadow 0.3s'
+                transition: 'transform 0.3s, border-color 0.3s'
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.transform = 'translateY(-5px)';
-                e.currentTarget.style.boxShadow = '0 10px 40px rgba(0,0,0,0.1)';
+                e.currentTarget.style.borderColor = '#D9FF00';
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.05)';
+                e.currentTarget.style.borderColor = '#333';
               }}>
                 <div style={{ 
                   position: 'absolute', 
                   top: '-15px', 
                   left: '30px',
-                  background: item.color,
-                  color: 'white',
+                  background: '#D9FF00',
+                  color: 'black',
                   width: '50px',
                   height: '50px',
                   borderRadius: '12px',
@@ -100,12 +97,12 @@ const Home = () => {
                   right: '20px',
                   fontSize: '3rem',
                   fontWeight: 700,
-                  color: '#f3f4f6'
+                  color: '#333'
                 }}>
                   {item.step}
                 </div>
-                <h4 style={{ marginTop: '30px', marginBottom: '15px', fontSize: '1.3rem' }}>{item.title}</h4>
-                <p style={{ color: '#6b7280', lineHeight: 1.7 }}>{item.desc}</p>
+                <h4 style={{ marginTop: '30px', marginBottom: '15px', fontSize: '1.3rem', color: 'white' }}>{item.title}</h4>
+                <p style={{ color: '#9ca3af', lineHeight: 1.7 }}>{item.desc}</p>
               </div>
             ))}
           </div>
@@ -115,8 +112,8 @@ const Home = () => {
       {/* Categories */}
       <section className="container" style={{ padding: '80px 0' }}>
         <div className="section-title">
-          <h2>Browse by Category</h2>
-          <p>Find the perfect automation tool for your workflow</p>
+          <h2 style={{ color: 'white' }}>Browse by Category</h2>
+          <p style={{ color: '#9ca3af' }}>Find the perfect automation tool for your workflow</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
           {[
@@ -124,28 +121,24 @@ const Home = () => {
               title: 'Jersey Mockups', 
               desc: 'Automate basketball, football & sports jersey designs',
               icon: 'fa-tshirt',
-              color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               slug: 'jersey-mockups'
             },
             { 
               title: 'Sewing Patterns', 
               desc: 'Generate pattern pieces with seam allowances',
               icon: 'fa-cut',
-              color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
               slug: 'sewing-patterns'
             },
             { 
               title: 'Bulk Actions', 
               desc: 'Resize, watermark, export multiple files at once',
               icon: 'fa-layer-group',
-              color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
               slug: 'bulk-actions'
             },
             { 
               title: 'Print Ready', 
               desc: 'Prepare files for DTF, sublimation & screen print',
               icon: 'fa-print',
-              color: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
               slug: 'print-ready'
             },
           ].map((cat, index) => (
@@ -153,33 +146,36 @@ const Home = () => {
               to={`/shop?category=${cat.slug}`} 
               key={index}
               style={{ 
-                background: cat.color,
+                background: '#222',
+                border: '1px solid #333',
                 padding: '35px 25px',
                 borderRadius: '16px',
                 color: 'white',
                 textDecoration: 'none',
                 display: 'block',
-                transition: 'transform 0.3s, box-shadow 0.3s'
+                transition: 'transform 0.3s, border-color 0.3s'
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.transform = 'translateY(-5px)';
-                e.currentTarget.style.boxShadow = '0 15px 30px rgba(0,0,0,0.2)';
+                e.currentTarget.style.borderColor = '#D9FF00';
+                e.currentTarget.querySelector('i').style.color = '#D9FF00';
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = '#333';
+                e.currentTarget.querySelector('i').style.color = 'white';
               }}
             >
-              <i className={`fas ${cat.icon}`} style={{ fontSize: '2.5rem', marginBottom: '20px', display: 'block' }}></i>
+              <i className={`fas ${cat.icon}`} style={{ fontSize: '2.5rem', marginBottom: '20px', display: 'block', transition: 'color 0.3s' }}></i>
               <h4 style={{ color: 'white', marginBottom: '8px', fontSize: '1.2rem' }}>{cat.title}</h4>
-              <p style={{ opacity: 0.9, fontSize: '0.9rem', margin: 0 }}>{cat.desc}</p>
+              <p style={{ opacity: 0.7, fontSize: '0.9rem', margin: 0 }}>{cat.desc}</p>
             </Link>
           ))}
         </div>
       </section>
 
       {/* Featured Products */}
-      <section style={{ background: '#111', padding: '80px 0' }}>
+      <section style={{ background: '#1a1a1a', padding: '80px 0' }}>
         <div className="container">
           <div className="section-title">
             <h2 style={{ color: 'white' }}>Featured Scripts</h2>
@@ -206,8 +202,10 @@ const Home = () => {
           
           <div style={{ textAlign: 'center', marginTop: '40px' }}>
             <Link to="/shop" className="btn" style={{ 
-              background: 'linear-gradient(90deg, #00d4ff, #7c3aed)',
-              border: 'none'
+              background: '#D9FF00',
+              color: 'black',
+              border: 'none',
+              fontWeight: 'bold'
             }}>
               <span>View All Products</span>
             </Link>
@@ -219,8 +217,8 @@ const Home = () => {
       <section style={{ padding: '80px 0' }}>
         <div className="container">
           <div className="section-title">
-            <h2>Why Choose SHUZEE Scripts?</h2>
-            <p>Built by designers, for designers</p>
+            <h2 style={{ color: 'white' }}>Why Choose SHUZEE Scripts?</h2>
+            <p style={{ color: '#9ca3af' }}>Built by designers, for designers</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '30px' }}>
             {[
@@ -228,37 +226,31 @@ const Home = () => {
                 icon: 'fa-bolt', 
                 title: 'Lightning Fast', 
                 desc: 'Process hundreds of designs in minutes instead of hours.',
-                color: '#f59e0b'
               },
               { 
                 icon: 'fa-check-double', 
                 title: 'Consistent Quality', 
                 desc: 'Every output maintains professional quality standards.',
-                color: '#22c55e'
               },
               { 
                 icon: 'fa-headset', 
                 title: 'Local Support', 
                 desc: 'Filipino-owned with responsive customer support.',
-                color: '#3b82f6'
               },
               { 
                 icon: 'fa-sync-alt', 
                 title: 'Free Updates', 
                 desc: 'Get lifetime updates and improvements at no extra cost.',
-                color: '#7c3aed'
               },
               { 
                 icon: 'fa-video', 
                 title: 'Video Tutorials', 
                 desc: 'Step-by-step guides to help you get started quickly.',
-                color: '#ef4444'
               },
               { 
                 icon: 'fa-shield-alt', 
                 title: 'Secure Payment', 
                 desc: 'Pay safely via GCash, Maya, or GoTyme.',
-                color: '#06b6d4'
               },
             ].map((feature, index) => (
               <div key={index} style={{ 
@@ -266,26 +258,27 @@ const Home = () => {
                 gap: '20px',
                 padding: '25px',
                 borderRadius: '12px',
-                background: '#fafafa',
+                background: '#222',
+                border: '1px solid #333',
                 transition: 'background 0.3s'
               }}
-              onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'}
-              onMouseOut={(e) => e.currentTarget.style.background = '#fafafa'}>
+              onMouseOver={(e) => e.currentTarget.style.borderColor = '#D9FF00'}
+              onMouseOut={(e) => e.currentTarget.style.borderColor = '#333'}>
                 <div style={{ 
                   width: '50px', 
                   height: '50px', 
-                  background: `${feature.color}15`,
+                  background: 'rgba(217, 255, 0, 0.1)',
                   borderRadius: '12px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexShrink: 0
                 }}>
-                  <i className={`fas ${feature.icon}`} style={{ color: feature.color, fontSize: '1.3rem' }}></i>
+                  <i className={`fas ${feature.icon}`} style={{ color: '#D9FF00', fontSize: '1.3rem' }}></i>
                 </div>
                 <div>
-                  <h4 style={{ marginBottom: '8px', fontSize: '1.1rem' }}>{feature.title}</h4>
-                  <p style={{ color: '#6b7280', fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>{feature.desc}</p>
+                  <h4 style={{ marginBottom: '8px', fontSize: '1.1rem', color: 'white' }}>{feature.title}</h4>
+                  <p style={{ color: '#9ca3af', fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>{feature.desc}</p>
                 </div>
               </div>
             ))}
@@ -294,11 +287,11 @@ const Home = () => {
       </section>
 
       {/* Testimonials */}
-      <section style={{ background: '#fafafa', padding: '80px 0' }}>
+      <section style={{ background: '#1a1a1a', padding: '80px 0' }}>
         <div className="container">
           <div className="section-title">
-            <h2>What Our Customers Say</h2>
-            <p>Trusted by graphic designers and print shops across the Philippines</p>
+            <h2 style={{ color: 'white' }}>What Our Customers Say</h2>
+            <p style={{ color: '#9ca3af' }}>Trusted by graphic designers and print shops across the Philippines</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '25px' }}>
             {[
@@ -323,36 +316,36 @@ const Home = () => {
             ].map((review, index) => (
               <div key={index} style={{ 
                 padding: '35px', 
-                background: 'white', 
+                background: '#222', 
                 borderRadius: '16px',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.05)'
+                border: '1px solid #333'
               }}>
-                <div style={{ color: '#f59e0b', marginBottom: '20px' }}>
+                <div style={{ color: '#D9FF00', marginBottom: '20px' }}>
                   <i className="fas fa-star"></i>
                   <i className="fas fa-star"></i>
                   <i className="fas fa-star"></i>
                   <i className="fas fa-star"></i>
                   <i className="fas fa-star"></i>
                 </div>
-                <p style={{ fontSize: '1.05rem', lineHeight: 1.7, marginBottom: '25px', color: '#374151' }}>"{review.text}"</p>
+                <p style={{ fontSize: '1.05rem', lineHeight: 1.7, marginBottom: '25px', color: '#d1d5db' }}>"{review.text}"</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                   <div style={{ 
                     width: '50px', 
                     height: '50px', 
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: '#D9FF00',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: 'white',
+                    color: 'black',
                     fontWeight: 700,
                     fontSize: '1.2rem'
                   }}>
                     {review.avatar}
                   </div>
                   <div>
-                    <h5 style={{ marginBottom: '3px', fontWeight: 600 }}>{review.name}</h5>
-                    <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>{review.role}</span>
+                    <h5 style={{ marginBottom: '3px', fontWeight: 600, color: 'white' }}>{review.name}</h5>
+                    <span style={{ fontSize: '0.85rem', color: '#9ca3af' }}>{review.role}</span>
                   </div>
                 </div>
               </div>
@@ -363,29 +356,33 @@ const Home = () => {
 
       {/* CTA Banner */}
       <section style={{ 
-        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+        background: '#111',
         padding: '100px 0',
         textAlign: 'center',
-        color: 'white'
+        color: 'white',
+        borderTop: '1px solid #333',
+        borderBottom: '1px solid #333'
       }}>
         <div className="container">
           <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', marginBottom: '15px', color: 'white' }}>
             Ready to Automate Your Workflow?
           </h2>
-          <p style={{ fontSize: '1.2rem', opacity: 0.8, marginBottom: '35px', maxWidth: '600px', margin: '0 auto 35px' }}>
+          <p style={{ fontSize: '1.2rem', opacity: 0.8, marginBottom: '35px', maxWidth: '600px', margin: '0 auto 35px', color: '#9ca3af' }}>
             Join hundreds of Filipino designers who are saving time and earning more with our Photoshop scripts.
           </p>
           <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link to="/shop" className="btn" style={{ 
-              background: 'linear-gradient(90deg, #00d4ff, #7c3aed)',
+              background: '#D9FF00',
+              color: 'black',
               border: 'none',
               padding: '18px 40px',
-              fontSize: '1.1rem'
+              fontSize: '1.1rem',
+              fontWeight: 'bold'
             }}>
               <span><i className="fas fa-shopping-bag" style={{ marginRight: '10px' }}></i>Shop Now</span>
             </Link>
             <a href="https://m.me/shuzee" target="_blank" rel="noopener noreferrer" className="btn btn-outline" style={{ 
-              borderColor: 'rgba(255,255,255,0.3)',
+              borderColor: '#333',
               color: 'white',
               padding: '18px 40px'
             }}>
@@ -396,25 +393,25 @@ const Home = () => {
       </section>
 
       {/* Payment Methods */}
-      <section style={{ padding: '50px 0', borderTop: '1px solid #e5e7eb' }}>
+      <section style={{ padding: '50px 0', background: '#111' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <p style={{ color: '#9ca3af', fontSize: '0.85rem', marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '2px' }}>
+          <p style={{ color: '#6b7280', fontSize: '0.85rem', marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '2px' }}>
             Accepted Payment Methods
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', flexWrap: 'wrap', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#374151' }}>
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/GCash_logo.svg/2560px-GCash_logo.svg.png" alt="GCash" style={{ height: '30px', objectFit: 'contain' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'white' }}>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/GCash_logo.svg/2560px-GCash_logo.svg.png" alt="GCash" style={{ height: '30px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#374151' }}>
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Maya_logo.svg/2560px-Maya_logo.svg.png" alt="Maya" style={{ height: '30px', objectFit: 'contain' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'white' }}>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Maya_logo.svg/2560px-Maya_logo.svg.png" alt="Maya" style={{ height: '30px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#374151' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'white' }}>
               <span style={{ fontWeight: 700, fontSize: '1.2rem' }}>GoTyme</span>
             </div>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

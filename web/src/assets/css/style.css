@@ -350,6 +350,41 @@ header {
     font-family: var(--font-heading);
 }
 
+/* Dark Mode Overrides */
+.dark-mode .product-card {
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.dark-mode .product-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.dark-mode .product-image {
+    background: #2a2a2a;
+    border-radius: 0;
+    margin-bottom: 0;
+}
+
+.dark-mode .product-info {
+    padding: 20px;
+}
+
+.dark-mode .product-info h3 a {
+    color: #fff;
+}
+
+.dark-mode .product-category {
+    color: #999;
+}
+
+.dark-mode .product-price {
+    color: var(--accent);
+}
+
 /* Footer */
 footer {
     background: #000;
