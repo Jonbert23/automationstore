@@ -248,10 +248,10 @@ const ProductDetail = () => {
   }
 
   return (
-    <>
+    <div className="dark-mode" style={{ backgroundColor: '#111', minHeight: '100vh', paddingBottom: '80px' }}>
       {/* Breadcrumbs */}
-      <div className="container" style={{ marginTop: '130px', fontSize: '0.9rem', color: '#888', textTransform: 'uppercase', fontWeight: 600 }}>
-        <Link to="/">Home</Link> / <Link to="/shop">{product.category}</Link> / <span style={{ color: 'var(--primary)' }}>{product.title}</span>
+      <div className="container" style={{ paddingTop: '130px', fontSize: '0.9rem', color: '#666', textTransform: 'uppercase', fontWeight: 600 }}>
+        <Link to="/" style={{ color: '#666' }}>Home</Link> / <Link to="/shop" style={{ color: '#666' }}>{product.category}</Link> / <span style={{ color: '#D9FF00' }}>{product.title}</span>
       </div>
 
       {/* Product Detail */}
@@ -297,22 +297,22 @@ const ProductDetail = () => {
 
         {/* Info */}
         <div className="product-info-col">
-          <span style={{ color: 'var(--accent-hover)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>
+          <span style={{ color: '#D9FF00', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>
             {product.category}
           </span>
-          <h1 style={{ fontSize: '2.5rem', margin: '10px 0' }}>{product.title}</h1>
+          <h1 style={{ fontSize: '2.5rem', margin: '10px 0', color: 'white' }}>{product.title}</h1>
           
           {/* Price */}
           <div className="price" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <span style={{ fontSize: '2rem', fontWeight: 700 }}>₱{product.price?.toLocaleString()}</span>
+            <span style={{ fontSize: '2rem', fontWeight: 700, color: '#D9FF00' }}>₱{product.price?.toLocaleString()}</span>
             {product.comparePrice && product.comparePrice > product.price && (
-              <span style={{ textDecoration: 'line-through', color: '#999', fontSize: '1.2rem' }}>
+              <span style={{ textDecoration: 'line-through', color: '#666', fontSize: '1.2rem' }}>
                 ₱{product.comparePrice.toLocaleString()}
               </span>
             )}
           </div>
           
-          <p style={{ color: '#666', marginBottom: '25px', fontSize: '1.05rem', lineHeight: 1.8 }}>
+          <p style={{ color: '#9ca3af', marginBottom: '25px', fontSize: '1.05rem', lineHeight: 1.8 }}>
             {product.description}
           </p>
 
@@ -324,28 +324,28 @@ const ProductDetail = () => {
             marginBottom: '25px' 
           }}>
             {product.fileType && (
-              <div style={{ background: '#f9fafb', padding: '15px', borderRadius: '8px' }}>
-                <div style={{ color: '#6b7280', fontSize: '0.8rem', marginBottom: '5px' }}>File Type</div>
-                <div style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <i className={`fas ${getFileTypeIcon(product.fileType)}`}></i>
+              <div style={{ background: '#222', border: '1px solid #333', padding: '15px', borderRadius: '8px' }}>
+                <div style={{ color: '#666', fontSize: '0.8rem', marginBottom: '5px' }}>File Type</div>
+                <div style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', color: 'white' }}>
+                  <i className={`fas ${getFileTypeIcon(product.fileType)}`} style={{ color: '#D9FF00' }}></i>
                   {getFileTypeLabel(product.fileType)}
                 </div>
               </div>
             )}
             {product.fileSize && (
-              <div style={{ background: '#f9fafb', padding: '15px', borderRadius: '8px' }}>
-                <div style={{ color: '#6b7280', fontSize: '0.8rem', marginBottom: '5px' }}>File Size</div>
-                <div style={{ fontWeight: 600 }}>
-                  <i className="fas fa-hdd" style={{ marginRight: '8px' }}></i>
+              <div style={{ background: '#222', border: '1px solid #333', padding: '15px', borderRadius: '8px' }}>
+                <div style={{ color: '#666', fontSize: '0.8rem', marginBottom: '5px' }}>File Size</div>
+                <div style={{ fontWeight: 600, color: 'white' }}>
+                  <i className="fas fa-hdd" style={{ marginRight: '8px', color: '#D9FF00' }}></i>
                   {product.fileSize}
                 </div>
               </div>
             )}
             {product.compatibility && (
-              <div style={{ background: '#f9fafb', padding: '15px', borderRadius: '8px' }}>
-                <div style={{ color: '#6b7280', fontSize: '0.8rem', marginBottom: '5px' }}>Compatibility</div>
-                <div style={{ fontWeight: 600 }}>
-                  <i className="fab fa-adobe" style={{ marginRight: '8px' }}></i>
+              <div style={{ background: '#222', border: '1px solid #333', padding: '15px', borderRadius: '8px' }}>
+                <div style={{ color: '#666', fontSize: '0.8rem', marginBottom: '5px' }}>Compatibility</div>
+                <div style={{ fontWeight: 600, color: 'white' }}>
+                  <i className="fab fa-adobe" style={{ marginRight: '8px', color: '#D9FF00' }}></i>
                   {product.compatibility}
                 </div>
               </div>
@@ -354,7 +354,7 @@ const ProductDetail = () => {
 
           {/* Add to Cart */}
           <div style={{ display: 'flex', gap: '12px', marginBottom: '25px' }}>
-            <button className="btn add-to-cart" style={{ flex: 1, padding: '18px' }} onClick={handleAddToCart}>
+            <button className="btn add-to-cart" style={{ flex: 1, padding: '18px', background: '#D9FF00', color: '#111', border: 'none' }} onClick={handleAddToCart}>
               <span>Add to Cart - ₱{product.price?.toLocaleString()}</span>
             </button>
             <button 
@@ -362,9 +362,9 @@ const ProductDetail = () => {
               title={inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
               style={{
                 width: '60px',
-                border: '1px solid var(--border)',
-                background: inWishlist ? '#fef2f2' : 'white',
-                borderRadius: '4px',
+                border: '1px solid #333',
+                background: inWishlist ? 'rgba(239, 68, 68, 0.1)' : '#222',
+                borderRadius: '8px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -383,12 +383,12 @@ const ProductDetail = () => {
           </div>
 
           {/* Instant Delivery Info */}
-          <div style={{ background: '#f0fdf4', border: '1px solid #22c55e', padding: '20px', borderRadius: '8px', marginBottom: '25px' }}>
+          <div style={{ background: 'rgba(217, 255, 0, 0.1)', border: '1px solid #D9FF00', padding: '20px', borderRadius: '12px', marginBottom: '25px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
-              <i className="fas fa-bolt" style={{ color: '#22c55e', fontSize: '1.2rem' }}></i>
-              <strong style={{ color: '#166534' }}>Instant Digital Delivery</strong>
+              <i className="fas fa-bolt" style={{ color: '#D9FF00', fontSize: '1.2rem' }}></i>
+              <strong style={{ color: '#D9FF00' }}>Instant Digital Delivery</strong>
             </div>
-            <p style={{ color: '#15803d', fontSize: '0.9rem', margin: 0 }}>
+            <p style={{ color: '#9ca3af', fontSize: '0.9rem', margin: 0 }}>
               Get immediate access to your files via Google Drive after payment verification.
             </p>
           </div>
@@ -580,9 +580,9 @@ const ProductDetail = () => {
 
       {/* Related Products */}
       {relatedProducts.length > 0 && (
-        <section className="container" style={{ margin: '100px auto' }}>
+        <section className="container" style={{ marginTop: '80px' }}>
           <div className="section-title">
-            <h3>You May Also Like</h3>
+            <h3 style={{ color: 'white' }}>You May Also Like</h3>
           </div>
           <div className="product-grid">
             {relatedProducts.map(product => (
@@ -591,7 +591,7 @@ const ProductDetail = () => {
           </div>
         </section>
       )}
-    </>
+    </div>
   );
 };
 

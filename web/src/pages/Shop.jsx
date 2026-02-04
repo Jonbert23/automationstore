@@ -25,18 +25,16 @@ const Shop = () => {
         console.error('Error fetching data:', error);
         // Use mock data if Sanity is not configured
         setProducts([
-          { _id: '1', title: 'Zoom Velocity 5', category: 'Running', price: 149.00, slug: { current: 'zoom-velocity-5' }, images: [{ asset: { url: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=600&q=80' } }] },
-          { _id: '2', title: 'Apex High-Top', category: 'Lifestyle', price: 189.00, slug: { current: 'apex-high-top' }, images: [{ asset: { url: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=600&q=80' } }] },
-          { _id: '3', title: 'Nitro Boost Red', category: 'Training', price: 129.00, slug: { current: 'nitro-boost-red' }, images: [{ asset: { url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80' } }] },
-          { _id: '4', title: 'Cloud Strider', category: 'Running', price: 159.00, slug: { current: 'cloud-strider' }, images: [{ asset: { url: 'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?auto=format&fit=crop&w=600&q=80' } }] },
-          { _id: '5', title: 'Marathon Elite', category: 'Running', price: 210.00, slug: { current: 'marathon-elite' }, images: [{ asset: { url: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=600&q=80' } }] },
-          { _id: '6', title: 'Court King 2', category: 'Basketball', price: 130.00, slug: { current: 'court-king-2' }, images: [{ asset: { url: 'https://images.unsplash.com/photo-1584735175315-9d5df23860e6?auto=format&fit=crop&w=600&q=80' } }] },
+          { _id: '1', title: 'Jersey Automation Pro', category: 'Jersey Mockups', price: 2500, slug: { current: 'jersey-automation-pro' }, images: [{ asset: { url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80' } }] },
+          { _id: '2', title: 'Pattern Generator', category: 'Sewing Patterns', price: 1800, slug: { current: 'pattern-generator' }, images: [{ asset: { url: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=600&q=80' } }] },
+          { _id: '3', title: 'Bulk Resize Script', category: 'Bulk Actions', price: 1200, slug: { current: 'bulk-resize-script' }, images: [{ asset: { url: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=600&q=80' } }] },
+          { _id: '4', title: 'DTF Print Ready', category: 'Print Ready', price: 2000, slug: { current: 'dtf-print-ready' }, images: [{ asset: { url: 'https://images.unsplash.com/photo-1572044162444-ad60f128bdea?auto=format&fit=crop&w=600&q=80' } }] },
         ]);
         setCategories([
-          { _id: 'c1', title: 'Running', slug: { current: 'running' } },
-          { _id: 'c2', title: 'Basketball', slug: { current: 'basketball' } },
-          { _id: 'c3', title: 'Training', slug: { current: 'training' } },
-          { _id: 'c4', title: 'Lifestyle', slug: { current: 'lifestyle' } },
+          { _id: 'c1', title: 'Jersey Mockups', slug: { current: 'jersey-mockups' } },
+          { _id: 'c2', title: 'Sewing Patterns', slug: { current: 'sewing-patterns' } },
+          { _id: 'c3', title: 'Bulk Actions', slug: { current: 'bulk-actions' } },
+          { _id: 'c4', title: 'Print Ready', slug: { current: 'print-ready' } },
         ]);
       } finally {
         setLoading(false);
@@ -62,7 +60,7 @@ const Shop = () => {
       switch (sortBy) {
         case 'price-low': return a.price - b.price;
         case 'price-high': return b.price - a.price;
-        case 'newest': return -1; // Assume newest first in original order
+        case 'newest': return -1;
         default: return 0;
       }
     });
@@ -78,33 +76,42 @@ const Shop = () => {
   };
 
   return (
-    <>
+    <div className="dark-mode" style={{ backgroundColor: '#111', minHeight: '100vh' }}>
       {/* Page Header */}
-      <div className="page-header">
+      <div style={{ 
+        padding: '150px 0 80px',
+        textAlign: 'center',
+        background: 'linear-gradient(180deg, #1a1a1a 0%, #111 100%)',
+        borderBottom: '1px solid #333'
+      }}>
         <div className="container">
-          <h1>Performance Footwear</h1>
-          <p style={{ fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto', color: '#666' }}>
-            Engineered for every athlete. Find your perfect fit for running, training, and lifestyle.
+          <h1 style={{ color: 'white', fontSize: '3.5rem' }}>Photoshop Scripts</h1>
+          <p style={{ fontSize: '1.2rem', maxWidth: '600px', margin: '15px auto 0', color: '#9ca3af' }}>
+            Automation tools for jersey mockups, sewing patterns, and print production.
           </p>
         </div>
       </div>
 
       {/* Shop Layout */}
-      <section className="container" style={{ padding: '0 20px 80px' }}>
+      <section className="container" style={{ padding: '60px 20px 80px' }}>
         <div style={{ display: 'flex', gap: '50px', flexWrap: 'wrap' }}>
           
           {/* Sidebar Filters */}
           <aside style={{ flex: 1, minWidth: '250px' }}>
             <div style={{ marginBottom: '40px' }}>
-              <h4>Sport</h4>
+              <h4 style={{ color: '#D9FF00', marginBottom: '20px' }}>Category</h4>
               <ul style={{ marginTop: '20px' }}>
                 <li style={{ marginBottom: '12px' }}>
                   <a 
                     href="#" 
                     onClick={(e) => { e.preventDefault(); handleCategoryChange('all'); }}
-                    style={{ color: selectedCategory === 'all' ? 'var(--primary)' : 'var(--secondary)', fontWeight: selectedCategory === 'all' ? 700 : 400 }}
+                    style={{ 
+                      color: selectedCategory === 'all' ? '#D9FF00' : '#9ca3af', 
+                      fontWeight: selectedCategory === 'all' ? 700 : 400,
+                      transition: 'color 0.2s'
+                    }}
                   >
-                    All Sports
+                    All Scripts
                   </a>
                 </li>
                 {categories.map(cat => (
@@ -112,7 +119,11 @@ const Shop = () => {
                     <a 
                       href="#" 
                       onClick={(e) => { e.preventDefault(); handleCategoryChange(cat.slug?.current || cat.title.toLowerCase()); }}
-                      style={{ color: selectedCategory === (cat.slug?.current || cat.title.toLowerCase()) ? 'var(--primary)' : 'var(--secondary)', fontWeight: selectedCategory === (cat.slug?.current || cat.title.toLowerCase()) ? 700 : 400 }}
+                      style={{ 
+                        color: selectedCategory === (cat.slug?.current || cat.title.toLowerCase()) ? '#D9FF00' : '#9ca3af', 
+                        fontWeight: selectedCategory === (cat.slug?.current || cat.title.toLowerCase()) ? 700 : 400,
+                        transition: 'color 0.2s'
+                      }}
                     >
                       {cat.title}
                     </a>
@@ -122,60 +133,101 @@ const Shop = () => {
             </div>
 
             <div style={{ marginBottom: '40px' }}>
-              <h4>Price Range</h4>
+              <h4 style={{ color: '#D9FF00', marginBottom: '20px' }}>Price Range</h4>
               <div style={{ marginTop: '20px', display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <input 
                   type="number" 
                   placeholder="Min" 
-                  className="form-control" 
-                  style={{ padding: '10px' }}
+                  style={{ 
+                    padding: '12px',
+                    background: '#222',
+                    border: '1px solid #333',
+                    borderRadius: '8px',
+                    color: 'white',
+                    width: '100%'
+                  }}
                   value={priceRange.min}
                   onChange={(e) => setPriceRange({ ...priceRange, min: e.target.value })}
                 />
-                <span>-</span>
+                <span style={{ color: '#666' }}>-</span>
                 <input 
                   type="number" 
                   placeholder="Max" 
-                  className="form-control" 
-                  style={{ padding: '10px' }}
+                  style={{ 
+                    padding: '12px',
+                    background: '#222',
+                    border: '1px solid #333',
+                    borderRadius: '8px',
+                    color: 'white',
+                    width: '100%'
+                  }}
                   value={priceRange.max}
                   onChange={(e) => setPriceRange({ ...priceRange, max: e.target.value })}
                 />
               </div>
             </div>
+
+            {/* Info Box */}
+            <div style={{ 
+              background: '#222', 
+              border: '1px solid #333', 
+              borderRadius: '12px', 
+              padding: '20px'
+            }}>
+              <h5 style={{ color: '#D9FF00', marginBottom: '12px', fontSize: '0.9rem' }}>
+                <i className="fas fa-info-circle" style={{ marginRight: '8px' }}></i>
+                Need Help?
+              </h5>
+              <p style={{ color: '#9ca3af', fontSize: '0.85rem', lineHeight: 1.6 }}>
+                Message us on Facebook for custom script requests or compatibility questions.
+              </p>
+            </div>
           </aside>
 
           {/* Product Grid */}
           <div style={{ flex: 3 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px', borderBottom: '1px solid var(--border)', paddingBottom: '20px' }}>
-              <span style={{ fontWeight: 700, color: '#666' }}>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
+              marginBottom: '40px', 
+              borderBottom: '1px solid #333', 
+              paddingBottom: '20px' 
+            }}>
+              <span style={{ fontWeight: 700, color: '#9ca3af' }}>
                 Showing {filteredProducts.length} results
               </span>
               <select 
-                className="form-control" 
-                style={{ width: 'auto', padding: '10px 30px 10px 10px' }}
+                style={{ 
+                  padding: '12px 20px',
+                  background: '#222',
+                  border: '1px solid #333',
+                  borderRadius: '8px',
+                  color: 'white',
+                  cursor: 'pointer'
+                }}
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
               >
                 <option value="featured">Sort by: Featured</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
-                <option value="newest">Newest Drops</option>
+                <option value="newest">Newest</option>
               </select>
             </div>
 
             {loading ? (
               <div style={{ textAlign: 'center', padding: '60px' }}>
-                <i className="fas fa-spinner fa-spin" style={{ fontSize: '2rem', color: '#ccc' }}></i>
-                <p style={{ marginTop: '15px', color: '#888' }}>Loading products...</p>
+                <i className="fas fa-spinner fa-spin" style={{ fontSize: '2rem', color: '#D9FF00' }}></i>
+                <p style={{ marginTop: '15px', color: '#9ca3af' }}>Loading scripts...</p>
               </div>
             ) : filteredProducts.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '60px' }}>
-                <i className="fas fa-box-open" style={{ fontSize: '3rem', color: '#ddd', marginBottom: '15px' }}></i>
-                <p style={{ color: '#888' }}>No products found matching your criteria.</p>
+                <i className="fas fa-box-open" style={{ fontSize: '3rem', color: '#333', marginBottom: '15px' }}></i>
+                <p style={{ color: '#9ca3af' }}>No scripts found matching your criteria.</p>
                 <button 
-                  className="btn btn-outline" 
-                  style={{ marginTop: '15px' }}
+                  className="btn" 
+                  style={{ marginTop: '15px', background: '#D9FF00', color: 'black', border: 'none' }}
                   onClick={() => { setSelectedCategory('all'); setPriceRange({ min: '', max: '' }); }}
                 >
                   <span>Clear Filters</span>
@@ -191,7 +243,7 @@ const Shop = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

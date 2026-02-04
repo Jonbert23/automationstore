@@ -19,37 +19,38 @@ const Header = () => {
 
   return (
     <header style={{
-      background: isScrolled ? 'rgba(255,255,255,0.98)' : 'rgba(255,255,255,0.95)',
-      boxShadow: isScrolled ? '0 2px 10px rgba(0,0,0,0.05)' : 'none'
+      background: isScrolled ? 'rgba(17,17,17,0.98)' : 'rgba(17,17,17,0.95)',
+      boxShadow: isScrolled ? '0 2px 20px rgba(0,0,0,0.3)' : 'none',
+      borderBottom: '1px solid #333'
     }}>
       {/* Top Announcement Bar */}
-      <div style={{ background: '#111', color: 'var(--accent)', textAlign: 'center', padding: '8px', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
-        <i className="fas fa-bolt" style={{ marginRight: '5px' }}></i> Free Express Shipping on Orders Over $150
+      <div style={{ background: '#D9FF00', color: '#111', textAlign: 'center', padding: '8px', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
+        <i className="fas fa-bolt" style={{ marginRight: '5px' }}></i> Instant Digital Delivery After Payment Verification
       </div>
 
       <div className="container nav-container">
         <div 
           className={`hamburger ${isMenuOpen ? 'is-active' : ''}`} 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
+          style={{ color: 'white' }}
         >
           <i className="fas fa-bars"></i>
         </div>
         
-        <Link to="/" className="logo">SHUZEE<span>.</span></Link>
+        <Link to="/" className="logo" style={{ color: 'white' }}>SHUZEE<span style={{ color: '#D9FF00' }}>.</span></Link>
 
         <nav className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
-          <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
-          <Link to="/shop" onClick={() => setIsMenuOpen(false)}>Men</Link>
-          <Link to="/shop" onClick={() => setIsMenuOpen(false)}>Women</Link>
-          <Link to="/shop" onClick={() => setIsMenuOpen(false)}>New Drops</Link>
-          <Link to="/contact" onClick={() => setIsMenuOpen(false)}>Support</Link>
+          <Link to="/" onClick={() => setIsMenuOpen(false)} style={{ color: 'white' }}>Home</Link>
+          <Link to="/shop" onClick={() => setIsMenuOpen(false)} style={{ color: 'white' }}>Scripts</Link>
+          <Link to="/shop?category=jersey-mockups" onClick={() => setIsMenuOpen(false)} style={{ color: 'white' }}>Jersey</Link>
+          <Link to="/shop?category=sewing-patterns" onClick={() => setIsMenuOpen(false)} style={{ color: 'white' }}>Patterns</Link>
+          <Link to="/contact" onClick={() => setIsMenuOpen(false)} style={{ color: 'white' }}>Support</Link>
         </nav>
 
         <div className="nav-icons">
-          <div className="icon-btn"><i className="fas fa-search"></i></div>
-          <Link to="/cart" className="icon-btn">
+          <Link to="/cart" className="icon-btn" style={{ color: 'white' }}>
             <i className="fas fa-shopping-bag"></i>
-            <span className="cart-count">{getCartCount()}</span>
+            <span className="cart-count" style={{ background: '#D9FF00', color: '#111' }}>{getCartCount()}</span>
           </Link>
           {user ? (
             <Link to="/account" className="icon-btn" style={{ padding: 0 }}>
@@ -61,16 +62,18 @@ const Header = () => {
                     width: '32px', 
                     height: '32px', 
                     borderRadius: '50%',
-                    objectFit: 'cover'
+                    objectFit: 'cover',
+                    border: '2px solid #D9FF00'
                   }}
+                  referrerPolicy="no-referrer"
                 />
               ) : (
                 <div style={{
                   width: '32px',
                   height: '32px',
                   borderRadius: '50%',
-                  background: '#111',
-                  color: 'white',
+                  background: '#D9FF00',
+                  color: '#111',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -83,7 +86,7 @@ const Header = () => {
               )}
             </Link>
           ) : (
-            <Link to="/login" className="icon-btn"><i className="far fa-user"></i></Link>
+            <Link to="/login" className="icon-btn" style={{ color: 'white' }}><i className="far fa-user"></i></Link>
           )}
         </div>
       </div>

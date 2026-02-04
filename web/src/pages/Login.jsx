@@ -110,19 +110,21 @@ const Login = () => {
   const inputStyle = {
     width: '100%',
     padding: '14px 16px',
-    border: '1px solid #e5e7eb',
+    border: '1px solid #333',
     borderRadius: '8px',
     fontSize: '1rem',
     marginBottom: '16px',
     outline: 'none',
     transition: 'border-color 0.2s',
+    background: '#222',
+    color: 'white',
   };
 
   const buttonStyle = {
     width: '100%',
     padding: '14px',
-    background: 'var(--primary)',
-    color: 'white',
+    background: '#D9FF00',
+    color: '#111',
     border: 'none',
     borderRadius: '8px',
     fontSize: '1rem',
@@ -135,251 +137,252 @@ const Login = () => {
   };
 
   return (
-    <section style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 20px' }}>
-      <div style={{ maxWidth: '450px', width: '100%', textAlign: 'center' }}>
-        {/* Logo */}
-        <h1 className="logo" style={{ fontSize: '3rem', marginBottom: '10px' }}>SHUZEE<span>.</span></h1>
-        <p style={{ color: '#666', marginBottom: '40px' }}>Performance Footwear</p>
+    <div className="dark-mode" style={{ backgroundColor: '#111', minHeight: '100vh' }}>
+      <section style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 20px 40px' }}>
+        <div style={{ maxWidth: '450px', width: '100%', textAlign: 'center' }}>
+          {/* Logo */}
+          <h1 className="logo" style={{ fontSize: '3rem', marginBottom: '10px', color: 'white' }}>SHUZEE<span style={{ color: '#D9FF00' }}>.</span></h1>
+          <p style={{ color: '#9ca3af', marginBottom: '40px' }}>Photoshop Automation Scripts</p>
 
-        {/* Auth Card */}
-        <div style={{ 
-          background: '#fff', 
-          padding: '40px', 
-          border: '1px solid var(--border)',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-          borderRadius: '12px',
-        }}>
-          {/* Tabs */}
+          {/* Auth Card */}
           <div style={{ 
-            display: 'flex', 
-            marginBottom: '30px',
-            background: '#f3f4f6',
-            borderRadius: '8px',
-            padding: '4px',
+            background: '#1a1a1a', 
+            padding: '40px', 
+            border: '1px solid #333',
+            borderRadius: '16px',
           }}>
-            <button
-              onClick={() => { setActiveTab('login'); setError(''); }}
-              style={{
-                flex: 1,
-                padding: '12px',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                fontSize: '0.95rem',
-                background: activeTab === 'login' ? 'white' : 'transparent',
-                color: activeTab === 'login' ? 'var(--primary)' : '#6b7280',
-                boxShadow: activeTab === 'login' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-                transition: 'all 0.2s',
-              }}
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => { setActiveTab('register'); setError(''); }}
-              style={{
-                flex: 1,
-                padding: '12px',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                fontSize: '0.95rem',
-                background: activeTab === 'register' ? 'white' : 'transparent',
-                color: activeTab === 'register' ? 'var(--primary)' : '#6b7280',
-                boxShadow: activeTab === 'register' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-                transition: 'all 0.2s',
-              }}
-            >
-              Create Account
-            </button>
-          </div>
-
-          {/* Error/Success Messages */}
-          {error && (
+            {/* Tabs */}
             <div style={{ 
-              background: '#fef2f2', 
-              color: '#dc2626', 
-              padding: '12px', 
-              borderRadius: '8px', 
-              marginBottom: '20px',
-              fontSize: '0.9rem',
-              textAlign: 'left',
-            }}>
-              <i className="fas fa-exclamation-circle" style={{ marginRight: '8px' }}></i>
-              {error}
-            </div>
-          )}
-          {success && (
-            <div style={{ 
-              background: '#f0fdf4', 
-              color: '#16a34a', 
-              padding: '12px', 
-              borderRadius: '8px', 
-              marginBottom: '20px',
-              fontSize: '0.9rem',
-            }}>
-              <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
-              {success}
-            </div>
-          )}
-
-          {/* Login Form */}
-          {activeTab === 'login' && (
-            <form onSubmit={handleLogin}>
-              <div style={{ textAlign: 'left', marginBottom: '8px' }}>
-                <label style={{ fontSize: '0.9rem', fontWeight: '500', color: '#374151' }}>Email</label>
-              </div>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={loginEmail}
-                onChange={(e) => setLoginEmail(e.target.value)}
-                style={inputStyle}
-                required
-              />
-
-              <div style={{ textAlign: 'left', marginBottom: '8px' }}>
-                <label style={{ fontSize: '0.9rem', fontWeight: '500', color: '#374151' }}>Password</label>
-              </div>
-              <input
-                type="password"
-                placeholder="Enter your password"
-                value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-                style={inputStyle}
-                required
-              />
-
-              <button type="submit" style={buttonStyle} disabled={loading}>
-                {loading ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin"></i>
-                    Signing in...
-                  </>
-                ) : (
-                  <>
-                    <i className="fas fa-sign-in-alt"></i>
-                    Sign In
-                  </>
-                )}
-              </button>
-            </form>
-          )}
-
-          {/* Register Form */}
-          {activeTab === 'register' && (
-            <form onSubmit={handleRegister}>
-              <div style={{ textAlign: 'left', marginBottom: '8px' }}>
-                <label style={{ fontSize: '0.9rem', fontWeight: '500', color: '#374151' }}>Full Name</label>
-              </div>
-              <input
-                type="text"
-                placeholder="Enter your full name"
-                value={registerName}
-                onChange={(e) => setRegisterName(e.target.value)}
-                style={inputStyle}
-                required
-              />
-
-              <div style={{ textAlign: 'left', marginBottom: '8px' }}>
-                <label style={{ fontSize: '0.9rem', fontWeight: '500', color: '#374151' }}>Email</label>
-              </div>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={registerEmail}
-                onChange={(e) => setRegisterEmail(e.target.value)}
-                style={inputStyle}
-                required
-              />
-
-              <div style={{ textAlign: 'left', marginBottom: '8px' }}>
-                <label style={{ fontSize: '0.9rem', fontWeight: '500', color: '#374151' }}>Password</label>
-              </div>
-              <input
-                type="password"
-                placeholder="Create a password (min. 6 characters)"
-                value={registerPassword}
-                onChange={(e) => setRegisterPassword(e.target.value)}
-                style={inputStyle}
-                required
-                minLength={6}
-              />
-
-              <div style={{ textAlign: 'left', marginBottom: '8px' }}>
-                <label style={{ fontSize: '0.9rem', fontWeight: '500', color: '#374151' }}>Confirm Password</label>
-              </div>
-              <input
-                type="password"
-                placeholder="Confirm your password"
-                value={registerConfirmPassword}
-                onChange={(e) => setRegisterConfirmPassword(e.target.value)}
-                style={inputStyle}
-                required
-              />
-
-              <button type="submit" style={buttonStyle} disabled={loading}>
-                {loading ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin"></i>
-                    Creating account...
-                  </>
-                ) : (
-                  <>
-                    <i className="fas fa-user-plus"></i>
-                    Create Account
-                  </>
-                )}
-              </button>
-            </form>
-          )}
-
-          {/* Divider */}
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            margin: '30px 0',
-            color: '#9ca3af'
-          }}>
-            <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
-            <span style={{ padding: '0 15px', fontSize: '0.85rem' }}>or continue with</span>
-            <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
-          </div>
-
-          {/* Google Sign In Button */}
-          <div 
-            id="google-signin-btn" 
-            style={{ 
               display: 'flex', 
-              justifyContent: 'center',
-            }}
-          ></div>
+              marginBottom: '30px',
+              background: '#222',
+              borderRadius: '8px',
+              padding: '4px',
+            }}>
+              <button
+                onClick={() => { setActiveTab('login'); setError(''); }}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  fontSize: '0.95rem',
+                  background: activeTab === 'login' ? '#D9FF00' : 'transparent',
+                  color: activeTab === 'login' ? '#111' : '#9ca3af',
+                  transition: 'all 0.2s',
+                }}
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => { setActiveTab('register'); setError(''); }}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  fontSize: '0.95rem',
+                  background: activeTab === 'register' ? '#D9FF00' : 'transparent',
+                  color: activeTab === 'register' ? '#111' : '#9ca3af',
+                  transition: 'all 0.2s',
+                }}
+              >
+                Create Account
+              </button>
+            </div>
 
-          <p style={{ fontSize: '0.85rem', color: '#9ca3af', marginTop: '25px' }}>
-            By continuing, you agree to our{' '}
-            <a href="#" style={{ color: 'var(--primary)' }}>Terms of Service</a> and{' '}
-            <a href="#" style={{ color: 'var(--primary)' }}>Privacy Policy</a>.
-          </p>
-        </div>
+            {/* Error/Success Messages */}
+            {error && (
+              <div style={{ 
+                background: 'rgba(239, 68, 68, 0.1)', 
+                color: '#ef4444', 
+                padding: '12px', 
+                borderRadius: '8px', 
+                marginBottom: '20px',
+                fontSize: '0.9rem',
+                textAlign: 'left',
+                border: '1px solid rgba(239, 68, 68, 0.3)'
+              }}>
+                <i className="fas fa-exclamation-circle" style={{ marginRight: '8px' }}></i>
+                {error}
+              </div>
+            )}
+            {success && (
+              <div style={{ 
+                background: 'rgba(34, 197, 94, 0.1)', 
+                color: '#22c55e', 
+                padding: '12px', 
+                borderRadius: '8px', 
+                marginBottom: '20px',
+                fontSize: '0.9rem',
+                border: '1px solid rgba(34, 197, 94, 0.3)'
+              }}>
+                <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
+                {success}
+              </div>
+            )}
 
-        {/* Benefits */}
-        <div style={{ marginTop: '40px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', textAlign: 'center' }}>
-          <div>
-            <i className="fas fa-shipping-fast" style={{ fontSize: '1.5rem', color: 'var(--accent)', marginBottom: '10px', display: 'block' }}></i>
-            <p style={{ fontSize: '0.8rem', color: '#666' }}>Track Orders</p>
+            {/* Login Form */}
+            {activeTab === 'login' && (
+              <form onSubmit={handleLogin}>
+                <div style={{ textAlign: 'left', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '0.9rem', fontWeight: '500', color: '#9ca3af' }}>Email</label>
+                </div>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  style={inputStyle}
+                  required
+                />
+
+                <div style={{ textAlign: 'left', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '0.9rem', fontWeight: '500', color: '#9ca3af' }}>Password</label>
+                </div>
+                <input
+                  type="password"
+                  placeholder="Enter your password"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  style={inputStyle}
+                  required
+                />
+
+                <button type="submit" style={buttonStyle} disabled={loading}>
+                  {loading ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin"></i>
+                      Signing in...
+                    </>
+                  ) : (
+                    <>
+                      <i className="fas fa-sign-in-alt"></i>
+                      Sign In
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+
+            {/* Register Form */}
+            {activeTab === 'register' && (
+              <form onSubmit={handleRegister}>
+                <div style={{ textAlign: 'left', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '0.9rem', fontWeight: '500', color: '#9ca3af' }}>Full Name</label>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Enter your full name"
+                  value={registerName}
+                  onChange={(e) => setRegisterName(e.target.value)}
+                  style={inputStyle}
+                  required
+                />
+
+                <div style={{ textAlign: 'left', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '0.9rem', fontWeight: '500', color: '#9ca3af' }}>Email</label>
+                </div>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={registerEmail}
+                  onChange={(e) => setRegisterEmail(e.target.value)}
+                  style={inputStyle}
+                  required
+                />
+
+                <div style={{ textAlign: 'left', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '0.9rem', fontWeight: '500', color: '#9ca3af' }}>Password</label>
+                </div>
+                <input
+                  type="password"
+                  placeholder="Create a password (min. 6 characters)"
+                  value={registerPassword}
+                  onChange={(e) => setRegisterPassword(e.target.value)}
+                  style={inputStyle}
+                  required
+                  minLength={6}
+                />
+
+                <div style={{ textAlign: 'left', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '0.9rem', fontWeight: '500', color: '#9ca3af' }}>Confirm Password</label>
+                </div>
+                <input
+                  type="password"
+                  placeholder="Confirm your password"
+                  value={registerConfirmPassword}
+                  onChange={(e) => setRegisterConfirmPassword(e.target.value)}
+                  style={inputStyle}
+                  required
+                />
+
+                <button type="submit" style={buttonStyle} disabled={loading}>
+                  {loading ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin"></i>
+                      Creating account...
+                    </>
+                  ) : (
+                    <>
+                      <i className="fas fa-user-plus"></i>
+                      Create Account
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+
+            {/* Divider */}
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              margin: '30px 0',
+              color: '#666'
+            }}>
+              <div style={{ flex: 1, height: '1px', background: '#333' }}></div>
+              <span style={{ padding: '0 15px', fontSize: '0.85rem' }}>or continue with</span>
+              <div style={{ flex: 1, height: '1px', background: '#333' }}></div>
+            </div>
+
+            {/* Google Sign In Button */}
+            <div 
+              id="google-signin-btn" 
+              style={{ 
+                display: 'flex', 
+                justifyContent: 'center',
+              }}
+            ></div>
+
+            <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '25px' }}>
+              By continuing, you agree to our{' '}
+              <a href="#" style={{ color: '#D9FF00' }}>Terms of Service</a> and{' '}
+              <a href="#" style={{ color: '#D9FF00' }}>Privacy Policy</a>.
+            </p>
           </div>
-          <div>
-            <i className="fas fa-heart" style={{ fontSize: '1.5rem', color: 'var(--accent)', marginBottom: '10px', display: 'block' }}></i>
-            <p style={{ fontSize: '0.8rem', color: '#666' }}>Save Wishlist</p>
-          </div>
-          <div>
-            <i className="fas fa-undo" style={{ fontSize: '1.5rem', color: 'var(--accent)', marginBottom: '10px', display: 'block' }}></i>
-            <p style={{ fontSize: '0.8rem', color: '#666' }}>Easy Returns</p>
+
+          {/* Benefits */}
+          <div style={{ marginTop: '40px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', textAlign: 'center' }}>
+            <div>
+              <i className="fas fa-download" style={{ fontSize: '1.5rem', color: '#D9FF00', marginBottom: '10px', display: 'block' }}></i>
+              <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Instant Access</p>
+            </div>
+            <div>
+              <i className="fas fa-heart" style={{ fontSize: '1.5rem', color: '#D9FF00', marginBottom: '10px', display: 'block' }}></i>
+              <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Save Wishlist</p>
+            </div>
+            <div>
+              <i className="fas fa-sync-alt" style={{ fontSize: '1.5rem', color: '#D9FF00', marginBottom: '10px', display: 'block' }}></i>
+              <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Free Updates</p>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };
 
