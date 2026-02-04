@@ -8,6 +8,7 @@ const AdminCategories = () => {
   const [deleting, setDeleting] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -66,6 +67,23 @@ const AdminCategories = () => {
     }
   };
 
+  const handleEdit = (category) => {
+    setEditingId(category._id);
+    setFormData({
+      title: category.title,
+      slug: category.slug?.current || '',
+      description: category.description || '',
+    });
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const resetForm = () => {
+    setFormData({ title: '', slug: '', description: '' });
+    setEditingId(null);
+    setShowForm(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title) {
@@ -75,7 +93,7 @@ const AdminCategories = () => {
 
     setSaving(true);
     try {
-      const newCategory = await writeClient.create({
+      const doc = {
         _type: 'category',
         title: formData.title,
         slug: {
@@ -83,14 +101,30 @@ const AdminCategories = () => {
           current: formData.slug || generateSlug(formData.title),
         },
         description: formData.description,
-      });
+      };
 
-      setCategories([...categories, newCategory]);
-      setFormData({ title: '', slug: '', description: '' });
-      setShowForm(false);
+      if (editingId) {
+        // Update existing category
+        await writeClient
+          .patch(editingId)
+          .set(doc)
+          .commit();
+
+        setCategories(categories.map(cat => 
+          cat._id === editingId ? { ...cat, ...doc, _id: editingId } : cat
+        ));
+        alert('Category updated successfully');
+      } else {
+        // Create new category
+        const newCategory = await writeClient.create(doc);
+        setCategories([...categories, newCategory]);
+        alert('Category created successfully');
+      }
+
+      resetForm();
     } catch (error) {
-      console.error('Error creating category:', error);
-      alert('Failed to create category');
+      console.error('Error saving category:', error);
+      alert(`Failed to ${editingId ? 'update' : 'create'} category`);
     } finally {
       setSaving(false);
     }
@@ -110,7 +144,13 @@ const AdminCategories = () => {
       <div className="admin-top-bar">
         <h1 className="admin-page-title">Categories</h1>
         <button
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => {
+            if (showForm) {
+              resetForm();
+            } else {
+              setShowForm(true);
+            }
+          }}
           className="admin-action-btn"
         >
           <i className={`fas fa-${showForm ? 'times' : 'plus'}`}></i>
@@ -118,10 +158,10 @@ const AdminCategories = () => {
         </button>
       </div>
 
-      {/* Add Category Form */}
+      {/* Add/Edit Category Form */}
       {showForm && (
         <div className="admin-data-card" style={{ padding: '30px', marginBottom: '30px' }}>
-          <h3 className="admin-form-section-title">New Category</h3>
+          <h3 className="admin-form-section-title">{editingId ? 'Edit Category' : 'New Category'}</h3>
           <form onSubmit={handleSubmit}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
               <div className="admin-form-group">
@@ -170,7 +210,7 @@ const AdminCategories = () => {
                 </>
               ) : (
                 <>
-                  <i className="fas fa-save"></i> Save Category
+                  <i className="fas fa-save"></i> {editingId ? 'Update Category' : 'Save Category'}
                 </>
               )}
             </button>
@@ -211,6 +251,19 @@ const AdminCategories = () => {
                     {category.description || '-'}
                   </td>
                   <td>
+                    <button
+                      onClick={() => handleEdit(category)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: 'var(--primary)',
+                        marginRight: '10px',
+                      }}
+                      title="Edit"
+                    >
+                      <i className="fas fa-edit"></i>
+                    </button>
                     <button
                       onClick={() => handleDelete(category._id)}
                       disabled={deleting === category._id}
