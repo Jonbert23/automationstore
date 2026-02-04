@@ -62,6 +62,13 @@ export default {
       type: 'boolean',
       initialValue: false,
     },
+    {
+      name: 'isArchived',
+      title: 'Archived',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Archived products are hidden from the store but preserved for order history',
+    },
     // Digital Product Fields
     {
       name: 'driveLink',

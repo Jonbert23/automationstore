@@ -8,6 +8,7 @@ const AdminProducts = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [showArchived, setShowArchived] = useState(false);
   const [deleting, setDeleting] = useState(null);
 
   useEffect(() => {
@@ -15,23 +16,11 @@ const AdminProducts = () => {
   }, []);
 
   const fetchData = async () => {
-    console.log('=== AdminProducts: Starting fetch ===');
     try {
-      // Direct fetch test
-      console.log('Testing direct Sanity fetch...');
-      const directTest = await client.fetch('*[_type == "product"]{ _id, title }');
-      console.log('Direct test result:', directTest);
-      
       const [productsData, categoriesData] = await Promise.all([
-        getProducts(),
+        getProducts(true), // Include archived products for admin
         getCategories(),
       ]);
-      console.log('getProducts() returned:', productsData);
-      console.log('getCategories() returned:', categoriesData);
-      
-      if (!productsData || productsData.length === 0) {
-        console.warn('No products returned from getProducts()');
-      }
       
       setProducts(productsData || []);
       setCategories(categoriesData || []);
@@ -39,86 +28,93 @@ const AdminProducts = () => {
       console.error('Fetch error:', err);
     } finally {
       setLoading(false);
-      console.log('=== AdminProducts: Fetch complete ===');
     }
   };
 
   const handleDelete = async (productId) => {
-    if (!window.confirm('Are you sure you want to delete this product?')) return;
+    const action = window.confirm(
+      'What would you like to do with this product?\n\n' +
+      'Click OK to ARCHIVE (hide from store but keep for order history)\n' +
+      'Click Cancel to abort'
+    );
+    
+    if (!action) return;
 
     setDeleting(productId);
     try {
-      await writeClient.delete(productId);
-      setProducts(products.filter((p) => p._id !== productId));
+      // Soft delete - just archive the product
+      await writeClient.patch(productId).set({ isArchived: true }).commit();
+      setProducts(products.map(p => 
+        p._id === productId ? { ...p, isArchived: true } : p
+      ));
+      alert('Product archived successfully. It will no longer appear in the store.');
     } catch (error) {
-      console.error('Error deleting product:', error);
-      
-      // Check if error is due to references
-      if (error.message?.includes('references') || error.statusCode === 409) {
-        const forceDelete = window.confirm(
-          'This product is referenced by orders, reviews, or wishlists.\n\n' +
-          'Would you like to force delete it anyway?\n\n' +
-          '⚠️ Warning: This may cause issues with existing orders.'
-        );
-        
-        if (forceDelete) {
-          try {
-            // First, remove references from orders, reviews, wishlists
-            await removeProductReferences(productId);
-            // Then delete the product
-            await writeClient.delete(productId);
-            setProducts(products.filter((p) => p._id !== productId));
-            alert('Product deleted successfully');
-          } catch (forceError) {
-            console.error('Force delete failed:', forceError);
-            alert('Failed to delete product. Please remove it from orders manually in Sanity Studio.');
-          }
-        }
-      } else {
-        alert('Failed to delete product: ' + (error.message || 'Unknown error'));
-      }
+      console.error('Error archiving product:', error);
+      alert('Failed to archive product: ' + (error.message || 'Unknown error'));
     } finally {
       setDeleting(null);
     }
   };
 
-  const removeProductReferences = async (productId) => {
-    // Find and update orders that reference this product
-    const orders = await client.fetch(
-      `*[_type == "order" && references($productId)]{ _id }`,
-      { productId }
-    );
-    
-    // Find and delete reviews for this product
-    const reviews = await client.fetch(
-      `*[_type == "review" && product._ref == $productId]{ _id }`,
-      { productId }
-    );
-    
-    // Delete reviews
-    for (const review of reviews) {
-      await writeClient.delete(review._id);
+  const handleRestore = async (productId) => {
+    setDeleting(productId);
+    try {
+      await writeClient.patch(productId).set({ isArchived: false }).commit();
+      setProducts(products.map(p => 
+        p._id === productId ? { ...p, isArchived: false } : p
+      ));
+    } catch (error) {
+      console.error('Error restoring product:', error);
+      alert('Failed to restore product');
+    } finally {
+      setDeleting(null);
     }
-    
-    // Remove from user wishlists
-    const usersWithWishlist = await client.fetch(
-      `*[_type == "user" && $productId in wishlist[]._ref]{ _id }`,
-      { productId }
-    );
-    
-    for (const user of usersWithWishlist) {
-      await writeClient
-        .patch(user._id)
-        .unset([`wishlist[_ref=="${productId}"]`])
-        .commit();
+  };
+
+  const handlePermanentDelete = async (productId) => {
+    if (!window.confirm('⚠️ PERMANENT DELETE\n\nThis will permanently delete this product and may cause issues with order history.\n\nAre you absolutely sure?')) return;
+
+    setDeleting(productId);
+    try {
+      // Try to delete reviews first
+      const reviews = await client.fetch(
+        `*[_type == "review" && product._ref == $productId]{ _id }`,
+        { productId }
+      );
+      for (const review of reviews) {
+        await writeClient.delete(review._id);
+      }
+      
+      // Remove from wishlists
+      const usersWithWishlist = await client.fetch(
+        `*[_type == "user" && $productId in wishlist[]._ref]{ _id }`,
+        { productId }
+      );
+      for (const user of usersWithWishlist) {
+        await writeClient.patch(user._id).unset([`wishlist[_ref=="${productId}"]`]).commit();
+      }
+      
+      // Now try to delete
+      await writeClient.delete(productId);
+      setProducts(products.filter(p => p._id !== productId));
+      alert('Product permanently deleted');
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      alert('Cannot permanently delete. This product is referenced in orders. It will remain archived.');
+    } finally {
+      setDeleting(null);
     }
   };
 
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = !categoryFilter || product.categorySlug === categoryFilter;
-    return matchesSearch && matchesCategory;
+    const matchesArchived = showArchived ? product.isArchived : !product.isArchived;
+    return matchesSearch && matchesCategory && matchesArchived;
   });
+
+  const archivedCount = products.filter(p => p.isArchived).length;
+  const activeCount = products.filter(p => !p.isArchived).length;
 
   const getStockStatus = (stock) => {
     if (stock === 0) return { label: 'Out of Stock', class: 'admin-status-out-of-stock' };
@@ -145,7 +141,7 @@ const AdminProducts = () => {
       </div>
 
       {/* Filters */}
-      <div className="admin-filters">
+      <div className="admin-filters" style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
         <input
           type="text"
           className="admin-form-input"
@@ -167,6 +163,39 @@ const AdminProducts = () => {
             </option>
           ))}
         </select>
+        
+        <div style={{ display: 'flex', gap: '10px', marginLeft: 'auto' }}>
+          <button
+            onClick={() => setShowArchived(false)}
+            style={{
+              padding: '8px 16px',
+              background: !showArchived ? '#111' : '#f3f4f6',
+              color: !showArchived ? 'white' : '#666',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontWeight: 500,
+              fontSize: '0.9rem'
+            }}
+          >
+            Active ({activeCount})
+          </button>
+          <button
+            onClick={() => setShowArchived(true)}
+            style={{
+              padding: '8px 16px',
+              background: showArchived ? '#ef4444' : '#f3f4f6',
+              color: showArchived ? 'white' : '#666',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontWeight: 500,
+              fontSize: '0.9rem'
+            }}
+          >
+            Archived ({archivedCount})
+          </button>
+        </div>
       </div>
 
       {/* Products Table */}
@@ -228,23 +257,58 @@ const AdminProducts = () => {
                         >
                           <i className="fas fa-edit"></i>
                         </Link>
-                        <button
-                          onClick={() => handleDelete(product._id)}
-                          disabled={deleting === product._id}
-                          style={{
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            color: 'var(--danger)',
-                          }}
-                          title="Delete"
-                        >
-                          {deleting === product._id ? (
-                            <i className="fas fa-spinner fa-spin"></i>
-                          ) : (
-                            <i className="fas fa-trash"></i>
-                          )}
-                        </button>
+                        {product.isArchived ? (
+                          <>
+                            <button
+                              onClick={() => handleRestore(product._id)}
+                              disabled={deleting === product._id}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                color: '#22c55e',
+                              }}
+                              title="Restore"
+                            >
+                              {deleting === product._id ? (
+                                <i className="fas fa-spinner fa-spin"></i>
+                              ) : (
+                                <i className="fas fa-undo"></i>
+                              )}
+                            </button>
+                            <button
+                              onClick={() => handlePermanentDelete(product._id)}
+                              disabled={deleting === product._id}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                color: '#ef4444',
+                              }}
+                              title="Delete Permanently"
+                            >
+                              <i className="fas fa-trash"></i>
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            onClick={() => handleDelete(product._id)}
+                            disabled={deleting === product._id}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              color: '#f59e0b',
+                            }}
+                            title="Archive"
+                          >
+                            {deleting === product._id ? (
+                              <i className="fas fa-spinner fa-spin"></i>
+                            ) : (
+                              <i className="fas fa-archive"></i>
+                            )}
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

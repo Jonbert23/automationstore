@@ -43,14 +43,15 @@ export const urlFor = (source) => {
 
 // ==================== PRODUCTS ====================
 
-// Fetch all products
-export const getProducts = async () => {
+// Fetch all products (excluding archived)
+export const getProducts = async (includeArchived = false) => {
   if (!isSanityConfigured) {
     console.warn('Sanity not configured, returning empty products');
     return [];
   }
   try {
-    const query = `*[_type == "product"]{
+    const filter = includeArchived ? '' : ' && isArchived != true';
+    const query = `*[_type == "product"${filter}]{
       _id,
       title,
       slug,
@@ -63,7 +64,8 @@ export const getProducts = async () => {
       featured,
       fileType,
       fileSize,
-      compatibility
+      compatibility,
+      isArchived
     }`;
     const products = await client.fetch(query);
     console.log('Fetched products from Sanity:', products);
@@ -74,11 +76,11 @@ export const getProducts = async () => {
   }
 };
 
-// Fetch featured products
+// Fetch featured products (excluding archived)
 export const getFeaturedProducts = async () => {
   if (!isSanityConfigured) return [];
   try {
-    const query = `*[_type == "product" && featured == true]{
+    const query = `*[_type == "product" && featured == true && isArchived != true]{
       _id,
       title,
       slug,
@@ -144,11 +146,11 @@ export const getCategories = async () => {
   }
 };
 
-// Fetch products by category
+// Fetch products by category (excluding archived)
 export const getProductsByCategory = async (categorySlug) => {
   if (!isSanityConfigured) return [];
   try {
-    const query = `*[_type == "product" && category->slug.current == $categorySlug]{
+    const query = `*[_type == "product" && category->slug.current == $categorySlug && isArchived != true]{
       _id,
       title,
       slug,
