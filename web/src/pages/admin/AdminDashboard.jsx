@@ -248,7 +248,7 @@ const AdminDashboard = () => {
                 }}>
                   {chartData.map((day, index) => {
                     const maxRevenue = Math.max(...chartData.map(d => d.revenue), 1);
-                    const heightPercent = (day.revenue / maxRevenue) * 100;
+                    const barHeight = (day.revenue / maxRevenue) * 180; // 180px max height
                     
                     return (
                       <div 
@@ -258,8 +258,10 @@ const AdminDashboard = () => {
                           display: 'flex', 
                           flexDirection: 'column', 
                           alignItems: 'center',
+                          justifyContent: 'flex-end',
                           position: 'relative',
-                          cursor: 'pointer'
+                          cursor: 'pointer',
+                          height: '100%'
                         }}
                         title={`${day.date}: ₱${day.revenue.toLocaleString()} (${day.orders} orders)`}
                       >
@@ -268,7 +270,7 @@ const AdminDashboard = () => {
                           style={{
                             width: '100%',
                             maxWidth: '40px',
-                            height: `${Math.max(heightPercent, 2)}%`,
+                            height: `${Math.max(barHeight, 4)}px`,
                             background: day.revenue > 0 
                               ? 'linear-gradient(to top, #3b82f6, #60a5fa)' 
                               : '#e5e7eb',
@@ -302,11 +304,11 @@ const AdminDashboard = () => {
                         {day.orders > 0 && (
                           <div style={{
                             position: 'absolute',
-                            top: `${100 - heightPercent - 5}%`,
+                            bottom: `${Math.max(barHeight, 4) + 5}px`,
                             left: '50%',
                             transform: 'translateX(-50%)',
-                            width: '8px',
-                            height: '8px',
+                            width: '10px',
+                            height: '10px',
                             background: '#22c55e',
                             borderRadius: '50%',
                             border: '2px solid white',
