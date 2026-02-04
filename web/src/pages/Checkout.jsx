@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useStore from '../hooks/useStore';
-import { createOrder, getPaymentMethods, urlFor, storeName } from '../services/sanityClient';
+import { createOrder, getPaymentMethods, urlFor, storeName, uploadImage } from '../services/sanityClient';
 import { GCashIcon, MayaIcon, GoTymeIcon } from '../components/common/PaymentIcons';
 import '../assets/css/checkout.css';
 
@@ -12,7 +12,7 @@ const Checkout = () => {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [step, setStep] = useState(1); // 1: Review, 2: Payment, 3: Confirm
-  const [paymentReference, setPaymentReference] = useState('');
+  const [paymentProofFile, setPaymentProofFile] = useState(null);
   const [orderId, setOrderId] = useState(null);
 
   // Fetch payment methods
@@ -54,9 +54,21 @@ const Checkout = () => {
       return;
     }
 
+    if (!paymentProofFile) {
+      alert('Please upload a payment receipt.');
+      return;
+    }
+
     setLoading(true);
     
     try {
+      // Upload image first
+      const imageAsset = await uploadImage(paymentProofFile);
+      
+      if (!imageAsset) {
+        throw new Error('Failed to upload image');
+      }
+
       const order = await createOrder({
         user: user.email,
         userName: user.name,
@@ -67,8 +79,14 @@ const Checkout = () => {
         })),
         total: total,
         paymentMethod: selectedPayment?.slug?.current || selectedPayment?._id,
-        paymentReference: paymentReference,
-        status: paymentReference ? 'payment_submitted' : 'pending',
+        paymentProof: {
+          _type: 'image',
+          asset: {
+            _type: 'reference',
+            _ref: imageAsset._id
+          }
+        },
+        status: 'payment_submitted',
       });
 
       setOrderId(order._id);
@@ -76,9 +94,7 @@ const Checkout = () => {
       setStep(3);
     } catch (error) {
       console.error('Error creating order:', error);
-      alert('Order created! Please complete payment to get access.');
-      clearCart();
-      navigate('/account/orders');
+      alert('Failed to create order. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -320,7 +336,7 @@ const Checkout = () => {
               </div>
             )}
 
-            {/* Payment Reference Input */}
+            {/* Payment Proof Upload */}
             <div style={{ background: '#1a1a1a', border: '1px solid #333', borderRadius: '12px', padding: '25px', marginBottom: '30px' }}>
               <h3 style={{ marginBottom: '15px', fontSize: '1rem', color: 'white' }}>
                 <i className="fas fa-receipt" style={{ marginRight: '10px', color: '#D9FF00' }}></i>
@@ -328,13 +344,12 @@ const Checkout = () => {
               </h3>
               <div style={{ marginBottom: '15px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: '0.9rem', color: '#9ca3af' }}>
-                  Reference/Transaction Number *
+                  Upload Payment Receipt *
                 </label>
                 <input
-                  type="text"
-                  value={paymentReference}
-                  onChange={(e) => setPaymentReference(e.target.value)}
-                  placeholder="Enter your payment reference number"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setPaymentProofFile(e.target.files[0])}
                   style={{
                     width: '100%',
                     padding: '14px',
@@ -347,7 +362,7 @@ const Checkout = () => {
                   }}
                 />
                 <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '8px' }}>
-                  You can find this in your {selectedPayment?.name || 'payment app'} transaction history
+                  Please upload a screenshot of your payment transaction
                 </p>
               </div>
             </div>
@@ -372,7 +387,7 @@ const Checkout = () => {
                 onClick={handlePlaceOrder}
                 className="btn" 
                 style={{ flex: 1, padding: '18px', fontSize: '1.1rem', background: '#D9FF00', color: '#111', border: 'none' }}
-                disabled={loading || !paymentReference}
+                disabled={loading || !paymentProofFile}
               >
                 <span>{loading ? 'Processing...' : 'Submit Order'}</span>
               </button>

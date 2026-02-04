@@ -480,6 +480,21 @@ export const removeFromWishlist = async (userId, productId) => {
 
 // ==================== ORDERS ====================
 
+// Upload image asset
+export const uploadImage = async (file) => {
+  if (!isSanityConfigured) return null;
+  try {
+    const asset = await writeClient.assets.upload('image', file, {
+      contentType: file.type,
+      filename: file.name,
+    });
+    return asset;
+  } catch (error) {
+    console.error('Image upload error:', error);
+    return null;
+  }
+};
+
 // Create order
 export const createOrder = async (orderData) => {
   if (!isSanityConfigured) {
