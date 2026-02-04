@@ -234,7 +234,7 @@ const Shop = () => {
                 </button>
               </div>
             ) : (
-              <div className="product-grid">
+              <div className="product-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))' }}>
                 {filteredProducts.map(product => (
                   <ProductCard key={product._id} product={product} />
                 ))}
