@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getProductBySlug, getProducts, urlFor, getProductReviews, createReview, hasUserReviewed, addToWishlist as addToWishlistAPI, removeFromWishlist as removeFromWishlistAPI } from '../services/sanityClient';
 import ProductCard from '../components/common/ProductCard';
 import useStore from '../hooks/useStore';
+import useUIStore from '../hooks/useUIStore';
 import '../assets/css/product-detail.css';
 
 const ProductDetail = () => {
@@ -12,6 +13,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const addToCart = useStore((state) => state.addToCart);
+  const startAnimation = useUIStore((state) => state.startAnimation);
   const addToRecentlyViewed = useStore((state) => state.addToRecentlyViewed);
   const toggleWishlist = useStore((state) => state.toggleWishlist);
   const isInWishlist = useStore((state) => state.isInWishlist);
@@ -189,6 +191,13 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = () => {
+    // Start animation
+    const imgElement = document.querySelector('.main-image');
+    if (imgElement) {
+      const rect = imgElement.getBoundingClientRect();
+      startAnimation(rect, getImageUrl(product.images?.[selectedImage]));
+    }
+
     addToCart({
       _id: product._id,
       title: product.title,

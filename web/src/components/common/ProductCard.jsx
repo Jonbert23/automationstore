@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import useStore from '../../hooks/useStore';
+import useUIStore from '../../hooks/useUIStore';
 import { urlFor, addToWishlist as addToWishlistAPI, removeFromWishlist as removeFromWishlistAPI } from '../../services/sanityClient';
 
 const ProductCard = ({ product }) => {
   const addToCart = useStore((state) => state.addToCart);
+  const startAnimation = useUIStore((state) => state.startAnimation);
   const toggleWishlist = useStore((state) => state.toggleWishlist);
   const isInWishlist = useStore((state) => state.isInWishlist);
   const user = useStore((state) => state.user);
@@ -31,6 +33,14 @@ const ProductCard = ({ product }) => {
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    // Start animation
+    const imgElement = e.currentTarget.closest('.product-card').querySelector('img');
+    if (imgElement) {
+      const rect = imgElement.getBoundingClientRect();
+      startAnimation(rect, getImageUrl());
+    }
+
     addToCart({
       _id: product._id || product.id,
       title: product.title,

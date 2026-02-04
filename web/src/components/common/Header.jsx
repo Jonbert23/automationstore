@@ -48,7 +48,7 @@ const Header = () => {
         </nav>
 
         <div className="nav-icons">
-          <Link to="/cart" className="icon-btn" style={{ color: 'white' }}>
+          <Link to="/cart" className="icon-btn" id="cart-icon-container" style={{ color: 'white', transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
             <i className="fas fa-shopping-bag"></i>
             <span className="cart-count" style={{ background: '#D9FF00', color: '#111' }}>{getCartCount()}</span>
           </Link>
