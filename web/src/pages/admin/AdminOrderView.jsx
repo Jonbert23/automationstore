@@ -11,7 +11,7 @@ const AdminOrderView = () => {
   const [adminNotes, setAdminNotes] = useState('');
   const [savingNotes, setSavingNotes] = useState(false);
 
-  const statusOptions = ['pending', 'payment_submitted', 'verified', 'completed', 'cancelled', 'refunded'];
+  const statusOptions = ['pending', 'verified', 'completed', 'cancelled'];
 
   useEffect(() => {
     fetchOrder();
@@ -43,14 +43,14 @@ const AdminOrderView = () => {
   };
 
   const handleVerifyPayment = async () => {
-    if (!confirm('Verify this payment and grant access to the customer?')) return;
+    if (!confirm('Verify this payment? Customer will be able to access Google Drive.')) return;
     
     setVerifying(true);
     try {
       await verifyPayment(orderId, 'admin');
       setOrder({ 
         ...order, 
-        status: 'completed', 
+        status: 'verified', 
         paymentVerified: true, 
         accessGranted: true,
         paymentVerifiedAt: new Date().toISOString(),
@@ -71,7 +71,7 @@ const AdminOrderView = () => {
     setVerifying(true);
     try {
       await rejectPayment(orderId, reason || 'Payment could not be verified');
-      setOrder({ ...order, status: 'pending', notes: reason });
+      setOrder({ ...order, status: 'cancelled', notes: reason });
       setAdminNotes(reason);
     } catch (error) {
       console.error('Error rejecting payment:', error);
@@ -109,14 +109,12 @@ const AdminOrderView = () => {
   const getStatusClass = (status) => {
     switch (status) {
       case 'completed':
-      case 'verified':
         return 'admin-status-active';
-      case 'payment_submitted':
+      case 'verified':
         return 'admin-status-warning';
       case 'pending':
         return 'admin-status-pending';
       case 'cancelled':
-      case 'refunded':
         return 'admin-status-out-of-stock';
       default:
         return 'admin-status-pending';
@@ -125,12 +123,10 @@ const AdminOrderView = () => {
 
   const getStatusLabel = (status) => {
     const labels = {
-      pending: 'Pending Payment',
-      payment_submitted: 'Payment Submitted',
+      pending: 'Pending',
       verified: 'Verified',
       completed: 'Completed',
       cancelled: 'Cancelled',
-      refunded: 'Refunded',
     };
     return labels[status] || status;
   };
@@ -186,7 +182,7 @@ const AdminOrderView = () => {
           </span>
         </div>
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          {order.status === 'payment_submitted' && (
+          {order.status === 'pending' && (
             <>
               <button 
                 onClick={handleVerifyPayment}
@@ -227,7 +223,7 @@ const AdminOrderView = () => {
       </div>
 
       {/* Payment Verification Alert */}
-      {order.status === 'payment_submitted' && (
+      {order.status === 'pending' && (
         <div style={{ 
           background: '#fef3c7', 
           border: '1px solid #f59e0b', 
@@ -242,7 +238,7 @@ const AdminOrderView = () => {
           <div style={{ flex: 1 }}>
             <strong style={{ color: '#92400e' }}>Payment Pending Verification</strong>
             <p style={{ color: '#92400e', margin: '5px 0 0', fontSize: '0.9rem' }}>
-              Customer has submitted payment details. Please verify and approve to grant access.
+              Please verify the payment and approve to grant the customer access to Google Drive.
             </p>
           </div>
         </div>
@@ -423,7 +419,7 @@ const AdminOrderView = () => {
                 </div>
               </div>
 
-              {(order.status === 'payment_submitted' || order.paymentVerified) && (
+              {order.paymentReference && (
                 <div style={{ marginBottom: '20px', position: 'relative' }}>
                   <div style={{ 
                     position: 'absolute', 
@@ -439,7 +435,7 @@ const AdminOrderView = () => {
                     <i className={`fas ${order.paymentVerified ? 'fa-check' : 'fa-clock'}`} style={{ color: 'white', fontSize: '10px' }}></i>
                   </div>
                   <div>
-                    <strong>Payment Submitted</strong>
+                    <strong>Payment Info Submitted</strong>
                     <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '2px' }}>
                       Via {getPaymentMethodLabel(order.paymentMethod)} - Ref: {order.paymentReference}
                     </p>
@@ -471,7 +467,31 @@ const AdminOrderView = () => {
                 </div>
               )}
 
-              {order.accessGranted && (
+              {order.status === 'verified' && order.accessGranted && (
+                <div style={{ marginBottom: '20px', position: 'relative' }}>
+                  <div style={{ 
+                    position: 'absolute', 
+                    left: '-26px', 
+                    width: '18px', 
+                    height: '18px', 
+                    borderRadius: '50%', 
+                    background: '#3b82f6', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center' 
+                  }}>
+                    <i className="fas fa-check" style={{ color: 'white', fontSize: '10px' }}></i>
+                  </div>
+                  <div>
+                    <strong style={{ color: '#3b82f6' }}>Verified - Awaiting Access</strong>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '2px' }}>
+                      Customer can now access Google Drive
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {order.status === 'completed' && (
                 <div style={{ position: 'relative' }}>
                   <div style={{ 
                     position: 'absolute', 
@@ -487,9 +507,9 @@ const AdminOrderView = () => {
                     <i className="fas fa-check" style={{ color: 'white', fontSize: '10px' }}></i>
                   </div>
                   <div>
-                    <strong style={{ color: '#22c55e' }}>Access Granted</strong>
+                    <strong style={{ color: '#22c55e' }}>Completed</strong>
                     <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '2px' }}>
-                      Customer can now access their files
+                      Customer has accessed their files
                     </p>
                   </div>
                 </div>
