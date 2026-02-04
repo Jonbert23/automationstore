@@ -32,8 +32,25 @@ const AdminOrderView = () => {
   const updateOrderStatus = async (newStatus) => {
     setUpdatingStatus(true);
     try {
-      await writeClient.patch(orderId).set({ status: newStatus }).commit();
-      setOrder({ ...order, status: newStatus });
+      // If changing to verified, also set accessGranted
+      if (newStatus === 'verified') {
+        await writeClient.patch(orderId).set({ 
+          status: newStatus,
+          accessGranted: true,
+          accessGrantedAt: new Date().toISOString(),
+          paymentVerified: true,
+          paymentVerifiedAt: new Date().toISOString(),
+        }).commit();
+        setOrder({ 
+          ...order, 
+          status: newStatus, 
+          accessGranted: true,
+          paymentVerified: true 
+        });
+      } else {
+        await writeClient.patch(orderId).set({ status: newStatus }).commit();
+        setOrder({ ...order, status: newStatus });
+      }
     } catch (error) {
       console.error('Error updating order status:', error);
       alert('Failed to update order status');

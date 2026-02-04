@@ -93,12 +93,28 @@ const AdminOrders = () => {
   const updateOrderStatus = async (orderId, newStatus) => {
     setUpdatingStatus(orderId);
     try {
-      await writeClient.patch(orderId).set({ status: newStatus }).commit();
-      setOrders(
-        orders.map((order) =>
-          order._id === orderId ? { ...order, status: newStatus } : order
-        )
-      );
+      // If changing to verified, also set accessGranted
+      if (newStatus === 'verified') {
+        await writeClient.patch(orderId).set({ 
+          status: newStatus,
+          accessGranted: true,
+          accessGrantedAt: new Date().toISOString(),
+          paymentVerified: true,
+          paymentVerifiedAt: new Date().toISOString(),
+        }).commit();
+        setOrders(
+          orders.map((order) =>
+            order._id === orderId ? { ...order, status: newStatus, accessGranted: true, paymentVerified: true } : order
+          )
+        );
+      } else {
+        await writeClient.patch(orderId).set({ status: newStatus }).commit();
+        setOrders(
+          orders.map((order) =>
+            order._id === orderId ? { ...order, status: newStatus } : order
+          )
+        );
+      }
     } catch (error) {
       console.error('Error updating order status:', error);
       alert('Failed to update order status');
