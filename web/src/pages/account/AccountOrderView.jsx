@@ -147,10 +147,10 @@ const AccountOrderView = () => {
 
   const getStatusInfo = (status) => {
     const statusInfo = {
-      pending: { label: 'Pending', color: '#f59e0b', icon: 'fa-clock', description: 'Waiting for payment verification' },
-      verified: { label: 'Verified', color: '#3b82f6', icon: 'fa-check-circle', description: 'Payment verified - You can now access your files!' },
-      completed: { label: 'Completed', color: '#22c55e', icon: 'fa-check-double', description: 'Order completed' },
-      cancelled: { label: 'Cancelled', color: '#ef4444', icon: 'fa-times-circle', description: 'Order cancelled' },
+      pending: { label: 'Pending', color: '#f59e0b', icon: 'fa-clock', description: 'Awaiting payment verification' },
+      verified: { label: 'Payment Verified', color: '#3b82f6', icon: 'fa-check-circle', description: 'Your payment has been verified! Access your files now.' },
+      completed: { label: 'Completed', color: '#22c55e', icon: 'fa-check-double', description: 'Order completed - Files accessed' },
+      cancelled: { label: 'Cancelled', color: '#ef4444', icon: 'fa-times-circle', description: 'Order has been cancelled' },
     };
     return statusInfo[status] || { label: status, color: '#6b7280', icon: 'fa-question', description: '' };
   };
@@ -322,10 +322,12 @@ const AccountOrderView = () => {
             <div>
               <h4 style={{ marginBottom: '15px', fontWeight: 600 }}>Payment Information</h4>
               <div style={{ background: '#f9fafb', padding: '20px', borderRadius: '8px' }}>
-                <div style={{ marginBottom: '15px' }}>
-                  <span style={{ color: '#6b7280', fontSize: '0.85rem' }}>Payment Method</span>
-                  <p style={{ fontWeight: 600, margin: '5px 0 0' }}>{getPaymentMethodLabel(order.paymentMethod)}</p>
-                </div>
+                {order.paymentMethod && (
+                  <div style={{ marginBottom: '15px' }}>
+                    <span style={{ color: '#6b7280', fontSize: '0.85rem' }}>Payment Method</span>
+                    <p style={{ fontWeight: 600, margin: '5px 0 0' }}>{getPaymentMethodLabel(order.paymentMethod)}</p>
+                  </div>
+                )}
                 {order.paymentReference && (
                   <div style={{ marginBottom: '15px' }}>
                     <span style={{ color: '#6b7280', fontSize: '0.85rem' }}>Reference Number</span>
@@ -333,21 +335,28 @@ const AccountOrderView = () => {
                   </div>
                 )}
                 <div>
-                  <span style={{ color: '#6b7280', fontSize: '0.85rem' }}>Payment Status</span>
+                  <span style={{ color: '#6b7280', fontSize: '0.85rem' }}>Status</span>
                   <p style={{ 
                     fontWeight: 600, 
                     margin: '5px 0 0',
-                    color: order.paymentVerified ? '#22c55e' : '#f59e0b'
+                    color: (order.status === 'verified' || order.status === 'completed') ? '#22c55e' : 
+                           order.status === 'cancelled' ? '#ef4444' : '#f59e0b'
                   }}>
-                    <i className={`fas ${order.paymentVerified ? 'fa-check-circle' : 'fa-clock'}`} style={{ marginRight: '6px' }}></i>
-                    {order.paymentVerified ? 'Verified' : 'Pending Verification'}
+                    <i className={`fas ${
+                      order.status === 'completed' ? 'fa-check-double' :
+                      order.status === 'verified' ? 'fa-check-circle' : 
+                      order.status === 'cancelled' ? 'fa-times-circle' : 'fa-clock'
+                    }`} style={{ marginRight: '6px' }}></i>
+                    {order.status === 'completed' ? 'Payment Verified & Completed' :
+                     order.status === 'verified' ? 'Payment Verified' : 
+                     order.status === 'cancelled' ? 'Cancelled' : 'Pending Verification'}
                   </p>
                 </div>
               </div>
 
-              {/* Access Status */}
+              {/* What's Next */}
               <div style={{ marginTop: '20px' }}>
-                <h4 style={{ marginBottom: '15px', fontWeight: 600 }}>Access Status</h4>
+                <h4 style={{ marginBottom: '15px', fontWeight: 600 }}>What's Next?</h4>
                 {order.status === 'completed' ? (
                   <div style={{ 
                     background: '#f0fdf4', 
@@ -372,10 +381,10 @@ const AccountOrderView = () => {
                   }}>
                     <p style={{ color: '#1e40af', fontWeight: 600, marginBottom: '10px' }}>
                       <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
-                      Ready to Access
+                      Payment Verified - Ready to Access!
                     </p>
                     <p style={{ color: '#1e40af', fontSize: '0.9rem', margin: 0 }}>
-                      Your payment has been verified! Click "Access Google Drive" above to get your files.
+                      Click "Access Google Drive" above to get your files.
                     </p>
                   </div>
                 ) : order.status === 'cancelled' ? (
@@ -402,10 +411,10 @@ const AccountOrderView = () => {
                   }}>
                     <p style={{ color: '#92400e', fontWeight: 600, marginBottom: '10px' }}>
                       <i className="fas fa-clock" style={{ marginRight: '8px' }}></i>
-                      Pending Verification
+                      Awaiting Payment Verification
                     </p>
                     <p style={{ color: '#92400e', fontSize: '0.9rem', margin: 0 }}>
-                      We're verifying your payment. You'll get access once verified.
+                      We're verifying your payment. You'll get access to your files once verified.
                     </p>
                   </div>
                 )}

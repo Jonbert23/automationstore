@@ -335,39 +335,42 @@ const AdminOrderView = () => {
                   {order.paymentReference || 'Not provided'}
                 </p>
               </div>
-              <div>
-                <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Payment Status</label>
-                <p style={{ 
-                  fontWeight: 600, 
-                  marginTop: '5px',
-                  color: order.paymentVerified ? '#22c55e' : '#f59e0b'
-                }}>
-                  <i className={`fas ${order.paymentVerified ? 'fa-check-circle' : 'fa-clock'}`} style={{ marginRight: '6px' }}></i>
-                  {order.paymentVerified ? 'Verified' : 'Pending'}
-                </p>
-              </div>
-              <div>
-                <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Access Status</label>
-                <p style={{ 
-                  fontWeight: 600, 
-                  marginTop: '5px',
-                  color: order.accessGranted ? '#22c55e' : '#6b7280'
-                }}>
-                  <i className={`fas ${order.accessGranted ? 'fa-unlock' : 'fa-lock'}`} style={{ marginRight: '6px' }}></i>
-                  {order.accessGranted ? 'Granted' : 'Not Granted'}
-                </p>
-              </div>
             </div>
 
-            {order.paymentVerifiedAt && (
-              <div style={{ marginTop: '20px', padding: '15px', background: '#f0fdf4', borderRadius: '8px' }}>
-                <p style={{ color: '#166534', fontSize: '0.9rem' }}>
-                  <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
-                  Payment verified on {formatDate(order.paymentVerifiedAt)}
+            {/* Status-based info box */}
+            <div style={{ 
+              marginTop: '20px', 
+              padding: '15px', 
+              background: (order.status === 'verified' || order.status === 'completed') ? '#f0fdf4' : 
+                         order.status === 'cancelled' ? '#fee2e2' : '#fef3c7',
+              borderRadius: '8px',
+              border: `1px solid ${
+                (order.status === 'verified' || order.status === 'completed') ? '#22c55e' : 
+                order.status === 'cancelled' ? '#ef4444' : '#f59e0b'
+              }`
+            }}>
+              <p style={{ 
+                color: (order.status === 'verified' || order.status === 'completed') ? '#166534' : 
+                       order.status === 'cancelled' ? '#991b1b' : '#92400e',
+                fontSize: '0.9rem',
+                fontWeight: 600
+              }}>
+                <i className={`fas ${
+                  order.status === 'completed' ? 'fa-check-double' :
+                  order.status === 'verified' ? 'fa-check-circle' : 
+                  order.status === 'cancelled' ? 'fa-times-circle' : 'fa-clock'
+                }`} style={{ marginRight: '8px' }}></i>
+                {order.status === 'completed' ? 'Payment Verified - Customer has accessed files' :
+                 order.status === 'verified' ? 'Payment Verified - Customer can access files' : 
+                 order.status === 'cancelled' ? 'Order Cancelled' : 'Awaiting Payment Verification'}
+              </p>
+              {order.paymentVerifiedAt && (order.status === 'verified' || order.status === 'completed') && (
+                <p style={{ color: '#166534', fontSize: '0.8rem', marginTop: '8px' }}>
+                  Verified on {formatDate(order.paymentVerifiedAt)}
                   {order.paymentVerifiedBy && ` by ${order.paymentVerifiedBy}`}
                 </p>
-              </div>
-            )}
+              )}
+            </div>
 
             {/* Payment Proof */}
             {order.paymentProof && (
