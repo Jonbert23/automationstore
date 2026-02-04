@@ -1,21 +1,26 @@
 import { useState, useEffect } from 'react';
-import { getPaymentMethods, writeClient, uploadImage, urlFor } from '../../services/sanityClient';
+import { writeClient, uploadImage, urlFor } from '../../services/sanityClient';
+
+const PAYMENT_OPTIONS = [
+  { value: 'GCash', label: 'GCash' },
+  { value: 'Maya', label: 'Maya' },
+  { value: 'GoTyme', label: 'GoTyme' },
+];
 
 const AdminPaymentGateways = () => {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(null);
-  const [showForm, setShowForm] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMode, setModalMode] = useState('add'); // 'add', 'edit', 'view'
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [qrPreview, setQrPreview] = useState(null);
   const [qrFile, setQrFile] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
-    slug: '',
     accountName: '',
     accountNumber: '',
-    instructions: '',
     isActive: true,
     sortOrder: 0,
   });
@@ -26,7 +31,6 @@ const AdminPaymentGateways = () => {
 
   const fetchPaymentMethods = async () => {
     try {
-      // Fetch all payment methods including inactive ones
       const query = `*[_type == "paymentMethod"] | order(sortOrder asc){
         _id,
         name,
@@ -34,7 +38,6 @@ const AdminPaymentGateways = () => {
         qrCode,
         accountName,
         accountNumber,
-        instructions,
         isActive,
         sortOrder
       }`;
@@ -85,13 +88,6 @@ const AdminPaymentGateways = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
-
-    if (name === 'name') {
-      setFormData((prev) => ({
-        ...prev,
-        slug: generateSlug(value),
-      }));
-    }
   };
 
   const handleQrCodeChange = (e) => {
@@ -106,21 +102,48 @@ const AdminPaymentGateways = () => {
     }
   };
 
-  const handleEdit = (payment) => {
+  const openAddModal = () => {
+    setModalMode('add');
+    setEditingId(null);
+    setFormData({
+      name: '',
+      accountName: '',
+      accountNumber: '',
+      isActive: true,
+      sortOrder: 0,
+    });
+    setQrPreview(null);
+    setQrFile(null);
+    setShowModal(true);
+  };
+
+  const openEditModal = (payment) => {
+    setModalMode('edit');
     setEditingId(payment._id);
     setFormData({
       name: payment.name,
-      slug: payment.slug?.current || '',
       accountName: payment.accountName || '',
       accountNumber: payment.accountNumber || '',
-      instructions: payment.instructions || '',
       isActive: payment.isActive !== false,
       sortOrder: payment.sortOrder || 0,
     });
     setQrPreview(getImageUrl(payment.qrCode));
     setQrFile(null);
-    setShowForm(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setShowModal(true);
+  };
+
+  const openViewModal = (payment) => {
+    setModalMode('view');
+    setEditingId(payment._id);
+    setFormData({
+      name: payment.name,
+      accountName: payment.accountName || '',
+      accountNumber: payment.accountNumber || '',
+      isActive: payment.isActive !== false,
+      sortOrder: payment.sortOrder || 0,
+    });
+    setQrPreview(getImageUrl(payment.qrCode));
+    setShowModal(true);
   };
 
   const handleToggleActive = async (payment) => {
@@ -139,18 +162,16 @@ const AdminPaymentGateways = () => {
     }
   };
 
-  const resetForm = () => {
+  const closeModal = () => {
+    setShowModal(false);
+    setEditingId(null);
     setFormData({
       name: '',
-      slug: '',
       accountName: '',
       accountNumber: '',
-      instructions: '',
       isActive: true,
       sortOrder: 0,
     });
-    setEditingId(null);
-    setShowForm(false);
     setQrPreview(null);
     setQrFile(null);
   };
@@ -158,7 +179,7 @@ const AdminPaymentGateways = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name) {
-      alert('Please enter a payment method name');
+      alert('Please select a payment method');
       return;
     }
 
@@ -171,7 +192,6 @@ const AdminPaymentGateways = () => {
     try {
       let qrCodeRef = null;
 
-      // Upload QR code if new file selected
       if (qrFile) {
         const imageAsset = await uploadImage(qrFile);
         if (imageAsset) {
@@ -190,22 +210,19 @@ const AdminPaymentGateways = () => {
         name: formData.name,
         slug: {
           _type: 'slug',
-          current: formData.slug || generateSlug(formData.name),
+          current: generateSlug(formData.name),
         },
         accountName: formData.accountName,
         accountNumber: formData.accountNumber,
-        instructions: formData.instructions,
         isActive: formData.isActive,
         sortOrder: parseInt(formData.sortOrder) || 0,
       };
 
-      // Only add qrCode if we have a new one
       if (qrCodeRef) {
         doc.qrCode = qrCodeRef;
       }
 
       if (editingId) {
-        // Update existing payment method
         await writeClient
           .patch(editingId)
           .set(doc)
@@ -216,14 +233,13 @@ const AdminPaymentGateways = () => {
         ));
         alert('Payment method updated successfully');
       } else {
-        // Create new payment method
         const newPayment = await writeClient.create(doc);
         setPaymentMethods([...paymentMethods, newPayment]);
         alert('Payment method created successfully');
       }
 
-      resetForm();
-      fetchPaymentMethods(); // Refresh to get updated QR codes
+      closeModal();
+      fetchPaymentMethods();
     } catch (error) {
       console.error('Error saving payment method:', error);
       alert(`Failed to ${editingId ? 'update' : 'create'} payment method`);
@@ -245,18 +261,9 @@ const AdminPaymentGateways = () => {
     <>
       <div className="admin-top-bar">
         <h1 className="admin-page-title">Payment Gateways</h1>
-        <button
-          onClick={() => {
-            if (showForm) {
-              resetForm();
-            } else {
-              setShowForm(true);
-            }
-          }}
-          className="admin-action-btn"
-        >
-          <i className={`fas fa-${showForm ? 'times' : 'plus'}`}></i>
-          {showForm ? 'Cancel' : 'Add Payment Method'}
+        <button onClick={openAddModal} className="admin-action-btn">
+          <i className="fas fa-plus"></i>
+          Add Payment Method
         </button>
       </div>
 
@@ -280,173 +287,419 @@ const AdminPaymentGateways = () => {
         </div>
       </div>
 
-      {/* Add/Edit Payment Method Form */}
-      {showForm && (
-        <div className="admin-data-card" style={{ padding: '30px', marginBottom: '30px' }}>
-          <h3 className="admin-form-section-title">{editingId ? 'Edit Payment Method' : 'New Payment Method'}</h3>
-          <form onSubmit={handleSubmit}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-              <div className="admin-form-group">
-                <label className="admin-form-label">Payment Method Name *</label>
-                <input
-                  type="text"
-                  name="name"
-                  className="admin-form-input"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder="e.g., GCash, Maya, GoTyme"
-                  required
-                />
-              </div>
-              <div className="admin-form-group">
-                <label className="admin-form-label">URL Slug</label>
-                <input
-                  type="text"
-                  name="slug"
-                  className="admin-form-input"
-                  value={formData.slug}
-                  onChange={handleInputChange}
-                  placeholder="auto-generated"
-                />
-              </div>
+      {/* Modal */}
+      {showModal && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000
+          }}
+          onClick={closeModal}
+        >
+          <div 
+            style={{
+              background: 'white',
+              borderRadius: '16px',
+              width: '100%',
+              maxWidth: '500px',
+              maxHeight: '90vh',
+              overflow: 'auto',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div style={{ 
+              padding: '20px 25px', 
+              borderBottom: '1px solid #e5e7eb',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700 }}>
+                {modalMode === 'add' ? 'Add Payment Method' : modalMode === 'edit' ? 'Edit Payment Method' : 'View Payment Method'}
+              </h2>
+              <button
+                onClick={closeModal}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '1.25rem',
+                  cursor: 'pointer',
+                  color: '#6b7280',
+                  padding: '5px'
+                }}
+              >
+                <i className="fas fa-times"></i>
+              </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-              <div className="admin-form-group">
-                <label className="admin-form-label">Account Name *</label>
-                <input
-                  type="text"
-                  name="accountName"
-                  className="admin-form-input"
-                  value={formData.accountName}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Juan Dela Cruz"
-                  required
-                />
-              </div>
-              <div className="admin-form-group">
-                <label className="admin-form-label">Account/Mobile Number</label>
-                <input
-                  type="text"
-                  name="accountNumber"
-                  className="admin-form-input"
-                  value={formData.accountNumber}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 0917-XXX-XXXX"
-                />
-              </div>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-              <div className="admin-form-group">
-                <label className="admin-form-label">Sort Order</label>
-                <input
-                  type="number"
-                  name="sortOrder"
-                  className="admin-form-input"
-                  value={formData.sortOrder}
-                  onChange={handleInputChange}
-                  placeholder="0"
-                  min="0"
-                />
-                <small style={{ color: '#666', fontSize: '0.8rem' }}>Lower numbers appear first</small>
-              </div>
-              <div className="admin-form-group">
-                <label className="admin-form-label">Status</label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '10px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      name="isActive"
-                      checked={formData.isActive}
-                      onChange={handleInputChange}
-                      style={{ width: '18px', height: '18px', cursor: 'pointer' }}
-                    />
-                    <span style={{ fontWeight: 500 }}>Active (visible in checkout)</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div className="admin-form-group">
-              <label className="admin-form-label">QR Code Image {!editingId && '*'}</label>
-              <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ 
-                    border: '2px dashed #ddd', 
-                    borderRadius: '12px', 
-                    padding: '30px',
-                    textAlign: 'center',
-                    cursor: 'pointer',
-                    position: 'relative',
-                    background: '#fafafa'
-                  }}>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleQrCodeChange}
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        opacity: 0,
-                        cursor: 'pointer'
-                      }}
-                    />
-                    <i className="fas fa-cloud-upload-alt" style={{ fontSize: '2rem', color: '#999', marginBottom: '10px', display: 'block' }}></i>
-                    <p style={{ color: '#666', fontSize: '0.9rem' }}>Click or drag to upload QR code</p>
-                    <p style={{ color: '#999', fontSize: '0.8rem', marginTop: '5px' }}>PNG, JPG up to 5MB</p>
-                  </div>
-                </div>
-                {qrPreview && (
-                  <div style={{ 
-                    width: '150px', 
-                    height: '150px', 
-                    borderRadius: '12px', 
-                    overflow: 'hidden',
-                    border: '1px solid #ddd',
-                    flexShrink: 0
-                  }}>
+            {/* Modal Body */}
+            <form onSubmit={handleSubmit} style={{ padding: '25px' }}>
+              {/* QR Code Preview/Upload */}
+              <div style={{ textAlign: 'center', marginBottom: '25px' }}>
+                {modalMode === 'view' ? (
+                  qrPreview ? (
                     <img 
                       src={qrPreview} 
-                      alt="QR Preview" 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      alt="QR Code" 
+                      style={{ 
+                        maxWidth: '200px', 
+                        maxHeight: '200px', 
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                      }}
                     />
+                  ) : (
+                    <div style={{ 
+                      width: '200px', 
+                      height: '200px', 
+                      background: '#f3f4f6', 
+                      margin: '0 auto',
+                      borderRadius: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <i className="fas fa-qrcode" style={{ fontSize: '4rem', color: '#9ca3af' }}></i>
+                    </div>
+                  )
+                ) : (
+                  <div style={{ position: 'relative', display: 'inline-block' }}>
+                    {qrPreview ? (
+                      <div style={{ position: 'relative' }}>
+                        <img 
+                          src={qrPreview} 
+                          alt="QR Preview" 
+                          style={{ 
+                            maxWidth: '180px', 
+                            maxHeight: '180px', 
+                            borderRadius: '12px',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                          }}
+                        />
+                        <label style={{
+                          position: 'absolute',
+                          bottom: '-10px',
+                          right: '-10px',
+                          width: '36px',
+                          height: '36px',
+                          background: 'var(--primary)',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                        }}>
+                          <i className="fas fa-camera" style={{ color: 'white', fontSize: '0.9rem' }}></i>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleQrCodeChange}
+                            style={{ display: 'none' }}
+                          />
+                        </label>
+                      </div>
+                    ) : (
+                      <label style={{ 
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '180px', 
+                        height: '180px', 
+                        border: '2px dashed #d1d5db', 
+                        borderRadius: '12px',
+                        cursor: 'pointer',
+                        background: '#f9fafb',
+                        transition: 'all 0.2s'
+                      }}>
+                        <i className="fas fa-qrcode" style={{ fontSize: '3rem', color: '#9ca3af', marginBottom: '10px' }}></i>
+                        <span style={{ color: '#6b7280', fontSize: '0.9rem' }}>Upload QR Code</span>
+                        <span style={{ color: '#9ca3af', fontSize: '0.75rem', marginTop: '5px' }}>Click to browse</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleQrCodeChange}
+                          style={{ display: 'none' }}
+                        />
+                      </label>
+                    )}
                   </div>
                 )}
               </div>
-            </div>
 
-            <div className="admin-form-group">
-              <label className="admin-form-label">Payment Instructions</label>
-              <textarea
-                name="instructions"
-                className="admin-form-textarea"
-                rows="4"
-                value={formData.instructions}
-                onChange={handleInputChange}
-                placeholder="Step-by-step instructions for customers (e.g., Open GCash app, tap 'Scan QR', enter amount...)"
-              />
-            </div>
+              {/* Payment Method Dropdown */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: '0.9rem' }}>
+                  Payment Method *
+                </label>
+                {modalMode === 'view' ? (
+                  <div style={{ 
+                    padding: '12px 14px', 
+                    background: '#f3f4f6', 
+                    borderRadius: '8px',
+                    fontWeight: 600,
+                    fontSize: '1rem'
+                  }}>
+                    {formData.name}
+                  </div>
+                ) : (
+                  <select
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '12px 14px',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      background: 'white',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <option value="">Select payment method</option>
+                    {PAYMENT_OPTIONS.map(option => (
+                      <option key={option.value} value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                )}
+              </div>
 
-            <button
-              type="submit"
-              className="admin-action-btn"
-              disabled={saving}
-            >
-              {saving ? (
-                <>
-                  <i className="fas fa-spinner fa-spin"></i> Saving...
-                </>
-              ) : (
-                <>
-                  <i className="fas fa-save"></i> {editingId ? 'Update Payment Method' : 'Save Payment Method'}
-                </>
+              {/* Account Name */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: '0.9rem' }}>
+                  Account Name *
+                </label>
+                {modalMode === 'view' ? (
+                  <div style={{ 
+                    padding: '12px 14px', 
+                    background: '#f3f4f6', 
+                    borderRadius: '8px',
+                    fontSize: '1rem'
+                  }}>
+                    {formData.accountName || '-'}
+                  </div>
+                ) : (
+                  <input
+                    type="text"
+                    name="accountName"
+                    value={formData.accountName}
+                    onChange={handleInputChange}
+                    placeholder="e.g., Juan Dela Cruz"
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '12px 14px',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      fontSize: '1rem'
+                    }}
+                  />
+                )}
+              </div>
+
+              {/* Account Number */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: '0.9rem' }}>
+                  Account/Mobile Number
+                </label>
+                {modalMode === 'view' ? (
+                  <div style={{ 
+                    padding: '12px 14px', 
+                    background: '#f3f4f6', 
+                    borderRadius: '8px',
+                    fontSize: '1rem'
+                  }}>
+                    {formData.accountNumber || '-'}
+                  </div>
+                ) : (
+                  <input
+                    type="text"
+                    name="accountNumber"
+                    value={formData.accountNumber}
+                    onChange={handleInputChange}
+                    placeholder="e.g., 0917-XXX-XXXX"
+                    style={{
+                      width: '100%',
+                      padding: '12px 14px',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      fontSize: '1rem'
+                    }}
+                  />
+                )}
+              </div>
+
+              {/* Sort Order & Status Row */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: '0.9rem' }}>
+                    Sort Order
+                  </label>
+                  {modalMode === 'view' ? (
+                    <div style={{ 
+                      padding: '12px 14px', 
+                      background: '#f3f4f6', 
+                      borderRadius: '8px',
+                      fontSize: '1rem'
+                    }}>
+                      {formData.sortOrder}
+                    </div>
+                  ) : (
+                    <input
+                      type="number"
+                      name="sortOrder"
+                      value={formData.sortOrder}
+                      onChange={handleInputChange}
+                      min="0"
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '8px',
+                        fontSize: '1rem'
+                      }}
+                    />
+                  )}
+                </div>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: '0.9rem' }}>
+                    Status
+                  </label>
+                  {modalMode === 'view' ? (
+                    <div style={{ 
+                      padding: '12px 14px', 
+                      background: formData.isActive ? '#dcfce7' : '#f3f4f6', 
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      color: formData.isActive ? '#166534' : '#6b7280',
+                      fontWeight: 600
+                    }}>
+                      {formData.isActive ? 'Active' : 'Inactive'}
+                    </div>
+                  ) : (
+                    <label style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '10px', 
+                      cursor: 'pointer',
+                      padding: '12px 14px',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      background: formData.isActive ? '#f0fdf4' : 'white'
+                    }}>
+                      <input
+                        type="checkbox"
+                        name="isActive"
+                        checked={formData.isActive}
+                        onChange={handleInputChange}
+                        style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                      />
+                      <span style={{ fontWeight: 500 }}>Active</span>
+                    </label>
+                  )}
+                </div>
+              </div>
+
+              {/* Modal Actions */}
+              {modalMode !== 'view' && (
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    style={{
+                      flex: 1,
+                      padding: '14px',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      background: 'white',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      fontSize: '1rem'
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    style={{
+                      flex: 1,
+                      padding: '14px',
+                      border: 'none',
+                      borderRadius: '8px',
+                      background: 'var(--primary)',
+                      color: 'white',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      fontSize: '1rem',
+                      opacity: saving ? 0.7 : 1
+                    }}
+                  >
+                    {saving ? (
+                      <>
+                        <i className="fas fa-spinner fa-spin" style={{ marginRight: '8px' }}></i>
+                        Saving...
+                      </>
+                    ) : (
+                      editingId ? 'Update' : 'Add Payment Method'
+                    )}
+                  </button>
+                </div>
               )}
-            </button>
-          </form>
+
+              {modalMode === 'view' && (
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    style={{
+                      flex: 1,
+                      padding: '14px',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      background: 'white',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      fontSize: '1rem'
+                    }}
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setModalMode('edit')}
+                    style={{
+                      flex: 1,
+                      padding: '14px',
+                      border: 'none',
+                      borderRadius: '8px',
+                      background: 'var(--primary)',
+                      color: 'white',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      fontSize: '1rem'
+                    }}
+                  >
+                    <i className="fas fa-edit" style={{ marginRight: '8px' }}></i>
+                    Edit
+                  </button>
+                </div>
+              )}
+            </form>
+          </div>
         </div>
       )}
 
@@ -457,7 +710,7 @@ const AdminPaymentGateways = () => {
             <i className="fas fa-qrcode"></i>
             <p>No payment methods yet</p>
             <button
-              onClick={() => setShowForm(true)}
+              onClick={openAddModal}
               className="admin-action-btn"
               style={{ marginTop: '20px' }}
             >
@@ -465,7 +718,7 @@ const AdminPaymentGateways = () => {
             </button>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px', padding: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px', padding: '20px' }}>
             {paymentMethods.map((payment) => (
               <div 
                 key={payment._id} 
@@ -474,13 +727,17 @@ const AdminPaymentGateways = () => {
                   borderRadius: '12px', 
                   overflow: 'hidden',
                   background: 'white',
-                  opacity: payment.isActive ? 1 : 0.6
+                  opacity: payment.isActive ? 1 : 0.6,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
                 }}
+                onClick={() => openViewModal(payment)}
               >
                 {/* QR Code */}
                 <div style={{ 
                   background: '#f9fafb', 
-                  padding: '25px', 
+                  padding: '20px', 
                   textAlign: 'center',
                   borderBottom: '1px solid #e5e7eb'
                 }}>
@@ -489,16 +746,16 @@ const AdminPaymentGateways = () => {
                       src={getImageUrl(payment.qrCode)} 
                       alt={`${payment.name} QR`}
                       style={{ 
-                        maxWidth: '150px', 
-                        maxHeight: '150px', 
+                        maxWidth: '120px', 
+                        maxHeight: '120px', 
                         borderRadius: '8px',
                         boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                       }}
                     />
                   ) : (
                     <div style={{ 
-                      width: '150px', 
-                      height: '150px', 
+                      width: '120px', 
+                      height: '120px', 
                       background: '#e5e7eb', 
                       margin: '0 auto',
                       borderRadius: '8px',
@@ -506,19 +763,19 @@ const AdminPaymentGateways = () => {
                       alignItems: 'center',
                       justifyContent: 'center'
                     }}>
-                      <i className="fas fa-qrcode" style={{ fontSize: '3rem', color: '#9ca3af' }}></i>
+                      <i className="fas fa-qrcode" style={{ fontSize: '2.5rem', color: '#9ca3af' }}></i>
                     </div>
                   )}
                 </div>
 
                 {/* Details */}
-                <div style={{ padding: '20px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-                    <h3 style={{ fontWeight: 700, fontSize: '1.2rem' }}>{payment.name}</h3>
+                <div style={{ padding: '15px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                    <h3 style={{ fontWeight: 700, fontSize: '1.1rem' }}>{payment.name}</h3>
                     <span style={{
                       padding: '4px 10px',
                       borderRadius: '20px',
-                      fontSize: '0.75rem',
+                      fontSize: '0.7rem',
                       fontWeight: 600,
                       background: payment.isActive ? '#dcfce7' : '#f3f4f6',
                       color: payment.isActive ? '#166534' : '#6b7280'
@@ -527,72 +784,74 @@ const AdminPaymentGateways = () => {
                     </span>
                   </div>
 
-                  <div style={{ fontSize: '0.9rem', color: '#4b5563', marginBottom: '10px' }}>
-                    <p style={{ marginBottom: '5px' }}>
-                      <strong>Account:</strong> {payment.accountName || '-'}
-                    </p>
-                    <p style={{ marginBottom: '5px' }}>
-                      <strong>Number:</strong> {payment.accountNumber || '-'}
-                    </p>
-                    <p style={{ color: '#9ca3af' }}>
-                      <strong>Order:</strong> {payment.sortOrder || 0}
-                    </p>
+                  <div style={{ fontSize: '0.85rem', color: '#6b7280' }}>
+                    <p style={{ marginBottom: '3px' }}>{payment.accountName || '-'}</p>
+                    <p>{payment.accountNumber || '-'}</p>
                   </div>
 
                   {/* Actions */}
-                  <div style={{ display: 'flex', gap: '10px', marginTop: '15px', paddingTop: '15px', borderTop: '1px solid #e5e7eb' }}>
+                  <div style={{ display: 'flex', gap: '8px', marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #e5e7eb' }}>
                     <button
-                      onClick={() => handleToggleActive(payment)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleActive(payment);
+                      }}
                       style={{
                         flex: 1,
-                        padding: '8px 12px',
+                        padding: '8px',
                         border: '1px solid #e5e7eb',
                         borderRadius: '6px',
                         background: 'white',
                         cursor: 'pointer',
-                        fontSize: '0.85rem',
+                        fontSize: '0.8rem',
                         fontWeight: 500,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '6px'
+                        gap: '5px'
                       }}
                     >
                       <i className={`fas fa-${payment.isActive ? 'eye-slash' : 'eye'}`}></i>
                       {payment.isActive ? 'Disable' : 'Enable'}
                     </button>
                     <button
-                      onClick={() => handleEdit(payment)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openEditModal(payment);
+                      }}
                       style={{
                         flex: 1,
-                        padding: '8px 12px',
+                        padding: '8px',
                         border: 'none',
                         borderRadius: '6px',
                         background: 'var(--primary)',
                         color: 'white',
                         cursor: 'pointer',
-                        fontSize: '0.85rem',
+                        fontSize: '0.8rem',
                         fontWeight: 500,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '6px'
+                        gap: '5px'
                       }}
                     >
                       <i className="fas fa-edit"></i>
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(payment._id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(payment._id);
+                      }}
                       disabled={deleting === payment._id}
                       style={{
-                        padding: '8px 12px',
+                        padding: '8px 10px',
                         border: 'none',
                         borderRadius: '6px',
                         background: '#fee2e2',
                         color: '#dc2626',
                         cursor: 'pointer',
-                        fontSize: '0.85rem',
+                        fontSize: '0.8rem',
                         fontWeight: 500
                       }}
                       title="Delete"
