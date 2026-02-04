@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useStore from '../hooks/useStore';
-import { createOrder, getPaymentMethods, urlFor, storeName } from '../services/sanityClient';
-import '../assets/css/checkout.css';
+import { GCashIcon, MayaIcon, GoTymeIcon } from '../components/common/PaymentIcons';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -238,10 +237,24 @@ const Checkout = () => {
                     background: selectedPayment?._id === method._id ? '#f9fafb' : 'white',
                     cursor: 'pointer',
                     textAlign: 'center',
-                    transition: 'all 0.2s'
+                    transition: 'all 0.2s',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px',
+                    height: '100px'
                   }}
                 >
-                  <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{method.name}</div>
+                  {method.name.toLowerCase().includes('gcash') ? (
+                    <GCashIcon height={30} />
+                  ) : method.name.toLowerCase().includes('maya') ? (
+                    <MayaIcon height={30} />
+                  ) : method.name.toLowerCase().includes('gotyme') ? (
+                    <GoTymeIcon height={30} />
+                  ) : (
+                    <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{method.name}</div>
+                  )}
                 </button>
               ))}
             </div>
