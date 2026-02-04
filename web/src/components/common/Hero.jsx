@@ -5,7 +5,12 @@ const Hero = () => {
     <section className="hero" style={{ 
       background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
       position: 'relative',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '85vh',
+      padding: '80px 20px'
     }}>
       {/* Animated background elements */}
       <div style={{
@@ -40,7 +45,16 @@ const Hero = () => {
         animation: 'float 8s ease-in-out infinite reverse',
       }} />
 
-      <div className="hero-content" style={{ position: 'relative', zIndex: 2 }}>
+      <div className="hero-content" style={{ 
+        position: 'relative', 
+        zIndex: 2,
+        maxWidth: '900px',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        textAlign: 'center'
+      }}>
         <div style={{ 
           display: 'inline-flex', 
           alignItems: 'center', 
