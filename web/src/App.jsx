@@ -32,6 +32,7 @@ import AdminAnalytics from './pages/admin/AdminAnalytics';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminDiscounts from './pages/admin/AdminDiscounts';
 import AdminReviews from './pages/admin/AdminReviews';
+import AdminPaymentGateways from './pages/admin/AdminPaymentGateways';
 import useStore from './hooks/useStore';
 import { checkExistingSession, initGoogleAuth } from './features/auth/authService';
 
@@ -86,6 +87,7 @@ function App() {
           <Route path="settings" element={<AdminSettings />} />
           <Route path="discounts" element={<AdminDiscounts />} />
           <Route path="reviews" element={<AdminReviews />} />
+          <Route path="payment-gateways" element={<AdminPaymentGateways />} />
         </Route>
         
         {/* Account pages with sidebar layout */}

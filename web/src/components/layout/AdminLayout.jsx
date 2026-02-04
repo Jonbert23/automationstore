@@ -136,6 +136,15 @@ const AdminLayout = () => {
             <span>Categories</span>
           </NavLink>
           <NavLink
+            to="/admin/payment-gateways"
+            className={({ isActive }) =>
+              `admin-nav-item ${isActive ? 'active' : ''}`
+            }
+          >
+            <i className="fas fa-credit-card"></i>
+            <span>Payment Gateways</span>
+          </NavLink>
+          <NavLink
             to="/admin/discounts"
             className={({ isActive }) =>
               `admin-nav-item ${isActive ? 'active' : ''}`
