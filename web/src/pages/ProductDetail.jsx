@@ -404,7 +404,7 @@ const ProductDetail = () => {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
-                  color: '#111',
+                  color: 'white',
                   fontWeight: 600,
                   textDecoration: 'none'
                 }}
