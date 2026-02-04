@@ -132,7 +132,7 @@ const AccountOrders = () => {
       </div>
 
       {/* Access Ready Banner */}
-      {orders.filter(o => (o.status === 'verified' || o.status === 'completed') && o.accessGranted).length > 0 && (
+      {orders.filter(o => o.status === 'verified' || o.status === 'completed').length > 0 && (
         <div style={{ 
           background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', 
           borderRadius: '12px', 
@@ -158,7 +158,7 @@ const AccountOrders = () => {
           <div style={{ flex: 1 }}>
             <strong style={{ fontSize: '1.1rem' }}>Your files are ready!</strong>
             <p style={{ opacity: 0.9, marginTop: '5px', fontSize: '0.9rem' }}>
-              You have {orders.filter(o => (o.status === 'verified' || o.status === 'completed') && o.accessGranted).length} order(s) with files ready to download.
+              You have {orders.filter(o => o.status === 'verified' || o.status === 'completed').length} order(s) with files ready to download.
             </p>
           </div>
           <Link 
@@ -488,7 +488,7 @@ const AccountOrders = () => {
                   <td style={{ fontWeight: 600 }}>₱{order.total?.toLocaleString()}</td>
                   <td>
                     <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                      {(order.status === 'verified' || order.status === 'completed') && order.accessGranted && (
+                      {(order.status === 'verified' || order.status === 'completed') && (
                         <Link 
                           to="/account/purchases" 
                           style={{ 
