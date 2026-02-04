@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getProducts, getCategories, urlFor, deleteProduct, client } from '../../services/sanityClient';
+import { getProducts, getCategories, urlFor, writeClient, client } from '../../services/sanityClient';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -48,17 +48,69 @@ const AdminProducts = () => {
 
     setDeleting(productId);
     try {
-      const result = await deleteProduct(productId);
-      if (result.success) {
-        setProducts(products.filter((p) => p._id !== productId));
-      } else {
-        alert(`Failed to delete: ${result.error}`);
-      }
+      await writeClient.delete(productId);
+      setProducts(products.filter((p) => p._id !== productId));
     } catch (error) {
       console.error('Error deleting product:', error);
-      alert('Failed to delete product: ' + error.message);
+      
+      // Check if error is due to references
+      if (error.message?.includes('references') || error.statusCode === 409) {
+        const forceDelete = window.confirm(
+          'This product is referenced by orders, reviews, or wishlists.\n\n' +
+          'Would you like to force delete it anyway?\n\n' +
+          '⚠️ Warning: This may cause issues with existing orders.'
+        );
+        
+        if (forceDelete) {
+          try {
+            // First, remove references from orders, reviews, wishlists
+            await removeProductReferences(productId);
+            // Then delete the product
+            await writeClient.delete(productId);
+            setProducts(products.filter((p) => p._id !== productId));
+            alert('Product deleted successfully');
+          } catch (forceError) {
+            console.error('Force delete failed:', forceError);
+            alert('Failed to delete product. Please remove it from orders manually in Sanity Studio.');
+          }
+        }
+      } else {
+        alert('Failed to delete product: ' + (error.message || 'Unknown error'));
+      }
     } finally {
       setDeleting(null);
+    }
+  };
+
+  const removeProductReferences = async (productId) => {
+    // Find and update orders that reference this product
+    const orders = await client.fetch(
+      `*[_type == "order" && references($productId)]{ _id }`,
+      { productId }
+    );
+    
+    // Find and delete reviews for this product
+    const reviews = await client.fetch(
+      `*[_type == "review" && product._ref == $productId]{ _id }`,
+      { productId }
+    );
+    
+    // Delete reviews
+    for (const review of reviews) {
+      await writeClient.delete(review._id);
+    }
+    
+    // Remove from user wishlists
+    const usersWithWishlist = await client.fetch(
+      `*[_type == "user" && $productId in wishlist[]._ref]{ _id }`,
+      { productId }
+    );
+    
+    for (const user of usersWithWishlist) {
+      await writeClient
+        .patch(user._id)
+        .unset([`wishlist[_ref=="${productId}"]`])
+        .commit();
     }
   };
 
@@ -161,7 +213,7 @@ const AdminProducts = () => {
                     </td>
                     <td>{product.category || '-'}</td>
                     <td>{product.stock ?? 0}</td>
-                    <td>${product.price?.toFixed(2)}</td>
+                    <td>₱{product.price?.toLocaleString()}</td>
                     <td>
                       <span className={`admin-status-badge ${stockStatus.class}`}>
                         {stockStatus.label}

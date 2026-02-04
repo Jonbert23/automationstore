@@ -43,25 +43,6 @@ export const urlFor = (source) => {
 
 // ==================== PRODUCTS ====================
 
-// Delete a product
-export const deleteProduct = async (productId) => {
-  if (!isSanityConfigured) {
-    console.error('Sanity not configured');
-    return { success: false, error: 'Sanity not configured' };
-  }
-  if (!token) {
-    console.error('No Sanity token - cannot delete');
-    return { success: false, error: 'No write token configured. Add VITE_SANITY_TOKEN to your environment.' };
-  }
-  try {
-    await writeClient.delete(productId);
-    return { success: true };
-  } catch (error) {
-    console.error('Delete error:', error);
-    return { success: false, error: error.message || 'Failed to delete product' };
-  }
-};
-
 // Fetch all products
 export const getProducts = async () => {
   if (!isSanityConfigured) {
