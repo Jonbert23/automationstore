@@ -91,7 +91,7 @@ const Checkout = () => {
         status: 'payment_submitted',
       });
 
-      // Send email notification to admin
+      // Send email notification to admin with payment proof URL
       import('../services/emailService').then(({ sendOrderNotification }) => {
         sendOrderNotification({
           orderId: order._id,
@@ -99,7 +99,8 @@ const Checkout = () => {
           customerEmail: user.email,
           totalAmount: total,
           items: cart,
-          paymentMethod: selectedPayment?.name || 'Unknown'
+          paymentMethod: selectedPayment?.name || 'Unknown',
+          paymentProofUrl: imageAsset?.url || ''
         });
       });
 
