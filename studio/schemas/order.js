@@ -100,12 +100,10 @@ export default {
       type: 'string',
       options: {
         list: [
-          { title: 'Pending Payment', value: 'pending' },
-          { title: 'Payment Submitted', value: 'payment_submitted' },
-          { title: 'Payment Verified', value: 'verified' },
+          { title: 'Pending', value: 'pending' },
+          { title: 'Verified', value: 'verified' },
           { title: 'Completed', value: 'completed' },
           { title: 'Cancelled', value: 'cancelled' },
-          { title: 'Refunded', value: 'refunded' },
         ],
       },
       initialValue: 'pending',
@@ -126,12 +124,10 @@ export default {
     },
     prepare({ title, subtitle, total, paymentMethod }) {
       const statusLabels = {
-        pending: 'PENDING PAYMENT',
-        payment_submitted: 'PAYMENT SUBMITTED',
+        pending: 'PENDING',
         verified: 'VERIFIED',
         completed: 'COMPLETED',
         cancelled: 'CANCELLED',
-        refunded: 'REFUNDED',
       };
       return {
         title: title || 'Unknown User',

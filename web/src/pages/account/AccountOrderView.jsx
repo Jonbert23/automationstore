@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getOrderById, urlFor, storeName } from '../../services/sanityClient';
+import { getOrderById, urlFor, storeName, markOrderCompleted } from '../../services/sanityClient';
 import useStore from '../../hooks/useStore';
 
 const AccountOrderView = () => {
@@ -147,12 +147,10 @@ const AccountOrderView = () => {
 
   const getStatusInfo = (status) => {
     const statusInfo = {
-      pending: { label: 'Pending Payment', color: '#f59e0b', icon: 'fa-clock', description: 'Waiting for payment' },
-      payment_submitted: { label: 'Payment Submitted', color: '#3b82f6', icon: 'fa-receipt', description: 'We are verifying your payment' },
-      verified: { label: 'Verified', color: '#22c55e', icon: 'fa-check-circle', description: 'Payment verified' },
-      completed: { label: 'Completed', color: '#22c55e', icon: 'fa-check-double', description: 'Access granted' },
+      pending: { label: 'Pending', color: '#f59e0b', icon: 'fa-clock', description: 'Waiting for payment verification' },
+      verified: { label: 'Verified', color: '#3b82f6', icon: 'fa-check-circle', description: 'Payment verified - You can now access your files!' },
+      completed: { label: 'Completed', color: '#22c55e', icon: 'fa-check-double', description: 'Order completed' },
       cancelled: { label: 'Cancelled', color: '#ef4444', icon: 'fa-times-circle', description: 'Order cancelled' },
-      refunded: { label: 'Refunded', color: '#6b7280', icon: 'fa-undo', description: 'Payment refunded' },
     };
     return statusInfo[status] || { label: status, color: '#6b7280', icon: 'fa-question', description: '' };
   };
@@ -222,25 +220,54 @@ const AccountOrderView = () => {
         }}>
           <i className={`fas ${statusInfo.icon}`} style={{ color: 'white', fontSize: '1.5rem' }}></i>
         </div>
-        <div>
+        <div style={{ flex: 1 }}>
           <h3 style={{ marginBottom: '5px', color: statusInfo.color }}>{statusInfo.label}</h3>
           <p style={{ color: '#6b7280', margin: 0 }}>{statusInfo.description}</p>
         </div>
-        {order.accessGranted && (
+        {order.status === 'verified' && order.accessGranted && (
+          <button 
+            onClick={async () => {
+              // Mark order as completed
+              await markOrderCompleted(order._id);
+              setOrder({ ...order, status: 'completed' });
+              // Navigate to purchases
+              navigate('/account/purchases');
+            }}
+            style={{
+              background: '#22c55e',
+              color: 'white',
+              padding: '14px 24px',
+              borderRadius: '8px',
+              fontWeight: 600,
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '1rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}
+          >
+            <i className="fab fa-google-drive" style={{ fontSize: '1.2rem' }}></i>
+            Access Google Drive
+          </button>
+        )}
+        {order.status === 'completed' && (
           <Link 
             to="/account/purchases"
             style={{
-              marginLeft: 'auto',
               background: '#22c55e',
               color: 'white',
-              padding: '12px 20px',
+              padding: '14px 24px',
               borderRadius: '8px',
               fontWeight: 600,
-              textDecoration: 'none'
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
             }}
           >
-            <i className="fas fa-download" style={{ marginRight: '8px' }}></i>
-            Access Your Files
+            <i className="fas fa-download"></i>
+            View My Purchases
           </Link>
         )}
       </div>
@@ -321,7 +348,7 @@ const AccountOrderView = () => {
               {/* Access Status */}
               <div style={{ marginTop: '20px' }}>
                 <h4 style={{ marginBottom: '15px', fontWeight: 600 }}>Access Status</h4>
-                {order.accessGranted ? (
+                {order.status === 'completed' ? (
                   <div style={{ 
                     background: '#f0fdf4', 
                     border: '1px solid #22c55e', 
@@ -329,17 +356,42 @@ const AccountOrderView = () => {
                     borderRadius: '8px' 
                   }}>
                     <p style={{ color: '#166534', fontWeight: 600, marginBottom: '10px' }}>
-                      <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
-                      Access Granted
+                      <i className="fas fa-check-double" style={{ marginRight: '8px' }}></i>
+                      Order Completed
                     </p>
                     <p style={{ color: '#15803d', fontSize: '0.9rem', margin: 0 }}>
-                      You can download your files from the "My Purchases" section.
+                      You have accessed your files. Visit "My Purchases" anytime to download again.
                     </p>
-                    {order.accessGrantedAt && (
-                      <p style={{ color: '#6b7280', fontSize: '0.8rem', marginTop: '10px' }}>
-                        Granted on: {new Date(order.accessGrantedAt).toLocaleDateString()}
-                      </p>
-                    )}
+                  </div>
+                ) : order.status === 'verified' ? (
+                  <div style={{ 
+                    background: '#dbeafe', 
+                    border: '1px solid #3b82f6', 
+                    padding: '20px', 
+                    borderRadius: '8px' 
+                  }}>
+                    <p style={{ color: '#1e40af', fontWeight: 600, marginBottom: '10px' }}>
+                      <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
+                      Ready to Access
+                    </p>
+                    <p style={{ color: '#1e40af', fontSize: '0.9rem', margin: 0 }}>
+                      Your payment has been verified! Click "Access Google Drive" above to get your files.
+                    </p>
+                  </div>
+                ) : order.status === 'cancelled' ? (
+                  <div style={{ 
+                    background: '#fee2e2', 
+                    border: '1px solid #ef4444', 
+                    padding: '20px', 
+                    borderRadius: '8px' 
+                  }}>
+                    <p style={{ color: '#991b1b', fontWeight: 600, marginBottom: '10px' }}>
+                      <i className="fas fa-times-circle" style={{ marginRight: '8px' }}></i>
+                      Order Cancelled
+                    </p>
+                    <p style={{ color: '#991b1b', fontSize: '0.9rem', margin: 0 }}>
+                      This order has been cancelled. Contact support if you have questions.
+                    </p>
                   </div>
                 ) : (
                   <div style={{ 
@@ -350,10 +402,10 @@ const AccountOrderView = () => {
                   }}>
                     <p style={{ color: '#92400e', fontWeight: 600, marginBottom: '10px' }}>
                       <i className="fas fa-clock" style={{ marginRight: '8px' }}></i>
-                      Pending Access
+                      Pending Verification
                     </p>
                     <p style={{ color: '#92400e', fontSize: '0.9rem', margin: 0 }}>
-                      Access will be granted once your payment is verified.
+                      We're verifying your payment. You'll get access once verified.
                     </p>
                   </div>
                 )}

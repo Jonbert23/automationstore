@@ -531,7 +531,7 @@ export const verifyPayment = async (orderId, adminEmail) => {
         paymentVerifiedBy: adminEmail,
         accessGranted: true,
         accessGrantedAt: new Date().toISOString(),
-        status: 'completed',
+        status: 'verified',
       })
       .commit();
   } catch (error) {
@@ -547,8 +547,24 @@ export const rejectPayment = async (orderId, reason) => {
     return await writeClient
       .patch(orderId)
       .set({
-        status: 'pending',
+        status: 'cancelled',
         notes: reason,
+      })
+      .commit();
+  } catch (error) {
+    console.warn('Sanity update error:', error);
+    return null;
+  }
+};
+
+// Mark order as completed when customer accesses Google Drive
+export const markOrderCompleted = async (orderId) => {
+  if (!isSanityConfigured) return null;
+  try {
+    return await writeClient
+      .patch(orderId)
+      .set({
+        status: 'completed',
       })
       .commit();
   } catch (error) {

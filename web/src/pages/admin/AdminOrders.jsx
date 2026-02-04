@@ -52,14 +52,14 @@ const AdminOrders = () => {
   };
 
   const handleVerifyPayment = async (orderId) => {
-    if (!confirm('Verify this payment and grant access to the customer?')) return;
+    if (!confirm('Verify this payment? Customer will be able to access Google Drive.')) return;
     
     setVerifyingPayment(orderId);
     try {
       await verifyPayment(orderId, 'admin');
       setOrders(orders.map(order => 
         order._id === orderId 
-          ? { ...order, status: 'completed', paymentVerified: true, accessGranted: true }
+          ? { ...order, status: 'verified', paymentVerified: true, accessGranted: true }
           : order
       ));
     } catch (error) {
@@ -79,7 +79,7 @@ const AdminOrders = () => {
       await rejectPayment(orderId, reason || 'Payment could not be verified');
       setOrders(orders.map(order => 
         order._id === orderId 
-          ? { ...order, status: 'pending' }
+          ? { ...order, status: 'cancelled' }
           : order
       ));
     } catch (error) {
@@ -120,14 +120,12 @@ const AdminOrders = () => {
   const getStatusClass = (status) => {
     switch (status) {
       case 'completed':
-      case 'verified':
         return 'admin-status-active';
-      case 'payment_submitted':
+      case 'verified':
         return 'admin-status-warning';
       case 'pending':
         return 'admin-status-pending';
       case 'cancelled':
-      case 'refunded':
         return 'admin-status-out-of-stock';
       default:
         return 'admin-status-pending';
@@ -136,12 +134,10 @@ const AdminOrders = () => {
 
   const getStatusLabel = (status) => {
     const labels = {
-      pending: 'Pending Payment',
-      payment_submitted: 'Payment Submitted',
+      pending: 'Pending',
       verified: 'Verified',
       completed: 'Completed',
       cancelled: 'Cancelled',
-      refunded: 'Refunded',
     };
     return labels[status] || status;
   };
@@ -155,7 +151,7 @@ const AdminOrders = () => {
     return labels[method] || method || '-';
   };
 
-  const statusOptions = ['pending', 'payment_submitted', 'verified', 'completed', 'cancelled', 'refunded'];
+  const statusOptions = ['pending', 'verified', 'completed', 'cancelled'];
 
   // Filter orders based on date range, status, and search term
   const getFilteredOrders = () => {
@@ -309,12 +305,10 @@ const AdminOrders = () => {
           style={{ maxWidth: '180px' }}
         >
           <option value="all">All Status</option>
-          <option value="pending">Pending Payment</option>
-          <option value="payment_submitted">Payment Submitted</option>
+          <option value="pending">Pending</option>
           <option value="verified">Verified</option>
           <option value="completed">Completed</option>
           <option value="cancelled">Cancelled</option>
-          <option value="refunded">Refunded</option>
         </select>
 
         {(dateRange !== 'all' || statusFilter !== 'all' || searchTerm) && (
@@ -345,7 +339,7 @@ const AdminOrders = () => {
       </div>
 
       {/* Pending Verification Alert */}
-      {orders.filter(o => o.status === 'payment_submitted').length > 0 && (
+      {orders.filter(o => o.status === 'pending').length > 0 && (
         <div style={{ 
           background: '#fef3c7', 
           border: '1px solid #f59e0b', 
@@ -359,7 +353,7 @@ const AdminOrders = () => {
           <i className="fas fa-exclamation-circle" style={{ color: '#f59e0b', fontSize: '1.5rem' }}></i>
           <div>
             <strong style={{ color: '#92400e' }}>
-              {orders.filter(o => o.status === 'payment_submitted').length} order(s) awaiting payment verification
+              {orders.filter(o => o.status === 'pending').length} order(s) awaiting payment verification
             </strong>
             <p style={{ fontSize: '0.85rem', color: '#92400e', margin: '5px 0 0' }}>
               Review and verify payments to grant customers access to their purchases.
@@ -390,7 +384,7 @@ const AdminOrders = () => {
             </thead>
             <tbody>
               {filteredOrders.map((order) => (
-                <tr key={order._id} style={{ background: order.status === 'payment_submitted' ? '#fffbeb' : 'transparent' }}>
+                <tr key={order._id} style={{ background: order.status === 'pending' ? '#fffbeb' : 'transparent' }}>
                   <td>
                     <div style={{ fontWeight: 600 }}>
                       #{order._id.slice(-8).toUpperCase()}
@@ -438,7 +432,7 @@ const AdminOrders = () => {
                   </td>
                   <td>
                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                      {order.status === 'payment_submitted' && (
+                      {order.status === 'pending' && (
                         <>
                           <button
                             onClick={() => handleVerifyPayment(order._id)}
