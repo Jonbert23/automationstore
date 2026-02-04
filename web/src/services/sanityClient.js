@@ -604,12 +604,12 @@ export const getUserOrders = async (userEmail) => {
 export const getUserPurchases = async (userEmail) => {
   if (!isSanityConfigured) return [];
   try {
-    // Show purchases if accessGranted is true OR status is verified/completed
+    // Show purchases where accessGranted is true OR status is verified/completed
     const query = `*[_type == "order" && user == $userEmail && (accessGranted == true || status == "verified" || status == "completed")] | order(_createdAt desc){
       _id,
       _createdAt,
-      status,
       accessGrantedAt,
+      status,
       items[]{
         "product": product->{ 
           _id, 
