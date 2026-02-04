@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/common/Hero';
 import ProductCard from '../components/common/ProductCard';
+import { GCashIcon, MayaIcon } from '../components/common/PaymentIcons';
 import { getFeaturedProducts, getCategories } from '../services/sanityClient';
 
 const Home = () => {
@@ -400,10 +401,10 @@ const Home = () => {
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', flexWrap: 'wrap', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'white' }}>
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/GCash_logo.svg/2560px-GCash_logo.svg.png" alt="GCash" style={{ height: '30px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+              <GCashIcon height={30} />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'white' }}>
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Maya_logo.svg/2560px-Maya_logo.svg.png" alt="Maya" style={{ height: '30px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+              <MayaIcon height={30} />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'white' }}>
               <span style={{ fontWeight: 700, fontSize: '1.2rem' }}>GoTyme</span>
