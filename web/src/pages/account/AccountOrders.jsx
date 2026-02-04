@@ -436,11 +436,11 @@ const AccountOrders = () => {
                 <tr key={order._id}>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      {order.items?.slice(0, 2).map((item, index) => (
-                        <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      {order.items?.[0] && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <img
-                            src={getImageUrl(item.product?.images?.[0])}
-                            alt={item.product?.title || 'Product'}
+                            src={getImageUrl(order.items[0].product?.images?.[0])}
+                            alt={order.items[0].product?.title || 'Product'}
                             style={{ 
                               width: '40px', 
                               height: '40px', 
@@ -449,20 +449,18 @@ const AccountOrders = () => {
                               background: '#e5e7eb'
                             }}
                           />
-                          <div style={{ maxWidth: '120px' }}>
+                          <div style={{ maxWidth: '150px' }}>
                             <p style={{ fontWeight: 500, fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {item.product?.title || 'Product'}
+                              {order.items[0].product?.title || 'Product'}
                             </p>
                             <p style={{ color: '#6b7280', fontSize: '0.75rem' }}>
-                              Qty: {item.quantity}
+                              {order.items.length > 1 
+                                ? `+${order.items.length - 1} more item${order.items.length - 1 > 1 ? 's' : ''}`
+                                : `Qty: ${order.items[0].quantity}`
+                              }
                             </p>
                           </div>
                         </div>
-                      ))}
-                      {order.items?.length > 2 && (
-                        <span style={{ color: '#6b7280', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>
-                          +{order.items.length - 2} more
-                        </span>
                       )}
                     </div>
                   </td>
@@ -487,29 +485,9 @@ const AccountOrders = () => {
                   </td>
                   <td style={{ fontWeight: 600 }}>₱{order.total?.toLocaleString()}</td>
                   <td>
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                      {(order.status === 'verified' || order.status === 'completed') && order.accessGranted && (
-                        <Link 
-                          to="/account/purchases" 
-                          style={{ 
-                            padding: '6px 12px',
-                            background: '#22c55e',
-                            color: 'white',
-                            borderRadius: '6px',
-                            fontSize: '0.8rem',
-                            fontWeight: 600,
-                            textDecoration: 'none',
-                            whiteSpace: 'nowrap'
-                          }}
-                        >
-                          <i className="fab fa-google-drive" style={{ marginRight: '5px' }}></i>
-                          Access Files
-                        </Link>
-                      )}
-                      <Link to={`/account/orders/${order._id}`} style={{ textDecoration: 'underline', fontWeight: 600 }}>
-                        View
-                      </Link>
-                    </div>
+                    <Link to={`/account/orders/${order._id}`} style={{ textDecoration: 'underline', fontWeight: 600 }}>
+                      View
+                    </Link>
                   </td>
                 </tr>
               ))}
