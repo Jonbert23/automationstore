@@ -344,7 +344,28 @@ const AdminProductForm = () => {
                 />
               </div>
               <div className="admin-form-group">
-                <label className="admin-form-label">URL Slug</label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <label className="admin-form-label" style={{ marginBottom: 0 }}>URL Slug</label>
+                  {formData.title && (
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, slug: generateSlug(formData.title) }))}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#3b82f6',
+                        fontSize: '0.85rem',
+                        cursor: 'pointer',
+                        fontWeight: 500,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                      }}
+                    >
+                      <i className="fas fa-sync-alt"></i> Generate from title
+                    </button>
+                  )}
+                </div>
                 <input
                   type="text"
                   name="slug"
@@ -353,6 +374,11 @@ const AdminProductForm = () => {
                   onChange={handleInputChange}
                   placeholder="auto-generated-from-title"
                 />
+                {formData.slug && (
+                  <small style={{ color: 'var(--text-muted)', marginTop: '5px', display: 'block' }}>
+                    URL: /product/{formData.slug}
+                  </small>
+                )}
               </div>
               <div className="admin-form-group">
                 <label className="admin-form-label">Description</label>
