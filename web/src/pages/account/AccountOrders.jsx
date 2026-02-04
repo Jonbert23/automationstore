@@ -131,6 +131,53 @@ const AccountOrders = () => {
         <h1 className="account-page-title">Order History</h1>
       </div>
 
+      {/* Access Ready Banner */}
+      {orders.filter(o => (o.status === 'verified' || o.status === 'completed') && o.accessGranted).length > 0 && (
+        <div style={{ 
+          background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', 
+          borderRadius: '12px', 
+          padding: '20px 25px', 
+          marginBottom: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '20px',
+          color: 'white'
+        }}>
+          <div style={{
+            width: '50px',
+            height: '50px',
+            background: 'rgba(255,255,255,0.2)',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0
+          }}>
+            <i className="fab fa-google-drive" style={{ fontSize: '1.5rem' }}></i>
+          </div>
+          <div style={{ flex: 1 }}>
+            <strong style={{ fontSize: '1.1rem' }}>Your files are ready!</strong>
+            <p style={{ opacity: 0.9, marginTop: '5px', fontSize: '0.9rem' }}>
+              You have {orders.filter(o => (o.status === 'verified' || o.status === 'completed') && o.accessGranted).length} order(s) with files ready to download.
+            </p>
+          </div>
+          <Link 
+            to="/account/purchases" 
+            style={{
+              background: 'white',
+              color: '#16a34a',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              fontWeight: 700,
+              textDecoration: 'none',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            Access My Purchases
+          </Link>
+        </div>
+      )}
+
       {/* Filters */}
       {orders.length > 0 && (
         <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '20px' }}>
@@ -214,9 +261,7 @@ const AccountOrders = () => {
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
-            <option value="processing">Processing</option>
-            <option value="shipped">Shipped</option>
-            <option value="delivered">Delivered</option>
+            <option value="verified">Verified</option>
             <option value="completed">Completed</option>
             <option value="cancelled">Cancelled</option>
           </select>
@@ -424,15 +469,47 @@ const AccountOrders = () => {
                   <td style={{ fontWeight: 600 }}>#{order._id.slice(-6).toUpperCase()}</td>
                   <td>{new Date(order._createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
                   <td>
-                    <span className={`status-badge status-${order.status}`}>
-                      {order.status}
+                    <span style={{
+                      padding: '4px 10px',
+                      borderRadius: '4px',
+                      fontSize: '0.8rem',
+                      fontWeight: 600,
+                      textTransform: 'capitalize',
+                      background: order.status === 'completed' ? '#dcfce7' : 
+                                 order.status === 'verified' ? '#dbeafe' : 
+                                 order.status === 'cancelled' ? '#fee2e2' : '#fef3c7',
+                      color: order.status === 'completed' ? '#166534' : 
+                             order.status === 'verified' ? '#1e40af' : 
+                             order.status === 'cancelled' ? '#991b1b' : '#92400e'
+                    }}>
+                      {order.status || 'pending'}
                     </span>
                   </td>
                   <td style={{ fontWeight: 600 }}>₱{order.total?.toLocaleString()}</td>
                   <td>
-                    <Link to={`/account/orders/${order._id}`} style={{ textDecoration: 'underline', fontWeight: 600 }}>
-                      View Details
-                    </Link>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                      {(order.status === 'verified' || order.status === 'completed') && order.accessGranted && (
+                        <Link 
+                          to="/account/purchases" 
+                          style={{ 
+                            padding: '6px 12px',
+                            background: '#22c55e',
+                            color: 'white',
+                            borderRadius: '6px',
+                            fontSize: '0.8rem',
+                            fontWeight: 600,
+                            textDecoration: 'none',
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          <i className="fab fa-google-drive" style={{ marginRight: '5px' }}></i>
+                          Access Files
+                        </Link>
+                      )}
+                      <Link to={`/account/orders/${order._id}`} style={{ textDecoration: 'underline', fontWeight: 600 }}>
+                        View
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               ))}
