@@ -77,6 +77,7 @@ const Checkout = () => {
           product: { _type: 'reference', _ref: item._id },
           quantity: 1, // Digital products are typically 1 per item
           price: item.price,
+          title: item.title // Add title for email template
         })),
         total: total,
         paymentMethod: selectedPayment?.slug?.current || selectedPayment?._id,
@@ -88,6 +89,18 @@ const Checkout = () => {
           }
         },
         status: 'payment_submitted',
+      });
+
+      // Send email notification to admin
+      import('../services/emailService').then(({ sendOrderNotification }) => {
+        sendOrderNotification({
+          orderId: order._id,
+          customerName: user.name,
+          customerEmail: user.email,
+          totalAmount: total,
+          items: cart,
+          paymentMethod: selectedPayment?.name || 'Unknown'
+        });
       });
 
       setOrderId(order._id);
@@ -297,11 +310,38 @@ const Checkout = () => {
                     <h3 style={{ marginBottom: '20px', color: 'white' }}>Scan to Pay</h3>
                     
                     {getQRCodeUrl(selectedPayment.qrCode) ? (
-                      <img 
-                        src={getQRCodeUrl(selectedPayment.qrCode)} 
-                        alt={`${selectedPayment.name} QR Code`}
-                        style={{ width: '100%', borderRadius: '12px', border: '2px solid #333', marginBottom: '20px' }}
-                      />
+                      <div>
+                        <img 
+                          src={getQRCodeUrl(selectedPayment.qrCode)} 
+                          alt={`${selectedPayment.name} QR Code`}
+                          style={{ width: '100%', borderRadius: '12px', border: '2px solid #333', marginBottom: '20px' }}
+                        />
+                        <a 
+                          href={getQRCodeUrl(selectedPayment.qrCode)} 
+                          download={`${selectedPayment.name}-QR.png`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            background: '#333',
+                            color: 'white',
+                            padding: '10px 20px',
+                            borderRadius: '8px',
+                            textDecoration: 'none',
+                            fontSize: '0.9rem',
+                            fontWeight: 600,
+                            marginBottom: '20px',
+                            transition: 'background 0.2s'
+                          }}
+                          onMouseOver={(e) => e.currentTarget.style.background = '#444'}
+                          onMouseOut={(e) => e.currentTarget.style.background = '#333'}
+                        >
+                          <i className="fas fa-download"></i>
+                          Download QR
+                        </a>
+                      </div>
                     ) : (
                       <div style={{ 
                         width: '100%', 
