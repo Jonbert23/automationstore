@@ -13,6 +13,8 @@ exports.handler = async (event) => {
   if (!clientKey || !returnUrl) return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing clientKey or returnUrl' }) };
   const paymentIntentId = clientKey.split('_client_')[0];
   if (!paymentIntentId) return { statusCode: 400, headers, body: JSON.stringify({ error: 'Invalid clientKey' }) };
+  // PayMongo expects type = provider name: 'gcash' or 'paymaya' (not paymongo_ewallet)
+  const methodType = provider === 'paymaya' ? 'paymaya' : 'gcash';
   try {
     const pmRes = await fetch('https://api.paymongo.com/v1/payment_methods', {
       method: 'POST',
@@ -20,9 +22,9 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         data: {
           attributes: {
-            type: 'paymongo_ewallet',
+            type: methodType,
             billing: {},
-            ewallet: { provider, return_url: returnUrl },
+            ewallet: { provider: methodType, return_url: returnUrl },
           },
         },
       }),
