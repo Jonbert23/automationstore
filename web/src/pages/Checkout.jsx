@@ -57,14 +57,20 @@ const Checkout = () => {
       const baseUrl = window.location.origin;
       const successUrl = `${baseUrl}/checkout?paymongo=success&orderId=${order._id}`;
       const cancelUrl = `${baseUrl}/checkout?paymongo=cancel`;
-      const functionsBase = import.meta.env.VITE_NETLIFY_FUNCTIONS_URL || `${baseUrl}/.netlify/functions`;
+      const functionsBase = import.meta.env.VITE_NETLIFY_FUNCTIONS_URL || `${baseUrl}/api`;
 
       const parseJson = async (res) => {
         const text = await res.text();
         if (!text?.trim()) return {};
         try { return JSON.parse(text); } catch {
-          if (res.status === 404 || (text.startsWith('<!') && /localhost|127\.0\.0\.1/.test(window.location.hostname))) {
-            throw new Error('Payment server not available. Deploy to Netlify or run "netlify dev" from project root.');
+          const isLocal = /localhost|127\.0\.0\.1/.test(window.location.hostname);
+          if (res.status === 404 || text.startsWith('<!')) {
+            if (isLocal) {
+              throw new Error('Payment server not available. Run "netlify dev" from project root.');
+            }
+            throw new Error(
+              'Payment server not responding. Check: 1) Latest code pushed to stage and deploy finished. 2) PAYMONGO_SECRET_KEY set in Netlify → Environment variables. 3) Hard refresh (Ctrl+Shift+R) and try again.'
+            );
           }
           throw new Error('Payment server error. Try again or use another method.');
         }
