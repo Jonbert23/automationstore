@@ -10,9 +10,9 @@
   # Output directory (relative to base)
   publish = "dist"
 
-# PayMongo: serverless functions (secret key stays in Netlify env only)
+# PayMongo: serverless functions live inside web app (secret key in Netlify env only)
 [functions]
-  directory = "netlify/functions"
+  directory = "web/netlify/functions"
   node_bundler = "esbuild"
 
 # Local testing: run "netlify dev" from project root to test PayMongo checkout
@@ -26,16 +26,15 @@
 [build.environment]
   NODE_VERSION = "18"
 
-# Proxy /api/* to Netlify Functions via full URL (avoids internal rewrite being caught by SPA rule)
-# For production, change the host to your production domain or use a separate API subdomain
+# Proxy /api/* to Netlify Functions (same deploy; works for all branch/production URLs)
 [[redirects]]
   from = "/api/create-payment-intent"
-  to = "https://shuzeestage.netlify.app/.netlify/functions/create-payment-intent"
+  to = "/.netlify/functions/create-payment-intent"
   status = 200
   force = true
 [[redirects]]
   from = "/api/attach-ewallet"
-  to = "https://shuzeestage.netlify.app/.netlify/functions/attach-ewallet"
+  to = "/.netlify/functions/attach-ewallet"
   status = 200
   force = true
 
