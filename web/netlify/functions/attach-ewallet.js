@@ -41,11 +41,21 @@ exports.handler = async (event) => {
     const pi = attachData?.data;
     const status = pi?.attributes?.status;
     const nextAction = pi?.attributes?.next_action;
+
+    if (!attachRes.ok) {
+      const msg = attachData?.errors?.[0]?.detail || attachData?.errors?.[0]?.title || 'Attach failed';
+      return { statusCode: attachRes.status || 500, headers, body: JSON.stringify({ error: msg }) };
+    }
+
     if (status === 'awaiting_next_action' && nextAction?.redirect?.url) {
       return { statusCode: 200, headers, body: JSON.stringify({ redirectUrl: nextAction.redirect.url }) };
     }
     if (status === 'succeeded') return { statusCode: 200, headers, body: JSON.stringify({ redirectUrl: returnUrl, status: 'succeeded' }) };
-    return { statusCode: 200, headers, body: JSON.stringify({ error: pi?.attributes?.last_payment_error?.message || 'Could not start payment', status }) };
+
+    const lastError = pi?.attributes?.last_payment_error?.message;
+    const apiError = attachData?.errors?.[0]?.detail || attachData?.errors?.[0]?.title;
+    const errorMsg = lastError || apiError || (status ? `Payment status: ${status}` : 'Could not start payment');
+    return { statusCode: 200, headers, body: JSON.stringify({ error: errorMsg, status }) };
   } catch (err) {
     return { statusCode: 500, headers, body: JSON.stringify({ error: err.message || 'Server error' }) };
   }
