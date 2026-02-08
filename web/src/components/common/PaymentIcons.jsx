@@ -45,6 +45,14 @@ export const GoTymeIcon = ({ height = 30, className }) => (
   </svg>
 );
 
+export const GrabPayIcon = ({ height = 30, className }) => (
+  <span className={className} style={{ display: 'inline-flex', alignItems: 'center', fontWeight: 700, color: '#00B14F', fontSize: height ? `${Math.round(height * 0.5)}px` : '0.95rem' }}>GrabPay</span>
+);
+
+export const ShopeePayIcon = ({ height = 30, className }) => (
+  <span className={className} style={{ display: 'inline-flex', alignItems: 'center', fontWeight: 700, color: '#EE4D2D', fontSize: height ? `${Math.round(height * 0.5)}px` : '0.95rem' }}>ShopeePay</span>
+);
+
 export const MayaIcon = ({ height = 30, className }) => (
   <svg 
     height={height} 

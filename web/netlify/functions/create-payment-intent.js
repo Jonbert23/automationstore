@@ -31,7 +31,7 @@ exports.handler = async (event) => {
           attributes: {
             amount: amountCentavos,
             currency: 'PHP',
-            payment_method_allowed: ['card', 'paymaya', 'gcash', 'grab_pay'],
+            payment_method_allowed: ['card', 'paymaya', 'gcash', 'grab_pay', 'shopee_pay'],
             description: `Order ${orderId}`,
             metadata: { orderId, customerEmail: customerEmail || '', customerName: customerName || '' },
             statement_descriptor: 'SHUZEE',

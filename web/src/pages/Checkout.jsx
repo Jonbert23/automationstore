@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import useStore from '../hooks/useStore';
 import { createOrder, getPaymentMethods, urlFor, storeName, uploadImage, setOrderPayMongoPaymentIntentId } from '../services/sanityClient';
-import { GCashIcon, MayaIcon, GoTymeIcon } from '../components/common/PaymentIcons';
+import { GCashIcon, MayaIcon, GoTymeIcon, GrabPayIcon, ShopeePayIcon } from '../components/common/PaymentIcons';
 import '../assets/css/checkout.css';
 
 const PAYMONGO_METHOD = { _id: 'paymongo', name: 'PayMongo (Card / E-Wallet)', slug: { current: 'paymongo' } };
@@ -361,6 +361,10 @@ const Checkout = () => {
                     <MayaIcon height={30} />
                   ) : method.name?.toLowerCase().includes('gotyme') ? (
                     <GoTymeIcon height={30} />
+                  ) : method.name?.toLowerCase().includes('grab') ? (
+                    <GrabPayIcon height={30} />
+                  ) : method.name?.toLowerCase().includes('shopee') ? (
+                    <ShopeePayIcon height={30} />
                   ) : (
                     <div style={{ fontWeight: 700, fontSize: '1.1rem', color: 'white' }}>{method.name}</div>
                   )}
@@ -386,6 +390,14 @@ const Checkout = () => {
                   <button type="button" onClick={() => handlePayWithPayMongo('paymaya')} disabled={loading}
                     style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '16px 24px', background: '#1a1a1a', color: '#D9FF00', border: '2px solid #D9FF00', borderRadius: '12px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}>
                     <MayaIcon height={28} /> Pay with Maya
+                  </button>
+                  <button type="button" onClick={() => handlePayWithPayMongo('grab_pay')} disabled={loading}
+                    style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '16px 24px', background: '#1a1a1a', color: '#00B14F', border: '2px solid #00B14F', borderRadius: '12px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}>
+                    <GrabPayIcon height={28} /> Pay with GrabPay
+                  </button>
+                  <button type="button" onClick={() => handlePayWithPayMongo('shopee_pay')} disabled={loading}
+                    style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '16px 24px', background: '#1a1a1a', color: '#EE4D2D', border: '2px solid #EE4D2D', borderRadius: '12px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}>
+                    <ShopeePayIcon height={28} /> Pay with ShopeePay
                   </button>
                 </div>
                 <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '15px' }}>Card and other options may be available on the PayMongo page.</p>
