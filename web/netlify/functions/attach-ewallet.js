@@ -35,7 +35,15 @@ exports.handler = async (event) => {
     const attachRes = await fetch(`https://api.paymongo.com/v1/payment_intents/${paymentIntentId}/attach`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...authHeader() },
-      body: JSON.stringify({ data: { attributes: { client_key: clientKey, payment_method: paymentMethodId } } }),
+      body: JSON.stringify({
+        data: {
+          attributes: {
+            client_key: clientKey,
+            payment_method: paymentMethodId,
+            return_url: returnUrl,
+          },
+        },
+      }),
     });
     const attachData = await attachRes.json();
     const pi = attachData?.data;
