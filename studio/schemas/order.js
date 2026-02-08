@@ -41,11 +41,18 @@ export default {
       type: 'string',
       options: {
         list: [
+          { title: 'PayMongo (Card / E-Wallet)', value: 'paymongo' },
           { title: 'GCash', value: 'gcash' },
           { title: 'Maya', value: 'maya' },
           { title: 'GoTyme', value: 'gotyme' },
         ],
       },
+    },
+    {
+      name: 'paymongoPaymentIntentId',
+      title: 'PayMongo Payment Intent ID',
+      type: 'string',
+      hidden: ({ document }) => document?.paymentMethod !== 'paymongo',
     },
     {
       name: 'paymentReference',

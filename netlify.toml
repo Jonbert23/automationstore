@@ -10,6 +10,18 @@
   # Output directory (relative to base)
   publish = "dist"
 
+# PayMongo: serverless functions (secret key stays in Netlify env only)
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Local testing: run "netlify dev" from project root to test PayMongo checkout
+[dev]
+  command = "npm run dev --prefix web"
+  port = 3000
+  targetPort = 3000
+  autoLaunch = true
+
 # Environment variables (set these in Netlify dashboard)
 [build.environment]
   NODE_VERSION = "18"

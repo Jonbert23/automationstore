@@ -1,40 +1,100 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import useStore from '../hooks/useStore';
-import { createOrder, getPaymentMethods, urlFor, storeName, uploadImage } from '../services/sanityClient';
+import { createOrder, getPaymentMethods, urlFor, storeName, uploadImage, setOrderPayMongoPaymentIntentId } from '../services/sanityClient';
 import { GCashIcon, MayaIcon, GoTymeIcon } from '../components/common/PaymentIcons';
 import '../assets/css/checkout.css';
 
+const PAYMONGO_METHOD = { _id: 'paymongo', name: 'PayMongo (Card / E-Wallet)', slug: { current: 'paymongo' } };
+
 const Checkout = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { cart, user, getCartTotal, clearCart } = useStore();
   const [loading, setLoading] = useState(false);
-  const [paymentMethods, setPaymentMethods] = useState([]);
-  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [paymentMethods, setPaymentMethods] = useState([PAYMONGO_METHOD]);
+  const [selectedPayment, setSelectedPayment] = useState(PAYMONGO_METHOD);
   const [step, setStep] = useState(1); // 1: Review, 2: Payment, 3: Confirm
   const [paymentProofFile, setPaymentProofFile] = useState(null);
   const [orderId, setOrderId] = useState(null);
   const [isZoomed, setIsZoomed] = useState(false);
 
-  // Fetch payment methods
+  useEffect(() => {
+    const paymongo = searchParams.get('paymongo');
+    const id = searchParams.get('orderId');
+    if (paymongo === 'success' && id) {
+      setOrderId(id);
+      setStep(3);
+      clearCart();
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams, clearCart]);
+
   useEffect(() => {
     const fetchPaymentMethods = async () => {
       const methods = await getPaymentMethods();
-      if (methods.length > 0) {
-        setPaymentMethods(methods);
-        setSelectedPayment(methods[0]);
-      } else {
-        // Fallback payment methods if none in Sanity
-        setPaymentMethods([
-          { _id: 'gcash', name: 'GCash', slug: { current: 'gcash' }, accountName: 'Your Business Name', accountNumber: '0917-XXX-XXXX' },
-          { _id: 'maya', name: 'Maya', slug: { current: 'maya' }, accountName: 'Your Business Name', accountNumber: '0917-XXX-XXXX' },
-          { _id: 'gotyme', name: 'GoTyme', slug: { current: 'gotyme' }, accountName: 'Your Business Name', accountNumber: '0917-XXX-XXXX' },
-        ]);
-        setSelectedPayment({ _id: 'gcash', name: 'GCash', slug: { current: 'gcash' } });
-      }
+      const list = methods.some((m) => (m.slug?.current || m._id) === 'paymongo') ? methods : [PAYMONGO_METHOD, ...methods];
+      setPaymentMethods(list);
+      setSelectedPayment((prev) => list.find((m) => (m.slug?.current || m._id) === (prev?.slug?.current || prev?._id)) || list[0]);
     };
     fetchPaymentMethods();
   }, []);
+
+  const isPayMongo = (selectedPayment?.slug?.current || selectedPayment?._id) === 'paymongo';
+
+  const handlePayWithPayMongo = async (provider = 'gcash') => {
+    if (!user) { navigate('/login'); return; }
+    setLoading(true);
+    try {
+      const order = await createOrder({
+        user: user.email,
+        userName: user.name,
+        items: cart.map((item) => ({ product: { _type: 'reference', _ref: item._id }, quantity: 1, price: item.price, title: item.title })),
+        total,
+        paymentMethod: 'paymongo',
+        status: 'pending',
+      });
+      const baseUrl = window.location.origin;
+      const successUrl = `${baseUrl}/checkout?paymongo=success&orderId=${order._id}`;
+      const cancelUrl = `${baseUrl}/checkout?paymongo=cancel`;
+      const functionsBase = import.meta.env.VITE_NETLIFY_FUNCTIONS_URL || `${baseUrl}/.netlify/functions`;
+
+      const parseJson = async (res) => {
+        const text = await res.text();
+        if (!text?.trim()) return {};
+        try { return JSON.parse(text); } catch {
+          if (res.status === 404 || (text.startsWith('<!') && /localhost|127\.0\.0\.1/.test(window.location.hostname))) {
+            throw new Error('Payment server not available. Deploy to Netlify or run "netlify dev" from project root.');
+          }
+          throw new Error('Payment server error. Try again or use another method.');
+        }
+      };
+
+      const createRes = await fetch(`${functionsBase}/create-payment-intent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId: order._id, amount: total, successUrl, cancelUrl, customerEmail: user.email, customerName: user.name }),
+      });
+      const createData = await parseJson(createRes);
+      if (!createRes.ok || !createData.clientKey) throw new Error(createData.error || 'Failed to create payment');
+      await setOrderPayMongoPaymentIntentId(order._id, createData.paymentIntentId);
+
+      const attachRes = await fetch(`${functionsBase}/attach-ewallet`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clientKey: createData.clientKey, returnUrl: successUrl, provider }),
+      });
+      const attachData = await parseJson(attachRes);
+      if (attachData.redirectUrl) { clearCart(); window.location.href = attachData.redirectUrl; return; }
+      if (attachData.status === 'succeeded') { setOrderId(order._id); clearCart(); setStep(3); setSearchParams({}, { replace: true }); return; }
+      throw new Error(attachData.error || 'Could not start payment');
+    } catch (err) {
+      console.error('PayMongo error:', err);
+      alert(err.message || 'Payment could not be started.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const subtotal = getCartTotal();
   const total = subtotal; // No shipping or tax for digital products
@@ -55,7 +115,7 @@ const Checkout = () => {
       return;
     }
 
-    if (!paymentProofFile) {
+    if (!isPayMongo && !paymentProofFile) {
       alert('Please upload a payment receipt.');
       return;
     }
@@ -273,9 +333,9 @@ const Checkout = () => {
                   onClick={() => setSelectedPayment(method)}
                   style={{
                     padding: '20px',
-                    border: selectedPayment?._id === method._id ? '2px solid #D9FF00' : '1px solid #333',
+                    border: (selectedPayment?.slug?.current || selectedPayment?._id) === (method.slug?.current || method._id) ? '2px solid #D9FF00' : '1px solid #333',
                     borderRadius: '12px',
-                    background: selectedPayment?._id === method._id ? 'rgba(217, 255, 0, 0.05)' : '#1a1a1a',
+                    background: (selectedPayment?.slug?.current || selectedPayment?._id) === (method.slug?.current || method._id) ? 'rgba(217, 255, 0, 0.05)' : '#1a1a1a',
                     cursor: 'pointer',
                     textAlign: 'center',
                     transition: 'all 0.2s',
@@ -287,11 +347,13 @@ const Checkout = () => {
                     height: '100px'
                   }}
                 >
-                  {method.name.toLowerCase().includes('gcash') ? (
+                  {(method.slug?.current || method._id) === 'paymongo' ? (
+                    <span style={{ fontWeight: 700, fontSize: '0.95rem', color: 'white' }}>PayMongo</span>
+                  ) : method.name?.toLowerCase().includes('gcash') ? (
                     <GCashIcon height={30} />
-                  ) : method.name.toLowerCase().includes('maya') ? (
+                  ) : method.name?.toLowerCase().includes('maya') ? (
                     <MayaIcon height={30} />
-                  ) : method.name.toLowerCase().includes('gotyme') ? (
+                  ) : method.name?.toLowerCase().includes('gotyme') ? (
                     <GoTymeIcon height={30} />
                   ) : (
                     <div style={{ fontWeight: 700, fontSize: '1.1rem', color: 'white' }}>{method.name}</div>
@@ -300,10 +362,34 @@ const Checkout = () => {
               ))}
             </div>
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px' }}>
-              {/* QR Code Section - Left Side on Desktop */}
+            {searchParams.get('paymongo') === 'cancel' && (
+              <div style={{ background: 'rgba(245, 158, 11, 0.15)', border: '1px solid #f59e0b', borderRadius: '12px', padding: '15px', marginBottom: '20px', color: '#f59e0b' }}>
+                Payment was cancelled. You can try again or choose another method.
+              </div>
+            )}
+
+            {isPayMongo && (
+              <div style={{ background: '#1a1a1a', border: '1px solid #333', borderRadius: '12px', padding: '30px', marginBottom: '30px' }}>
+                <h3 style={{ marginBottom: '15px', color: 'white' }}>Pay with PayMongo</h3>
+                <p style={{ color: '#9ca3af', marginBottom: '20px', fontSize: '0.95rem' }}>You will be redirected to complete payment securely.</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
+                  <button type="button" onClick={() => handlePayWithPayMongo('gcash')} disabled={loading}
+                    style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '16px 24px', background: '#D9FF00', color: '#111', border: 'none', borderRadius: '12px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}>
+                    <GCashIcon height={28} /> Pay with GCash
+                  </button>
+                  <button type="button" onClick={() => handlePayWithPayMongo('paymaya')} disabled={loading}
+                    style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '16px 24px', background: '#1a1a1a', color: '#D9FF00', border: '2px solid #D9FF00', borderRadius: '12px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}>
+                    <MayaIcon height={28} /> Pay with Maya
+                  </button>
+                </div>
+                <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '15px' }}>Card and other options may be available on the PayMongo page.</p>
+                <button type="button" onClick={() => setStep(1)} style={{ marginTop: '20px', padding: '12px 24px', background: '#333', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>← Back</button>
+              </div>
+            )}
+
+            <div style={{ display: isPayMongo ? 'none' : 'flex', flexWrap: 'wrap', gap: '30px' }}>
               <div style={{ flex: '1 1 350px' }}>
-                {selectedPayment && (
+                {selectedPayment && !isPayMongo && (
                   <div style={{ 
                     background: '#1a1a1a', 
                     border: '1px solid #333', 
