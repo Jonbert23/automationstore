@@ -541,6 +541,17 @@ export const submitPayment = async (orderId, paymentData) => {
   }
 };
 
+// Update order with PayMongo Payment Intent ID
+export const setOrderPayMongoPaymentIntentId = async (orderId, paymongoPaymentIntentId) => {
+  if (!isSanityConfigured) return null;
+  try {
+    return await writeClient.patch(orderId).set({ paymongoPaymentIntentId }).commit();
+  } catch (error) {
+    console.warn('Sanity update error:', error);
+    return null;
+  }
+};
+
 // Verify payment (admin)
 export const verifyPayment = async (orderId, adminEmail) => {
   if (!isSanityConfigured) return null;

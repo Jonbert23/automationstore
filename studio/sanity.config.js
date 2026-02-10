@@ -6,7 +6,7 @@ export default defineConfig({
   name: 'apex-ecommerce',
   title: 'SHUZEE E-Commerce',
 
-  projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'your-project-id',
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'bsx4rxqm',
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
 
   plugins: [structureTool()],

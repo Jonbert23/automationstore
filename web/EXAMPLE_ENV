@@ -18,3 +18,14 @@ VITE_SANITY_TOKEN=your_sanity_write_token
 # Get this from https://console.cloud.google.com/
 # APIs & Services > Credentials > OAuth 2.0 Client ID
 VITE_GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
+
+# -------------------------------------------
+# PAYMONGO (optional – add to web/.env)
+# -------------------------------------------
+# Public key – safe to store here (used by main app).
+VITE_PAYMONGO_PUBLIC_KEY=pk_test_xxx
+# Secret key (sk_test_xxx or sk_live_xxx) must NOT be in this file.
+# - Production: set in Netlify Dashboard → Environment variables → PAYMONGO_SECRET_KEY
+# - Local testing: create .env in the PROJECT ROOT (folder with netlify.toml) with:
+#     PAYMONGO_SECRET_KEY=sk_test_xxx
+#   Then run "netlify dev" from the project root and open the URL it prints (e.g. http://localhost:8888).
