@@ -76,12 +76,83 @@
   transform: scale(1.2);
 }
 
+/* Checkout page: prevent horizontal overflow and white bar on right */
+.checkout-page {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+.checkout-page *,
+.checkout-page *::before,
+.checkout-page *::after {
+  box-sizing: border-box;
+}
+.checkout-page .container {
+  max-width: 100%;
+}
+
+/* Progress steps: prevent clipping on small screens */
+.checkout-steps-container {
+  overflow: visible;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+.checkout-steps {
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 12px 20px;
+  max-width: 100%;
+}
+
 @media (max-width: 768px) {
+  .checkout-steps-container {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+    overflow: hidden;
+    max-width: 100%;
+  }
+  .checkout-steps {
+    gap: 10px 20px;
+    margin-bottom: 24px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px 0 16px;
+    margin-left: 0;
+    margin-right: 0;
+    scrollbar-width: none;
+    min-width: min-content;
+  }
+  .checkout-steps::-webkit-scrollbar {
+    display: none;
+  }
+  .checkout-step {
+    flex-shrink: 0;
+    min-width: min-content;
+  }
+  .checkout-step-label {
+    font-size: 0.8rem !important;
+    white-space: nowrap;
+  }
+  .checkout-step-badge {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.75rem !important;
+    flex-shrink: 0;
+  }
   .checkout-grid {
     grid-template-columns: 1fr;
   }
   .order-summary-box {
     order: -1;
     position: static;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
   }
 }

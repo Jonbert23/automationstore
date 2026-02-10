@@ -257,9 +257,9 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="dark-mode" style={{ backgroundColor: '#111', minHeight: '100vh', paddingBottom: '80px' }}>
+    <div className="dark-mode product-detail-page" style={{ backgroundColor: '#111', minHeight: '100vh', paddingBottom: '80px' }}>
       {/* Breadcrumbs */}
-      <div className="container" style={{ paddingTop: '130px', fontSize: '0.9rem', color: '#666', textTransform: 'uppercase', fontWeight: 600 }}>
+      <div className="container product-detail-breadcrumb" style={{ paddingTop: '130px', fontSize: '0.9rem', color: '#666', textTransform: 'uppercase', fontWeight: 600 }}>
         <Link to="/" style={{ color: '#666' }}>Home</Link> / <Link to="/shop" style={{ color: '#666' }}>{product.category}</Link> / <span style={{ color: '#D9FF00' }}>{product.title}</span>
       </div>
 

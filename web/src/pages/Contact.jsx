@@ -36,7 +36,7 @@ const Contact = () => {
   return (
     <div className="dark-mode" style={{ backgroundColor: '#111', minHeight: '100vh' }}>
       {/* Page Header */}
-      <div style={{ 
+      <div className="store-page-header" style={{ 
         padding: '150px 0 80px',
         textAlign: 'center',
         background: 'linear-gradient(180deg, #1a1a1a 0%, #111 100%)',
@@ -50,8 +50,8 @@ const Contact = () => {
         </div>
       </div>
 
-      <section className="container" style={{ padding: '60px 20px 80px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '50px' }}>
+      <section className="container store-page-section" style={{ padding: '60px 20px 80px' }}>
+        <div className="contact-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '50px' }}>
           {/* Contact Form */}
           <div style={{ 
             background: '#1a1a1a', 
@@ -69,7 +69,7 @@ const Contact = () => {
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div className="contact-form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                   <div>
                     <label style={{ display: 'block', marginBottom: '8px', color: '#9ca3af', fontSize: '0.9rem' }}>Name</label>
                     <input 

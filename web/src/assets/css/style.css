@@ -199,7 +199,13 @@ header {
     font-size: 1.5rem;
 }
 
-/* Hero Section */
+/* Hero Section - spacing via .home-page padding to avoid margin collapse (white strip) */
+.home-page {
+    padding-top: 95px; /* Match header + announcement bar so dark bg fills gap */
+}
+.home-page .hero {
+    margin-top: 0;
+}
 .hero {
     height: 85vh;
     background-size: cover;
@@ -208,7 +214,7 @@ header {
     align-items: center;
     justify-content: flex-start; /* Left align for sport dynamic */
     position: relative;
-    margin-top: 95px; /* Header + Top bar */
+    margin-top: 95px; /* Header + Top bar (when not inside .home-page) */
 }
 
 .hero::after {
@@ -523,10 +529,82 @@ footer {
     background: #fff;
 }
 
+/* Mobile bottom navigation (fixed, 4 items) */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  padding: 10px 12px 12px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  background: #1b2532;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-bottom-nav-inner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.mobile-bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  transition: var(--transition);
+}
+
+.mobile-bottom-nav-item i,
+.mobile-bottom-nav-item .mobile-bottom-nav-icon {
+  font-size: 1.2rem;
+}
+
+.mobile-bottom-nav-item svg.mobile-bottom-nav-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
+}
+
+.mobile-bottom-nav-item:hover {
+  color: #fff;
+}
+
+.mobile-bottom-nav-item.active {
+  color: #D9FF00;
+}
+
+.mobile-bottom-nav-item.active i,
+.mobile-bottom-nav-item.active .mobile-bottom-nav-icon,
+.mobile-bottom-nav-item.active svg {
+  color: #D9FF00;
+}
+
+/* Main content padding when bottom nav is visible */
+.has-mobile-bottom-nav main {
+  padding-bottom: 0;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
-    header { top: 50px; } /* Adjust for top bar wrapping */
-    
+    .header-announcement-bar {
+      display: none;
+    }
+    footer {
+      display: none;
+    }
+
     .nav-links {
         position: fixed;
         top: 0;
@@ -559,4 +637,100 @@ footer {
     .hero-content { margin-left: 0; text-align: center; }
     
     .hero { justify-content: center; }
+
+    /* Prevent hero title clipping: more top space so "AUTOMATE YOUR" isn't cut off under header */
+    .home-page { padding-top: 80px; }
+
+    /* Show mobile bottom nav and add padding so content is not hidden */
+    .mobile-bottom-nav {
+      display: block;
+    }
+    .has-mobile-bottom-nav main {
+      padding-bottom: 90px;
+    }
+
+    /* ----- Store pages: mobile-friendly ----- */
+    .container {
+      padding: 0 16px;
+    }
+    .store-page-header {
+      padding: 80px 0 50px !important;
+    }
+    .store-page-header h1 {
+      font-size: 2rem !important;
+    }
+    .store-page-header p {
+      font-size: 1rem !important;
+    }
+    .store-page-section {
+      padding: 40px 0 60px !important;
+    }
+    /* Shop: stack sidebar above products, full width */
+    .shop-layout {
+      flex-direction: column;
+      gap: 24px;
+    }
+    .shop-sidebar {
+      min-width: 100%;
+      order: 1;
+    }
+    .shop-products {
+      order: 2;
+    }
+    .shop-toolbar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      padding-bottom: 16px;
+    }
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    /* Contact: single column */
+    .contact-layout {
+      grid-template-columns: 1fr !important;
+      gap: 32px !important;
+    }
+    .contact-form-grid {
+      grid-template-columns: 1fr !important;
+    }
+    /* Login: less top padding, benefits stack */
+    .login-page {
+      padding: 90px 16px 40px !important;
+    }
+    .login-benefits {
+      grid-template-columns: 1fr !important;
+      gap: 16px !important;
+    }
+    /* Cart: single column, summary below items */
+    .cart-layout {
+      grid-template-columns: 1fr !important;
+      gap: 24px !important;
+    }
+    .cart-summary-sticky {
+      position: static !important;
+    }
+    .cart-item-row {
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 16px !important;
+    }
+    .cart-item-row img {
+      width: 80px !important;
+      height: 80px !important;
+    }
+    .cart-item-actions {
+      flex-basis: 100%;
+      justify-content: flex-start;
+      margin-top: 8px;
+    }
+    /* Home page sections: reduce vertical padding on mobile */
+    .home-section {
+      padding: 50px 0 !important;
+    }
+    .section-title h2 {
+      font-size: 1.75rem !important;
+    }
 }

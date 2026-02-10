@@ -10,8 +10,8 @@ const Cart = () => {
 
   if (cart.length === 0) {
     return (
-      <div className="dark-mode" style={{ backgroundColor: '#111', minHeight: '100vh' }}>
-        <div style={{ 
+      <div className="dark-mode cart-page" style={{ backgroundColor: '#111', minHeight: '100vh' }}>
+        <div className="store-page-header" style={{ 
           padding: '150px 0 80px',
           textAlign: 'center',
           background: 'linear-gradient(180deg, #1a1a1a 0%, #111 100%)',
@@ -21,7 +21,7 @@ const Cart = () => {
             <h1 style={{ color: 'white' }}>Your Cart</h1>
           </div>
         </div>
-        <section className="container" style={{ padding: '60px 20px', textAlign: 'center', minHeight: '50vh' }}>
+        <section className="container store-page-section" style={{ padding: '60px 20px', textAlign: 'center', minHeight: '50vh' }}>
           <i className="fas fa-shopping-bag" style={{ fontSize: '4rem', color: '#333', marginBottom: '20px' }}></i>
           <h2 style={{ marginBottom: '10px', color: 'white' }}>Your cart is empty</h2>
           <p style={{ color: '#9ca3af', marginBottom: '30px' }}>Looks like you haven't added any scripts yet.</p>
@@ -32,9 +32,9 @@ const Cart = () => {
   }
 
   return (
-    <div className="dark-mode" style={{ backgroundColor: '#111', minHeight: '100vh' }}>
+    <div className="dark-mode cart-page" style={{ backgroundColor: '#111', minHeight: '100vh' }}>
       {/* Page Header */}
-      <div style={{ 
+      <div className="store-page-header" style={{ 
         padding: '150px 0 80px',
         textAlign: 'center',
         background: 'linear-gradient(180deg, #1a1a1a 0%, #111 100%)',
@@ -45,8 +45,8 @@ const Cart = () => {
         </div>
       </div>
 
-      <section className="container" style={{ padding: '60px 20px 80px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '50px' }}>
+      <section className="container store-page-section" style={{ padding: '60px 20px 80px' }}>
+        <div className="cart-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '50px' }}>
           {/* Cart Items */}
           <div>
             {/* Digital Products Notice */}
@@ -71,7 +71,7 @@ const Cart = () => {
 
             {/* Cart Items List */}
             {cart.map((item) => (
-              <div key={item._id} style={{
+              <div key={item._id} className="cart-item-row" style={{
                 display: 'flex',
                 gap: '20px',
                 padding: '25px',
@@ -85,8 +85,8 @@ const Cart = () => {
                   alt={item.title} 
                   style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '8px', background: '#222' }}
                 />
-                <div style={{ flex: 1 }}>
-                  <h4 style={{ color: 'white', marginBottom: '5px' }}>{item.title}</h4>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <h4 style={{ color: 'white', marginBottom: '5px', fontSize: '1rem' }}>{item.title}</h4>
                   <p style={{ color: '#9ca3af', fontSize: '0.85rem', marginBottom: '8px' }}>
                     {item.category}
                   </p>
@@ -106,7 +106,7 @@ const Cart = () => {
                   <p style={{ fontWeight: 700, fontSize: '1.2rem', color: '#D9FF00', marginBottom: '15px' }}>
                     ₱{item.price.toLocaleString()}
                   </p>
-                  <div style={{ display: 'flex', gap: '15px', justifyContent: 'flex-end' }}>
+                  <div className="cart-item-actions" style={{ display: 'flex', gap: '15px', justifyContent: 'flex-end' }}>
                     <i 
                       className="fas fa-heart" 
                       title="Save for Later"
@@ -136,25 +136,25 @@ const Cart = () => {
           </div>
 
           {/* Order Summary */}
-          <div style={{ 
-            background: '#1a1a1a', 
-            border: '1px solid #333', 
+          <div className="cart-summary-sticky" style={{ 
+            background: '#D9FF00', 
+            border: '1px solid rgba(0,0,0,0.1)', 
             borderRadius: '16px', 
             padding: '30px',
             height: 'fit-content',
             position: 'sticky',
             top: '150px'
           }}>
-            <h3 style={{ marginBottom: '25px', borderBottom: '1px solid #333', paddingBottom: '15px', color: 'white' }}>Order Summary</h3>
+            <h3 style={{ marginBottom: '25px', borderBottom: '1px solid rgba(0,0,0,0.15)', paddingBottom: '15px', color: '#111' }}>Order Summary</h3>
             
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
-              <span style={{ color: '#9ca3af' }}>Items ({cart.length})</span>
-              <span style={{ fontWeight: 700, color: 'white' }}>₱{subtotal.toLocaleString()}</span>
+              <span style={{ color: '#374151' }}>Items ({cart.length})</span>
+              <span style={{ fontWeight: 700, color: '#111' }}>₱{subtotal.toLocaleString()}</span>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '15px', borderTop: '1px solid #333', marginTop: '15px' }}>
-              <span style={{ fontWeight: 700, fontSize: '1.2rem', color: 'white' }}>Total</span>
-              <span style={{ fontWeight: 700, fontSize: '1.2rem', color: '#D9FF00' }}>₱{total.toLocaleString()}</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '15px', borderTop: '1px solid rgba(0,0,0,0.15)', marginTop: '15px' }}>
+              <span style={{ fontWeight: 700, fontSize: '1.2rem', color: '#111' }}>Total</span>
+              <span style={{ fontWeight: 700, fontSize: '1.2rem', color: '#111' }}>₱{total.toLocaleString()}</span>
             </div>
 
             <Link to="/checkout" className="btn" style={{ 
@@ -163,19 +163,19 @@ const Cart = () => {
               marginTop: '25px', 
               padding: '18px', 
               display: 'block',
-              background: '#D9FF00',
-              color: 'black',
+              background: '#111',
+              color: '#D9FF00',
               border: 'none'
             }}>
               <span>Proceed to Checkout</span>
             </Link>
             
-            <div style={{ marginTop: '25px', padding: '15px', background: '#222', borderRadius: '8px' }}>
-              <h4 style={{ fontSize: '0.85rem', marginBottom: '12px', fontWeight: 600, color: 'white' }}>
-                <i className="fas fa-shield-alt" style={{ marginRight: '8px', color: '#D9FF00' }}></i>
+            <div style={{ marginTop: '25px', padding: '15px', background: 'rgba(0,0,0,0.08)', borderRadius: '8px' }}>
+              <h4 style={{ fontSize: '0.85rem', marginBottom: '12px', fontWeight: 600, color: '#111' }}>
+                <i className="fas fa-shield-alt" style={{ marginRight: '8px', color: '#111' }}></i>
                 What happens next?
               </h4>
-              <ol style={{ paddingLeft: '18px', fontSize: '0.8rem', color: '#9ca3af', lineHeight: 1.8, margin: 0 }}>
+              <ol style={{ paddingLeft: '18px', fontSize: '0.8rem', color: '#374151', lineHeight: 1.8, margin: 0 }}>
                 <li>Choose your payment method</li>
                 <li>Scan QR code to pay</li>
                 <li>Enter your reference number</li>
@@ -184,7 +184,7 @@ const Cart = () => {
               </ol>
             </div>
 
-            <div style={{ marginTop: '15px', textAlign: 'center', fontSize: '0.8rem', color: '#666' }}>
+            <div style={{ marginTop: '15px', textAlign: 'center', fontSize: '0.8rem', color: '#374151' }}>
               <i className="fas fa-lock" style={{ marginRight: '5px' }}></i> 
               Secure Checkout via GCash, Maya, or GoTyme
             </div>

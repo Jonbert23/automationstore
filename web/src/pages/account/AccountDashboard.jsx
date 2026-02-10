@@ -67,7 +67,7 @@ const AccountDashboard = () => {
   return (
     <>
       {/* Welcome Banner */}
-      <div style={{ 
+      <div className="dashboard-welcome-banner" style={{ 
         background: 'linear-gradient(135deg, #111827 0%, #1f2937 100%)', 
         borderRadius: '16px', 
         padding: '40px',
@@ -96,10 +96,10 @@ const AccountDashboard = () => {
           borderRadius: '50%', 
           opacity: 0.1 
         }} />
-        <h1 style={{ fontSize: '2rem', marginBottom: '10px', position: 'relative' }}>
-          {getGreeting()}, {firstName}! 👋
+        <h1 className="dashboard-welcome-title" style={{ marginBottom: '10px', position: 'relative' }}>
+          {getGreeting()}, {firstName}! <span className="dashboard-welcome-emoji">👋</span>
         </h1>
-        <p style={{ color: '#9ca3af', fontSize: '1.1rem', position: 'relative' }}>
+        <p className="dashboard-welcome-text" style={{ color: '#9ca3af', position: 'relative' }}>
           Ready to elevate your game? We've got fresh drops and exclusive deals waiting just for you.
         </p>
       </div>
@@ -107,19 +107,19 @@ const AccountDashboard = () => {
       {/* New Products Section */}
       {newProducts.length > 0 && (
         <div className="account-card" style={{ marginBottom: '30px' }}>
-          <div className="account-card-header">
+          <div className="account-card-header dashboard-new-arrivals-header">
             <div>
-              <h3 className="account-card-title" style={{ marginBottom: '5px' }}>New Arrivals Just For You</h3>
-              <p style={{ color: '#6b7280', fontSize: '0.9rem' }}>Check out our latest products handpicked for you</p>
+              <h3 className="account-card-title dashboard-new-arrivals-title" style={{ marginBottom: '5px' }}>New Arrivals Just For You</h3>
+              <p className="dashboard-new-arrivals-subtitle" style={{ color: '#6b7280', fontSize: '0.9rem' }}>Check out our latest products handpicked for you</p>
             </div>
-            <Link to="/shop" style={{ color: '#111', fontWeight: 600, fontSize: '0.9rem' }}>
+            <Link to="/shop" className="dashboard-view-all-link" style={{ color: '#111', fontWeight: 600, fontSize: '0.9rem' }}>
               View All →
             </Link>
           </div>
           <div className="account-card-body">
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '20px' }}>
+            <div className="dashboard-new-arrivals-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '20px' }}>
               {newProducts.map((product) => (
-                <div key={product._id} style={{ background: '#f9fafb', borderRadius: '12px', overflow: 'hidden' }}>
+                <div key={product._id} className="dashboard-new-arrivals-card" style={{ background: '#f9fafb', borderRadius: '12px', overflow: 'hidden' }}>
                   <Link to={`/product/${product.slug?.current}`}>
                     <img
                       src={getImageUrl(product.images?.[0])}
@@ -162,57 +162,79 @@ const AccountDashboard = () => {
         </div>
       )}
 
-      {/* Recent Orders */}
-      <div className="account-card">
-        <div className="account-card-header">
-          <h3 className="account-card-title">Recent Orders</h3>
-          <Link to="/account/orders" style={{ color: '#111', fontWeight: 600, fontSize: '0.9rem' }}>
+      {/* Recent Orders - dark card layout */}
+      <div className="dashboard-recent-orders-card">
+        <div className="dashboard-recent-orders-header">
+          <h3 className="dashboard-recent-orders-title">Recent Orders</h3>
+          <Link to="/account/orders" className="dashboard-recent-orders-viewall">
             View All →
           </Link>
         </div>
-        
+
         {loading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#6b7280' }}>
+          <div className="dashboard-recent-orders-loading">
             <i className="fas fa-spinner fa-spin" style={{ fontSize: '1.5rem' }}></i>
-            <p style={{ marginTop: '10px' }}>Loading orders...</p>
+            <p>Loading orders...</p>
           </div>
         ) : orders.length === 0 ? (
-          <div style={{ padding: '40px', textAlign: 'center' }}>
-            <i className="fas fa-box-open" style={{ fontSize: '3rem', color: '#e5e7eb', marginBottom: '15px' }}></i>
-            <p style={{ color: '#6b7280', marginBottom: '15px' }}>No orders yet</p>
+          <div className="dashboard-recent-orders-empty">
+            <i className="fas fa-box-open"></i>
+            <p>No orders yet</p>
             <Link to="/shop" className="account-action-btn">Start Shopping</Link>
           </div>
         ) : (
-          <table className="account-table">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Total</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.slice(0, 5).map((order) => (
-                <tr key={order._id}>
-                  <td style={{ fontWeight: 600 }}>#{order._id.slice(-6).toUpperCase()}</td>
-                  <td>{new Date(order._createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-                  <td>
-                    <span className={`status-badge status-${order.status}`}>
-                      {order.status}
-                    </span>
-                  </td>
-                  <td style={{ fontWeight: 600 }}>₱{order.total?.toLocaleString()}</td>
-                  <td>
-                    <Link to={`/account/orders/${order._id}`} style={{ textDecoration: 'underline', fontWeight: 600 }}>
-                      View Details
-                    </Link>
-                  </td>
+          <div className="dashboard-recent-orders-list">
+            <table className="dashboard-recent-orders-table">
+              <thead>
+                <tr>
+                  <th scope="col">Product</th>
+                  <th scope="col">Items</th>
+                  <th scope="col">Order #</th>
+                  <th scope="col">Total</th>
+                  <th scope="col" aria-label="Action"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {orders.slice(0, 5).map((order) => {
+                  const firstItem = order.items?.[0];
+                  const product = firstItem?.product;
+                  const thumbUrl = product?.images?.[0] ? getImageUrl(product.images[0]) : null;
+                  const title = product?.title || 'Order';
+                  const orderNum = `#${order._id.slice(-6).toUpperCase()}`;
+                  const itemCount = order.items?.length ?? 0;
+                  return (
+                    <tr key={order._id} className="dashboard-recent-order-row">
+                      <td className="dashboard-recent-order-product" data-label="Product">
+                        <div className="dashboard-recent-order-thumb">
+                          {thumbUrl ? (
+                            <img src={thumbUrl} alt="" />
+                          ) : (
+                            <div className="dashboard-recent-order-thumb-placeholder">
+                              <i className="fas fa-receipt" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="dashboard-recent-order-title">{title}</div>
+                      </td>
+                      <td className="dashboard-recent-order-meta-cell" data-label="Items">{itemCount} item{itemCount !== 1 ? 's' : ''}</td>
+                      <td className="dashboard-recent-order-num-cell" data-label="Order #">{orderNum}</td>
+                      <td className="dashboard-recent-order-price-cell" data-label="Total">₱{order.total?.toLocaleString()}</td>
+                      <td className="dashboard-recent-order-action" data-label="">
+                        <Link
+                          to={`/account/orders/${order._id}`}
+                          className="dashboard-recent-order-view"
+                          aria-label="View order"
+                        >
+                          <span className="dashboard-recent-order-view-text">View</span>
+                          <i className="fas fa-eye dashboard-recent-order-view-icon" aria-hidden />
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 

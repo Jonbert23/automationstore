@@ -133,7 +133,7 @@ const AccountOrders = () => {
 
       {/* Access Ready Banner */}
       {orders.filter(o => (o.status === 'verified' || o.status === 'completed') && o.accessGranted).length > 0 && (
-        <div style={{ 
+        <div className="account-orders-ready-banner" style={{ 
           background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', 
           borderRadius: '12px', 
           padding: '20px 25px', 
@@ -180,7 +180,7 @@ const AccountOrders = () => {
 
       {/* Filters */}
       {orders.length > 0 && (
-        <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '20px' }}>
+        <div className="account-orders-filters" style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '20px' }}>
           <input
             type="text"
             placeholder="Search orders..."
@@ -399,7 +399,7 @@ const AccountOrders = () => {
         </div>
       )}
 
-      <div className="account-card">
+      <div className="account-card account-card-orders">
         {loading ? (
           <div style={{ padding: '60px', textAlign: 'center', color: '#6b7280' }}>
             <i className="fas fa-spinner fa-spin" style={{ fontSize: '2rem' }}></i>
@@ -420,79 +420,127 @@ const AccountOrders = () => {
             <button onClick={clearFilters} className="account-action-btn">Clear Filters</button>
           </div>
         ) : (
-          <table className="account-table">
-            <thead>
-              <tr>
-                <th>Products</th>
-                <th>Order ID</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Total</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredOrders.map((order) => (
-                <tr key={order._id}>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      {order.items?.[0] && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <img
-                            src={getImageUrl(order.items[0].product?.images?.[0])}
-                            alt={order.items[0].product?.title || 'Product'}
-                            style={{ 
-                              width: '40px', 
-                              height: '40px', 
-                              objectFit: 'cover', 
-                              borderRadius: '6px',
-                              background: '#e5e7eb'
-                            }}
-                          />
-                          <div style={{ maxWidth: '150px' }}>
-                            <p style={{ fontWeight: 500, fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {order.items[0].product?.title || 'Product'}
-                            </p>
-                            <p style={{ color: '#6b7280', fontSize: '0.75rem' }}>
-                              {order.items.length > 1 
-                                ? `+${order.items.length - 1} more item${order.items.length - 1 > 1 ? 's' : ''}`
-                                : `Qty: ${order.items[0].quantity}`
-                              }
-                            </p>
+          <>
+            {/* Desktop: table */}
+            <div className="account-orders-desktop">
+              <table className="account-table account-table-orders">
+                <thead>
+                  <tr>
+                    <th>Products</th>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredOrders.map((order) => (
+                    <tr key={order._id} className="account-order-row">
+                      <td className="account-order-product" data-label="Product">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          {order.items?.[0] && (
+                            <>
+                              <div className="account-order-thumb">
+                                <img
+                                  src={getImageUrl(order.items[0].product?.images?.[0])}
+                                  alt={order.items[0].product?.title || 'Product'}
+                                  style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '6px', background: '#e5e7eb' }}
+                                />
+                              </div>
+                              <div className="account-order-info" style={{ maxWidth: '150px' }}>
+                                <p className="account-order-title" style={{ fontWeight: 500, fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                  {order.items[0].product?.title || 'Product'}
+                                </p>
+                                <p className="account-order-meta" style={{ color: '#6b7280', fontSize: '0.75rem' }}>
+                                  {order.items.length > 1 ? `+${order.items.length - 1} more item${order.items.length - 1 > 1 ? 's' : ''}` : `Qty: ${order.items[0].quantity}`}
+                                </p>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                      <td className="account-order-id" data-label="Order ID" style={{ fontWeight: 600 }}>#{order._id.slice(-6).toUpperCase()}</td>
+                      <td className="account-order-date" data-label="Date">{new Date(order._createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                      <td className="account-order-status" data-label="Status">
+                        <span style={{
+                          padding: '4px 10px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 600, textTransform: 'capitalize',
+                          background: order.status === 'completed' ? '#dcfce7' : order.status === 'verified' ? '#dbeafe' : order.status === 'cancelled' ? '#fee2e2' : '#fef3c7',
+                          color: order.status === 'completed' ? '#166534' : order.status === 'verified' ? '#1e40af' : order.status === 'cancelled' ? '#991b1b' : '#92400e'
+                        }}>
+                          {order.status || 'pending'}
+                        </span>
+                      </td>
+                      <td className="account-order-total" data-label="Total" style={{ fontWeight: 600 }}>₱{order.total?.toLocaleString()}</td>
+                      <td className="account-order-action" data-label="">
+                        <Link to={`/account/orders/${order._id}`} className="account-order-view" style={{ textDecoration: 'underline', fontWeight: 600 }}>View</Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile: card layout (reference design) */}
+            <div className="account-orders-mobile">
+              {filteredOrders.map((order) => {
+                const firstItem = order.items?.[0];
+                const product = firstItem?.product;
+                const title = product?.title || 'Product';
+                const subtitle = product?.category || (order.items?.length > 1 ? `${order.items.length} items` : 'Digital');
+                const qty = firstItem?.quantity ?? 1;
+                const itemPrice = firstItem?.price ?? product?.price;
+                const comparePrice = product?.comparePrice;
+                const hasDiscount = comparePrice != null && itemPrice != null && comparePrice > itemPrice;
+                const discountAmount = hasDiscount ? comparePrice - itemPrice : 0;
+                return (
+                  <div key={order._id} className="account-order-mobile-card">
+                    <div className="account-order-mobile-top">
+                      <div className="account-order-mobile-product">
+                        {product?.category && (
+                          <span className="account-order-mobile-badge">{product.category}</span>
+                        )}
+                        <div className="account-order-mobile-product-inner">
+                          <div className="account-order-mobile-thumb">
+                            <img src={getImageUrl(product?.images?.[0])} alt={title} />
+                          </div>
+                          <div className="account-order-mobile-info">
+                            <h3 className="account-order-mobile-title">{title}</h3>
+                            <p className="account-order-mobile-subtitle">{subtitle}</p>
+                            <p className="account-order-mobile-qty">x{qty}</p>
                           </div>
                         </div>
-                      )}
+                      </div>
+                      <div className="account-order-mobile-pricing">
+                        {hasDiscount && (
+                          <span className="account-order-mobile-original">₱{comparePrice?.toLocaleString()}</span>
+                        )}
+                        <p className="account-order-mobile-total">
+                          <span className="account-order-mobile-total-label">Total: </span>
+                          <span className="account-order-mobile-total-amount">₱{order.total?.toLocaleString()}</span>
+                        </p>
+                        {hasDiscount && discountAmount > 0 && (
+                          <span className="account-order-mobile-discount">₱{discountAmount.toLocaleString()} off</span>
+                        )}
+                      </div>
                     </div>
-                  </td>
-                  <td style={{ fontWeight: 600 }}>#{order._id.slice(-6).toUpperCase()}</td>
-                  <td>{new Date(order._createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-                  <td>
-                    <span style={{
-                      padding: '4px 10px',
-                      borderRadius: '4px',
-                      fontSize: '0.8rem',
-                      fontWeight: 600,
-                      textTransform: 'capitalize',
-                      background: order.status === 'completed' ? '#dcfce7' : 
-                                 order.status === 'verified' ? '#dbeafe' : 
-                                 order.status === 'cancelled' ? '#fee2e2' : '#fef3c7',
-                      color: order.status === 'completed' ? '#166534' : 
-                             order.status === 'verified' ? '#1e40af' : 
-                             order.status === 'cancelled' ? '#991b1b' : '#92400e'
-                    }}>
-                      {order.status || 'pending'}
-                    </span>
-                  </td>
-                  <td style={{ fontWeight: 600 }}>₱{order.total?.toLocaleString()}</td>
-                  <td>
-                    <Link to={`/account/orders/${order._id}`} style={{ textDecoration: 'underline', fontWeight: 600 }}>
-                      View
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    <div className="account-order-mobile-actions">
+                      <Link to={`/account/orders/${order._id}`} className="account-order-mobile-btn account-order-mobile-btn-secondary">View order</Link>
+                      <Link to={`/account/reviews?order=${order._id}`} className="account-order-mobile-btn account-order-mobile-btn-primary">Write review</Link>
+                    </div>
+                    <div className="account-order-mobile-review">
+                      <span className="account-order-mobile-review-label">Quick review</span>
+                      <div className="account-order-mobile-stars" aria-hidden>
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <i key={i} className="far fa-star" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
         )}
       </div>
     </>

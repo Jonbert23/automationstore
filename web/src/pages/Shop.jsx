@@ -78,7 +78,7 @@ const Shop = () => {
   return (
     <div className="dark-mode" style={{ backgroundColor: '#111', minHeight: '100vh' }}>
       {/* Page Header */}
-      <div style={{ 
+      <div className="store-page-header" style={{ 
         padding: '150px 0 80px',
         textAlign: 'center',
         background: 'linear-gradient(180deg, #1a1a1a 0%, #111 100%)',
@@ -93,11 +93,11 @@ const Shop = () => {
       </div>
 
       {/* Shop Layout */}
-      <section className="container" style={{ padding: '60px 20px 80px' }}>
-        <div style={{ display: 'flex', gap: '50px', flexWrap: 'wrap' }}>
+      <section className="container store-page-section" style={{ padding: '60px 20px 80px' }}>
+        <div className="shop-layout" style={{ display: 'flex', gap: '50px', flexWrap: 'wrap' }}>
           
           {/* Sidebar Filters */}
-          <aside style={{ flex: 1, minWidth: '250px' }}>
+          <aside className="shop-sidebar" style={{ flex: 1, minWidth: '250px' }}>
             <div style={{ marginBottom: '40px' }}>
               <h4 style={{ color: '#D9FF00', marginBottom: '20px' }}>Category</h4>
               <ul style={{ marginTop: '20px' }}>
@@ -185,8 +185,8 @@ const Shop = () => {
           </aside>
 
           {/* Product Grid */}
-          <div style={{ flex: 3 }}>
-            <div style={{ 
+          <div className="shop-products" style={{ flex: 3 }}>
+            <div className="shop-toolbar" style={{ 
               display: 'flex', 
               justifyContent: 'space-between', 
               alignItems: 'center', 

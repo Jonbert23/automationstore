@@ -200,7 +200,7 @@ const Checkout = () => {
   }
 
   return (
-    <div className="dark-mode" style={{ backgroundColor: '#111', minHeight: '100vh', color: 'white' }}>
+    <div className="dark-mode checkout-page" style={{ backgroundColor: '#111', minHeight: '100vh', color: 'white' }}>
       {/* Simple Header for Checkout */}
       <header style={{ position: 'static', padding: '25px 0', borderBottom: '1px solid #333', background: '#1a1a1a' }}>
         <div className="container" style={{ textAlign: 'center' }}>
@@ -209,15 +209,15 @@ const Checkout = () => {
       </header>
 
       {/* Progress Steps */}
-      <div className="container" style={{ maxWidth: '800px', margin: '30px auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', marginBottom: '40px' }}>
+      <div className="container checkout-steps-container" style={{ maxWidth: '800px', margin: '30px auto' }}>
+        <div className="checkout-steps" style={{ display: 'flex', justifyContent: 'center', gap: '40px', marginBottom: '40px' }}>
           {[
             { num: 1, label: 'Review Order' },
             { num: 2, label: 'Payment' },
             { num: 3, label: 'Complete' },
           ].map((s) => (
-            <div key={s.num} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{
+            <div key={s.num} className="checkout-step" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div className="checkout-step-badge" style={{
                 width: '35px',
                 height: '35px',
                 borderRadius: '50%',
@@ -231,7 +231,7 @@ const Checkout = () => {
               }}>
                 {step > s.num ? <i className="fas fa-check"></i> : s.num}
               </div>
-              <span style={{ fontWeight: 600, color: step >= s.num ? '#D9FF00' : '#666' }}>{s.label}</span>
+              <span className="checkout-step-label" style={{ fontWeight: 600, color: step >= s.num ? '#D9FF00' : '#666' }}>{s.label}</span>
             </div>
           ))}
         </div>

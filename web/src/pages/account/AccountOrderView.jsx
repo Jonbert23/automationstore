@@ -145,16 +145,6 @@ const AccountOrderView = () => {
     printWindow.print();
   };
 
-  const getStatusInfo = (status) => {
-    const statusInfo = {
-      pending: { label: 'Pending', color: '#f59e0b', icon: 'fa-clock', description: 'Awaiting payment verification' },
-      verified: { label: 'Payment Verified', color: '#3b82f6', icon: 'fa-check-circle', description: 'Your payment has been verified! Access your files now.' },
-      completed: { label: 'Completed', color: '#22c55e', icon: 'fa-check-double', description: 'Order completed - Files accessed' },
-      cancelled: { label: 'Cancelled', color: '#ef4444', icon: 'fa-times-circle', description: 'Order has been cancelled' },
-    };
-    return statusInfo[status] || { label: status, color: '#6b7280', icon: 'fa-question', description: '' };
-  };
-
   const getPaymentMethodLabel = (method) => {
     const labels = { gcash: 'GCash', maya: 'Maya', gotyme: 'GoTyme' };
     return labels[method] || method || 'Not specified';
@@ -180,13 +170,11 @@ const AccountOrderView = () => {
     );
   }
 
-  const statusInfo = getStatusInfo(order.status);
-
   return (
     <>
-      <div className="account-topbar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <Link to="/account/orders" style={{ color: '#6b7280', fontSize: '1.2rem' }}>
+      <div className="account-topbar account-order-view-topbar">
+        <div className="account-order-view-topbar-inner" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <Link to="/account/orders" className="account-order-view-back" style={{ color: '#6b7280', fontSize: '1.2rem' }}>
             <i className="fas fa-arrow-left"></i>
           </Link>
           <h1 className="account-page-title">Order #{orderId.slice(-6).toUpperCase()}</h1>
@@ -198,87 +186,13 @@ const AccountOrderView = () => {
         </div>
       </div>
 
-      {/* Status Banner */}
-      <div style={{ 
-        background: `${statusInfo.color}15`, 
-        border: `1px solid ${statusInfo.color}`,
-        borderRadius: '12px',
-        padding: '25px',
-        marginBottom: '25px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '20px'
-      }}>
-        <div style={{
-          width: '60px',
-          height: '60px',
-          borderRadius: '50%',
-          background: statusInfo.color,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <i className={`fas ${statusInfo.icon}`} style={{ color: 'white', fontSize: '1.5rem' }}></i>
-        </div>
-        <div style={{ flex: 1 }}>
-          <h3 style={{ marginBottom: '5px', color: statusInfo.color }}>{statusInfo.label}</h3>
-          <p style={{ color: '#6b7280', margin: 0 }}>{statusInfo.description}</p>
-        </div>
-        {order.status === 'verified' && order.accessGranted && (
-          <button 
-            onClick={async () => {
-              // Mark order as completed
-              await markOrderCompleted(order._id);
-              setOrder({ ...order, status: 'completed' });
-              // Navigate to purchases
-              navigate('/account/purchases');
-            }}
-            style={{
-              background: '#22c55e',
-              color: 'white',
-              padding: '14px 24px',
-              borderRadius: '8px',
-              fontWeight: 600,
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}
-          >
-            <i className="fab fa-google-drive" style={{ fontSize: '1.2rem' }}></i>
-            Access Google Drive
-          </button>
-        )}
-        {order.status === 'completed' && (
-          <Link 
-            to="/account/purchases"
-            style={{
-              background: '#22c55e',
-              color: 'white',
-              padding: '14px 24px',
-              borderRadius: '8px',
-              fontWeight: 600,
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}
-          >
-            <i className="fas fa-download"></i>
-            View My Purchases
-          </Link>
-        )}
-      </div>
-
-      <div className="account-card">
+      <div className="account-card account-order-view-card">
         <div className="account-card-header">
           <h3 className="account-card-title">Order Details</h3>
-          <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>
-            {new Date(order._createdAt).toLocaleDateString('en-US', { 
-              month: 'long', 
-              day: 'numeric', 
+          <span className="account-order-view-date" style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+            {new Date(order._createdAt).toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
               year: 'numeric',
               hour: '2-digit',
               minute: '2-digit'
@@ -288,20 +202,22 @@ const AccountOrderView = () => {
 
         <div className="account-card-body">
           {/* Order Items */}
-          <div style={{ marginBottom: '30px' }}>
+          <div className="account-order-view-items" style={{ marginBottom: '30px' }}>
             {order.items?.map((item, index) => (
-              <div key={index} style={{ display: 'flex', gap: '20px', padding: '20px 0', borderBottom: '1px solid #e5e7eb' }}>
-                <img 
-                  src={getImageUrl(item.product?.images?.[0])} 
-                  alt={item.product?.title || 'Product'}
-                  style={{ width: '80px', height: '80px', objectFit: 'cover', background: '#f4f4f4', borderRadius: '8px' }}
-                />
-                <div style={{ flex: 1 }}>
+              <div key={index} className="account-order-view-item" style={{ display: 'flex', gap: '20px', padding: '20px 0', borderBottom: '1px solid #e5e7eb' }}>
+                <div className="account-order-view-item-thumb">
+                  <img
+                    src={getImageUrl(item.product?.images?.[0])}
+                    alt={item.product?.title || 'Product'}
+                    style={{ width: '80px', height: '80px', objectFit: 'cover', background: '#f4f4f4', borderRadius: '8px' }}
+                  />
+                </div>
+                <div className="account-order-view-item-info" style={{ flex: 1 }}>
                   <h4 style={{ marginBottom: '5px', fontWeight: 600 }}>{item.product?.title || 'Product'}</h4>
-                  <span style={{ 
+                  <span style={{
                     display: 'inline-block',
-                    background: '#f3f4f6', 
-                    padding: '4px 10px', 
+                    background: '#f3f4f6',
+                    padding: '4px 10px',
                     borderRadius: '4px',
                     fontSize: '0.75rem',
                     color: '#6b7280'
@@ -310,7 +226,7 @@ const AccountOrderView = () => {
                     Digital Download
                   </span>
                 </div>
-                <div style={{ textAlign: 'right', fontWeight: 700, fontSize: '1.1rem' }}>
+                <div className="account-order-view-item-price" style={{ textAlign: 'right', fontWeight: 700, fontSize: '1.1rem' }}>
                   ₱{item.price?.toLocaleString()}
                 </div>
               </div>
@@ -318,7 +234,7 @@ const AccountOrderView = () => {
           </div>
 
           {/* Payment & Summary */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', borderTop: '1px solid #e5e7eb', paddingTop: '30px' }}>
+          <div className="account-order-view-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', borderTop: '1px solid #e5e7eb', paddingTop: '30px' }}>
             <div>
               <h4 style={{ marginBottom: '15px', fontWeight: 600 }}>Payment Information</h4>
               <div style={{ background: '#f9fafb', padding: '20px', borderRadius: '8px' }}>
@@ -439,10 +355,10 @@ const AccountOrderView = () => {
       </div>
 
       {/* Help Section */}
-      <div style={{ 
-        marginTop: '20px', 
-        padding: '20px', 
-        background: '#f9fafb', 
+      <div className="account-order-view-help" style={{
+        marginTop: '20px',
+        padding: '20px',
+        background: '#f9fafb',
         borderRadius: '12px',
         textAlign: 'center'
       }}>

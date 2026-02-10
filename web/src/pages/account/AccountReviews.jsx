@@ -97,76 +97,99 @@ const AccountReviews = () => {
           </div>
         </div>
       ) : (
-        <div className="account-card">
-          <div className="account-card-body" style={{ padding: 0 }}>
-            {reviews.map((review) => (
-              <div 
-                key={review._id} 
-                style={{ 
-                  padding: '25px 30px', 
-                  borderBottom: '1px solid #e5e7eb',
-                  background: !review.isApproved ? '#fffbeb' : 'white'
-                }}
-              >
-                <div style={{ display: 'flex', gap: '20px' }}>
-                  {/* Product Image */}
-                  <Link to={`/product/${review.product?.slug?.current}`}>
-                    <img
-                      src={getImageUrl(review.product?.images?.[0])}
-                      alt={review.product?.title}
-                      style={{ 
-                        width: '80px', 
-                        height: '80px', 
-                        objectFit: 'cover', 
-                        borderRadius: '8px',
-                        background: '#f4f4f4'
-                      }}
-                    />
-                  </Link>
-
-                  {/* Review Content */}
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
-                      <div>
-                        <Link 
-                          to={`/product/${review.product?.slug?.current}`}
-                          style={{ fontWeight: 600, fontSize: '1.1rem', color: '#111', textDecoration: 'none' }}
-                        >
-                          {review.product?.title || 'Product'}
-                        </Link>
-                        <div style={{ marginTop: '5px' }}>
-                          {renderStars(review.rating)}
-                        </div>
-                      </div>
-                      <div style={{ textAlign: 'right' }}>
-                        <span style={{ color: '#6b7280', fontSize: '0.85rem' }}>
-                          {formatDate(review._createdAt)}
-                        </span>
-                        {!review.isApproved && (
-                          <div style={{ 
-                            marginTop: '5px',
-                            padding: '3px 10px', 
-                            background: '#fef3c7', 
-                            color: '#92400e',
-                            borderRadius: '12px',
-                            fontSize: '0.75rem',
-                            fontWeight: 600
-                          }}>
-                            Pending Approval
+        <>
+          {/* Desktop: list layout */}
+          <div className="account-reviews-desktop">
+            <div className="account-card">
+              <div className="account-card-body" style={{ padding: 0 }}>
+                {reviews.map((review) => (
+                  <div
+                    key={review._id}
+                    style={{
+                      padding: '25px 30px',
+                      borderBottom: '1px solid #e5e7eb',
+                      background: !review.isApproved ? '#fffbeb' : 'white'
+                    }}
+                  >
+                    <div style={{ display: 'flex', gap: '20px' }}>
+                      <Link to={`/product/${review.product?.slug?.current}`}>
+                        <img
+                          src={getImageUrl(review.product?.images?.[0])}
+                          alt={review.product?.title}
+                          style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px', background: '#f4f4f4' }}
+                        />
+                      </Link>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
+                          <div>
+                            <Link to={`/product/${review.product?.slug?.current}`} style={{ fontWeight: 600, fontSize: '1.1rem', color: '#111', textDecoration: 'none' }}>
+                              {review.product?.title || 'Product'}
+                            </Link>
+                            <div style={{ marginTop: '5px' }}>{renderStars(review.rating)}</div>
                           </div>
-                        )}
+                          <div style={{ textAlign: 'right' }}>
+                            <span style={{ color: '#6b7280', fontSize: '0.85rem' }}>{formatDate(review._createdAt)}</span>
+                            {!review.isApproved && (
+                              <div style={{ marginTop: '5px', padding: '3px 10px', background: '#fef3c7', color: '#92400e', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 600 }}>
+                                Pending Approval
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <p style={{ color: '#4b5563', lineHeight: 1.6 }}>{review.comment}</p>
                       </div>
                     </div>
-                    
-                    <p style={{ color: '#4b5563', lineHeight: 1.6 }}>
-                      {review.comment}
-                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile: card layout (same as Orders/Purchases) */}
+          <div className="account-reviews-mobile">
+            {reviews.map((review) => (
+              <div key={review._id} className="account-review-mobile-card">
+                <div className="account-review-mobile-top">
+                  <div className="account-review-mobile-product">
+                    <div className="account-review-mobile-product-inner">
+                      <div className="account-review-mobile-thumb">
+                        <img src={getImageUrl(review.product?.images?.[0])} alt={review.product?.title} />
+                      </div>
+                      <div className="account-review-mobile-info">
+                        <h3 className="account-review-mobile-title">{review.product?.title || 'Product'}</h3>
+                        <p className="account-review-mobile-subtitle">Digital Product</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="account-review-mobile-pricing">
+                    {review.product?.price != null && (
+                      <p className="account-review-mobile-total">
+                        <span className="account-review-mobile-total-label">Total: </span>
+                        <span className="account-review-mobile-total-amount">₱{review.product.price?.toLocaleString()}</span>
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="account-review-mobile-actions">
+                  <Link to={`/product/${review.product?.slug?.current}`} className="account-review-mobile-btn account-review-mobile-btn-secondary">
+                    View Product
+                  </Link>
+                  <Link to={`/product/${review.product?.slug?.current}#reviews`} className="account-review-mobile-btn account-review-mobile-btn-primary">
+                    Write review
+                  </Link>
+                </div>
+                <div className="account-review-mobile-review">
+                  <span className="account-review-mobile-review-label">Quick review</span>
+                  <div className="account-review-mobile-stars" aria-hidden>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <i key={star} className={star <= review.rating ? 'fas fa-star' : 'far fa-star'} />
+                    ))}
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </>
       )}
     </>
   );

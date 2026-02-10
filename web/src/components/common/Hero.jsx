@@ -5,7 +5,7 @@ const Hero = () => {
     <section className="hero" style={{ 
       background: '#111',
       position: 'relative',
-      overflow: 'hidden',
+      overflow: 'visible',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

@@ -138,7 +138,7 @@ const Login = () => {
 
   return (
     <div className="dark-mode" style={{ backgroundColor: '#111', minHeight: '100vh' }}>
-      <section style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 20px 40px' }}>
+      <section className="login-page" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 20px 40px' }}>
         <div style={{ maxWidth: '450px', width: '100%', textAlign: 'center' }}>
           {/* Logo */}
           <h1 className="logo" style={{ fontSize: '3rem', marginBottom: '10px', color: 'white' }}>SHUZEE<span style={{ color: '#D9FF00' }}>.</span></h1>
@@ -366,7 +366,7 @@ const Login = () => {
           </div>
 
           {/* Benefits */}
-          <div style={{ marginTop: '40px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', textAlign: 'center' }}>
+          <div className="login-benefits" style={{ marginTop: '40px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', textAlign: 'center' }}>
             <div>
               <i className="fas fa-download" style={{ fontSize: '1.5rem', color: '#D9FF00', marginBottom: '10px', display: 'block' }}></i>
               <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Instant Access</p>

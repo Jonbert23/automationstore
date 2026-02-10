@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import useStore from '../../hooks/useStore';
 import { signOut } from '../../features/auth/authService';
+import MobileBottomNav from '../common/MobileBottomNav';
 import '../../assets/css/account.css';
 
 const AccountLayout = () => {
@@ -44,9 +45,41 @@ const AccountLayout = () => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   };
 
+  const getPageTitle = () => {
+    const path = location.pathname;
+    if (path === '/account' || path === '/account/') return 'Dashboard';
+    if (path.startsWith('/account/orders/')) return 'Order';
+    if (path === '/account/orders') return 'Order History';
+    if (path === '/account/purchases') return 'My Purchases';
+    if (path === '/account/profile') return 'Profile';
+    if (path === '/account/wishlist') return 'Wishlist';
+    if (path === '/account/addresses') return 'Address Book';
+    if (path === '/account/saved') return 'Saved for Later';
+    if (path === '/account/reviews') return 'My Reviews';
+    if (path === '/account/recently-viewed') return 'Recently Viewed';
+    return 'Account';
+  };
+
   return (
     <div className="account-layout">
-      {/* Sidebar */}
+      {/* Mobile: title (left) and profile + cart (right) in one aligned row */}
+      <div className="account-mobile-title-bar">
+        <h1 className="account-mobile-page-title">{getPageTitle()}</h1>
+        <div className="account-mobile-float-icons">
+          <Link to="/account/profile" className="account-mobile-float-btn" aria-label="Profile">
+            {user.picture ? (
+              <img src={user.picture} alt="" referrerPolicy="no-referrer" />
+            ) : (
+              <i className="far fa-user" />
+            )}
+          </Link>
+          <Link to="/cart" className="account-mobile-float-btn" aria-label="Cart">
+            <i className="fas fa-shopping-bag" />
+          </Link>
+        </div>
+      </div>
+
+      {/* Sidebar (hidden on mobile when using bottom nav) */}
       <aside className="account-sidebar">
         <div className="sidebar-header">
           <Link to="/" className="sidebar-brand">SHUZEE</Link>
@@ -92,6 +125,7 @@ const AccountLayout = () => {
       <main className="account-main">
         <Outlet />
       </main>
+      <MobileBottomNav />
     </div>
   );
 };

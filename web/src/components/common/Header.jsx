@@ -23,8 +23,8 @@ const Header = () => {
       boxShadow: isScrolled ? '0 2px 20px rgba(0,0,0,0.3)' : 'none',
       borderBottom: '1px solid #333'
     }}>
-      {/* Top Announcement Bar */}
-      <div style={{ background: '#D9FF00', color: '#111', textAlign: 'center', padding: '8px', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
+      {/* Top Announcement Bar - hidden on mobile */}
+      <div className="header-announcement-bar" style={{ background: '#D9FF00', color: '#111', textAlign: 'center', padding: '8px', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
         <i className="fas fa-bolt" style={{ marginRight: '5px' }}></i> Instant Digital Delivery After Payment Verification
       </div>
 

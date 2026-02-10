@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import useStore from '../../hooks/useStore';
 import { writeClient } from '../../services/sanityClient';
 
@@ -127,7 +128,57 @@ const AccountProfile = () => {
 
   return (
     <>
-      <div className="account-topbar">
+      {/* Mobile-first customer profile (card + metrics, template colors) */}
+      <div className="profile-mobile-view">
+        <div className="profile-mobile-header">
+          <Link to="/account" className="profile-mobile-back" aria-label="Back">
+            <i className="fas fa-chevron-left" />
+          </Link>
+          <h1 className="profile-mobile-title">Profile</h1>
+          <a href="#profile-edit" className="profile-mobile-settings" aria-label="Edit profile">
+            <i className="fas fa-cog" />
+          </a>
+        </div>
+        <div className="profile-mobile-card">
+          <div className="profile-mobile-avatar-wrap">
+            {user.picture ? (
+              <img src={user.picture} alt={user.name} className="profile-mobile-avatar" referrerPolicy="no-referrer" />
+            ) : (
+              <div className="profile-mobile-avatar-placeholder">{getInitials(user.name)}</div>
+            )}
+          </div>
+          <h2 className="profile-mobile-name">{user.name}</h2>
+          <p className="profile-mobile-email">{user.email}</p>
+          <span className={`profile-mobile-badge ${user.authType === 'google' ? 'google' : 'email'}`}>
+            {user.authType === 'google' ? 'Google Account' : 'Email Account'}
+          </span>
+        </div>
+        <div className="profile-metrics-grid">
+          <Link to="/account/orders" className="profile-metric-card">
+            <i className="fas fa-receipt" />
+            <span className="profile-metric-value">Orders</span>
+            <span className="profile-metric-label">View orders</span>
+          </Link>
+          <Link to="/account/purchases" className="profile-metric-card">
+            <i className="fas fa-download" />
+            <span className="profile-metric-value">Purchase</span>
+            <span className="profile-metric-label">My purchases</span>
+          </Link>
+          <Link to="/account/wishlist" className="profile-metric-card">
+            <i className="fas fa-heart" />
+            <span className="profile-metric-value">WishList</span>
+            <span className="profile-metric-label">Saved items</span>
+          </Link>
+          <div className="profile-metric-card static">
+            <i className="fas fa-calendar-alt" />
+            <span className="profile-metric-value">Member</span>
+            <span className="profile-metric-label">Since 2024</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop / Edit section */}
+      <div className="account-topbar account-topbar-desktop">
         <h1 className="account-page-title">My Profile</h1>
       </div>
 
@@ -145,7 +196,7 @@ const AccountProfile = () => {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '30px' }}>
+      <div id="profile-edit" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '30px' }} className="account-profile-edit">
         {/* Profile Picture */}
         <div className="account-card">
           <div className="account-card-body" style={{ textAlign: 'center', padding: '40px 30px' }}>

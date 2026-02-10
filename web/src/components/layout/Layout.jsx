@@ -5,14 +5,14 @@ import { Outlet } from 'react-router-dom';
 
 const Layout = () => {
   return (
-    <>
+    <div>
       <CartFlyAnimation />
       <Header />
       <main>
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 

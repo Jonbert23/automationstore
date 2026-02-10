@@ -29,11 +29,11 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="dark-mode" style={{ backgroundColor: '#111', color: '#fff' }}>
+    <div className="dark-mode home-page" style={{ backgroundColor: '#111', color: '#fff' }}>
       <Hero />
       
       {/* How It Works */}
-      <section style={{ padding: '80px 0', background: '#1a1a1a' }}>
+      <section className="home-section" style={{ padding: '80px 0', background: '#1a1a1a' }}>
         <div className="container">
           <div className="section-title">
             <h2 style={{ color: 'white' }}>How It Works</h2>
@@ -111,7 +111,7 @@ const Home = () => {
       </section>
 
       {/* Categories */}
-      <section className="container" style={{ padding: '80px 0' }}>
+      <section className="container home-section" style={{ padding: '80px 0' }}>
         <div className="section-title">
           <h2 style={{ color: 'white' }}>Browse by Category</h2>
           <p style={{ color: '#9ca3af' }}>Find the perfect automation tool for your workflow</p>
@@ -176,7 +176,7 @@ const Home = () => {
       </section>
 
       {/* Featured Products */}
-      <section style={{ background: '#1a1a1a', padding: '80px 0' }}>
+      <section className="home-section" style={{ background: '#1a1a1a', padding: '80px 0' }}>
         <div className="container">
           <div className="section-title">
             <h2 style={{ color: 'white' }}>Featured Scripts</h2>
@@ -215,7 +215,7 @@ const Home = () => {
       </section>
 
       {/* Features / Why Choose Us */}
-      <section style={{ padding: '80px 0' }}>
+      <section className="home-section" style={{ padding: '80px 0' }}>
         <div className="container">
           <div className="section-title">
             <h2 style={{ color: 'white' }}>Why Choose SHUZEE Scripts?</h2>
@@ -288,7 +288,7 @@ const Home = () => {
       </section>
 
       {/* Testimonials */}
-      <section style={{ background: '#1a1a1a', padding: '80px 0' }}>
+      <section className="home-section" style={{ background: '#1a1a1a', padding: '80px 0' }}>
         <div className="container">
           <div className="section-title">
             <h2 style={{ color: 'white' }}>What Our Customers Say</h2>

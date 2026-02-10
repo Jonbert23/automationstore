@@ -73,34 +73,33 @@ const AccountWishlist = () => {
             <div key={product._id} className="wishlist-card">
               <div className="wishlist-image">
                 <Link to={`/product/${getProductSlug(product)}`}>
-                  <img 
-                    src={getImageUrl(product)} 
-                    alt={product.title}
-                  />
+                  <img src={getImageUrl(product)} alt={product.title} />
                 </Link>
-                <button 
+                <button
+                  type="button"
                   className="wishlist-remove"
                   onClick={() => handleRemoveFromWishlist(product._id)}
                   title="Remove from wishlist"
+                  aria-label="Remove from wishlist"
                 >
-                  <i className="fas fa-heart"></i>
+                  <i className="fas fa-heart" />
                 </button>
               </div>
               <div className="wishlist-info">
-                <div className="wishlist-category">{product.category}</div>
-                <h3 className="wishlist-title">
-                  <Link to={`/product/${getProductSlug(product)}`}>
-                    {product.title}
-                  </Link>
-                </h3>
+                <p className="wishlist-category">{product.category}</p>
+                <Link to={`/product/${getProductSlug(product)}`} className="wishlist-title">
+                  {product.title}
+                </Link>
                 <div className="wishlist-footer">
-                  <div className="wishlist-price">₱{product.price?.toLocaleString()}</div>
-                  <button 
-                    className="account-action-btn" 
-                    style={{ padding: '8px 15px', fontSize: '0.8rem' }}
+                  <span className="wishlist-price">₱{product.price?.toLocaleString()}</span>
+                  <button
+                    type="button"
+                    className="wishlist-add-btn"
                     onClick={() => handleAddToCart(product)}
+                    title="Add to cart"
+                    aria-label="Add to cart"
                   >
-                    Add to Cart
+                    <i className="fas fa-plus" />
                   </button>
                 </div>
               </div>

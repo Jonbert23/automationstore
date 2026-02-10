@@ -189,9 +189,47 @@
 @media (max-width: 768px) {
   .product-detail-grid {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 32px;
+    margin-top: 24px;
   }
   .gallery-container {
     position: static;
+  }
+  /* Breadcrumb: less top padding on mobile */
+  .product-detail-breadcrumb {
+    padding-top: 90px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    font-size: 0.8rem !important;
+  }
+  .product-info-col h1 {
+    font-size: 1.75rem !important;
+  }
+  .product-info-col .price,
+  .price {
+    font-size: 1.5rem !important;
+  }
+  /* Add to cart row: stack on very small screens */
+  .product-info-col .add-to-cart {
+    min-height: 48px;
+  }
+  .thumbnails {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+  .tab-headers {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .tab-btn {
+    font-size: 0.9rem;
+  }
+  /* Digital product info grid: 1 col on narrow */
+  .product-info-col [style*="gridTemplateColumns"] {
+    grid-template-columns: 1fr !important;
   }
 }

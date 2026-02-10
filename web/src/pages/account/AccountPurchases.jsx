@@ -151,7 +151,7 @@ const AccountPurchases = () => {
 
       {/* Filters */}
       {uniqueProducts.length > 0 && (
-        <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '20px' }}>
+        <div className="account-purchases-filters" style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '20px' }}>
           <input
             type="text"
             placeholder="Search products..."
@@ -350,7 +350,7 @@ const AccountPurchases = () => {
         </div>
       )}
 
-      <div className="account-card">
+      <div className="account-card account-card-purchases">
         {loading ? (
           <div style={{ padding: '60px', textAlign: 'center', color: '#6b7280' }}>
             <i className="fas fa-spinner fa-spin" style={{ fontSize: '2rem' }}></i>
@@ -373,109 +373,110 @@ const AccountPurchases = () => {
             <button onClick={clearFilters} className="account-action-btn">Clear Filters</button>
           </div>
         ) : (
-          <table className="account-table">
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Order ID</th>
-                <th>Date Purchased</th>
-                <th>File Info</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
+          <>
+            {/* Desktop: table */}
+            <div className="account-purchases-desktop">
+              <table className="account-table account-table-purchases">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Order ID</th>
+                    <th>Date Purchased</th>
+                    <th>File Info</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredProducts.map((product) => (
+                    <tr key={product._id} className="account-purchase-row">
+                      <td className="account-purchase-product" data-label="Product">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div className="account-purchase-thumb">
+                            <img src={getImageUrl(product.images?.[0])} alt={product.title} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '6px', background: '#e5e7eb' }} />
+                          </div>
+                          <div className="account-purchase-info" style={{ maxWidth: '200px' }}>
+                            <p className="account-purchase-title" style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '2px' }}>{product.title}</p>
+                            <p className="account-purchase-meta" style={{ color: '#6b7280', fontSize: '0.8rem' }}>{product.category || 'Digital Product'}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="account-purchase-orderid" data-label="Order ID">
+                        <Link to={`/account/orders/${product.orderId}`} style={{ color: '#111', fontWeight: 500, textDecoration: 'underline' }}>#{product.orderId.slice(-6).toUpperCase()}</Link>
+                      </td>
+                      <td className="account-purchase-date" data-label="Date Purchased">
+                        {new Date(product.purchaseDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </td>
+                      <td className="account-purchase-fileinfo" data-label="File Info">
+                        <div style={{ display: 'flex', gap: '15px', fontSize: '0.85rem', color: '#6b7280' }}>
+                          {product.fileType && <span title="File Type"><i className={`fas ${getFileTypeIcon(product.fileType)}`} style={{ marginRight: '5px' }}></i>{product.fileType.toUpperCase()}</span>}
+                          {product.fileSize && <span title="File Size"><i className="fas fa-hdd" style={{ marginRight: '5px' }}></i>{product.fileSize}</span>}
+                        </div>
+                      </td>
+                      <td className="account-purchase-action" data-label="">
+                        {product.driveLink ? (
+                          <a href={product.driveLink} target="_blank" rel="noopener noreferrer" className="account-purchase-view" style={{ display: 'inline-flex', alignItems: 'center', padding: '8px 16px', background: '#22c55e', color: 'white', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap', gap: '8px' }}>
+                            <i className="fab fa-google-drive"></i> Access Files
+                          </a>
+                        ) : (
+                          <span style={{ color: '#92400e', background: '#fef3c7', padding: '4px 10px', borderRadius: '4px', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                            <i className="fas fa-clock"></i> Processing
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile: card layout (reference design) */}
+            <div className="account-purchases-mobile">
               {filteredProducts.map((product) => (
-                <tr key={product._id}>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <img
-                        src={getImageUrl(product.images?.[0])}
-                        alt={product.title}
-                        style={{ 
-                          width: '50px', 
-                          height: '50px', 
-                          objectFit: 'cover', 
-                          borderRadius: '6px',
-                          background: '#e5e7eb'
-                        }}
-                      />
-                      <div style={{ maxWidth: '200px' }}>
-                        <p style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '2px' }}>
-                          {product.title}
-                        </p>
-                        <p style={{ color: '#6b7280', fontSize: '0.8rem' }}>
-                          {product.category || 'Digital Product'}
-                        </p>
+                <div key={product._id} className="account-purchase-mobile-card">
+                  <div className="account-purchase-mobile-top">
+                    <div className="account-purchase-mobile-product">
+                      {product.category && <span className="account-purchase-mobile-badge">{product.category}</span>}
+                      <div className="account-purchase-mobile-product-inner">
+                        <div className="account-purchase-mobile-thumb">
+                          <img src={getImageUrl(product.images?.[0])} alt={product.title} />
+                        </div>
+                        <div className="account-purchase-mobile-info">
+                          <h3 className="account-purchase-mobile-title">{product.title}</h3>
+                          <p className="account-purchase-mobile-subtitle">{product.category || 'Digital Product'}</p>
+                        </div>
                       </div>
                     </div>
-                  </td>
-                  <td>
-                    <Link to={`/account/orders/${product.orderId}`} style={{ color: '#111', fontWeight: 500, textDecoration: 'underline' }}>
-                      #{product.orderId.slice(-6).toUpperCase()}
-                    </Link>
-                  </td>
-                  <td>
-                    {new Date(product.purchaseDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                  </td>
-                  <td>
-                    <div style={{ display: 'flex', gap: '15px', fontSize: '0.85rem', color: '#6b7280' }}>
-                      {product.fileType && (
-                        <span title="File Type">
-                          <i className={`fas ${getFileTypeIcon(product.fileType)}`} style={{ marginRight: '5px' }}></i>
-                          {product.fileType.toUpperCase()}
-                        </span>
-                      )}
-                      {product.fileSize && (
-                        <span title="File Size">
-                          <i className="fas fa-hdd" style={{ marginRight: '5px' }}></i>
-                          {product.fileSize}
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                  <td>
+                    {product.price != null && (
+                      <div className="account-purchase-mobile-pricing">
+                        <p className="account-purchase-mobile-total">
+                          <span className="account-purchase-mobile-total-label">Total: </span>
+                          <span className="account-purchase-mobile-total-amount">₱{product.price?.toLocaleString()}</span>
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  <div className="account-purchase-mobile-actions">
                     {product.driveLink ? (
-                      <a
-                        href={product.driveLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ 
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          padding: '8px 16px',
-                          background: '#22c55e',
-                          color: 'white',
-                          borderRadius: '6px',
-                          fontSize: '0.85rem',
-                          fontWeight: 600,
-                          textDecoration: 'none',
-                          whiteSpace: 'nowrap',
-                          gap: '8px'
-                        }}
-                      >
-                        <i className="fab fa-google-drive"></i>
-                        Access Files
+                      <a href={product.driveLink} target="_blank" rel="noopener noreferrer" className="account-purchase-mobile-btn account-purchase-mobile-btn-primary">
+                        <i className="fab fa-google-drive"></i> Access Files
                       </a>
                     ) : (
-                      <span style={{ 
-                        color: '#92400e', 
-                        background: '#fef3c7', 
-                        padding: '4px 10px', 
-                        borderRadius: '4px', 
-                        fontSize: '0.8rem',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '5px'
-                      }}>
-                        <i className="fas fa-clock"></i>
-                        Processing
+                      <span className="account-purchase-mobile-btn account-purchase-mobile-btn-disabled">
+                        <i className="fas fa-clock"></i> Processing
                       </span>
                     )}
-                  </td>
-                </tr>
+                    <Link to={`/account/reviews?product=${product._id}`} className="account-purchase-mobile-btn account-purchase-mobile-btn-review">Write review</Link>
+                  </div>
+                  <div className="account-purchase-mobile-review">
+                    <span className="account-purchase-mobile-review-label">Quick review</span>
+                    <div className="account-purchase-mobile-stars" aria-hidden>
+                      {[1, 2, 3, 4, 5].map((i) => <i key={i} className="far fa-star" />)}
+                    </div>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </>
         )}
       </div>
     </>
